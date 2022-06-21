@@ -27,7 +27,7 @@ This tool is capable of fuzzing either any management frame of the 802.11 protoc
 ```
 
 ### Description
-STEP1: Inform the config file with the targeted AP and STA MAC addresses, the SSID of the AP and the interface name, which will be injecting the frames.  
+STEP1: Update the config file with the targeted AP and STA MAC addresses, the SSID of the AP and the interface name, which will be injecting the frames.  
 STEP2: Run the fuzzer via the command 
 ```
     sudo python3 fuzz.py
