@@ -6,9 +6,10 @@ This tool is capable of fuzzing either any management frame of the 802.11 protoc
 ## Fuzz Management Frames
 
 ### Prequisites
-1)SCAPY: https://scapy.readthedocs.io/en/latest/  
-2)BLAB: https://gitlab.com/akihe/blab  
-3)PANDAS: https://pandas.pydata.org/  
+1) SCAPY: https://scapy.readthedocs.io/en/latest/  
+2) BLAB: https://gitlab.com/akihe/blab  
+3) PANDAS: https://pandas.pydata.org/  
+4) NMAP: https://nmap.org/download.html
 
 ### Requirements and dependencies
 1) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
