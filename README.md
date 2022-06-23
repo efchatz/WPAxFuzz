@@ -1,7 +1,7 @@
 # WPAxFuzz
 
 ## A full-featured open-source Wi-Fi fuzzer    
-This tool is capable of fuzzing either any management frame of the 802.11 protocol or the SAE exchange. For the management frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management frame fuzzing can be executed against any AP (WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of the management frames fuzzing. So, it comes with the below options:
+This tool is capable of fuzzing either any management frame of the 802.11 protocol or the SAE exchange. For the management frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management frame fuzzing can be executed against any AP (WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of the management frames fuzzing. So, the tool comes with the below options:
 ```
     1) Fuzz Management Frames
     2) Fuzz SAE exchange
