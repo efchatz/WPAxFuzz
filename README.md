@@ -66,6 +66,13 @@ STEP5: The tool will check if the STA is alive, meaning connected to the targete
 STEP6: From this point on the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is being asked to reconnect and resume the fuzzing process.  
 STEP7: Exit the fuzzing process with 2 consecutive Ctrl+c.
 
+### Overview
+
+
+https://user-images.githubusercontent.com/66206274/175341903-3bf80965-db8a-413a-a063-38850b1c18d2.mp4
+
+
+
 ## Fuzz SAE-exchange
 
 ## Mage802.11 (DoS attack)
