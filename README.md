@@ -1,7 +1,16 @@
 # WPAxFuzz
 
 ## A full-featured open-source Wi-Fi fuzzer    
-This tool is capable of fuzzing either any management frame of the 802.11 protocol or the SAE exchange. For the management frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management frame fuzzing can be executed against any AP (WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of the management frames fuzzing.
+This tool is capable of fuzzing either any management frame of the 802.11 protocol or the SAE exchange. For the management frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management frame fuzzing can be executed against any AP (WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of the management frames fuzzing. So, it comes with the below options:
+```
+    1) Fuzz Management Frames
+    2) Fuzz SAE exchange
+    3) DoS attack
+```
+Hence, you can execute the tool with the command:
+```
+    sudo python3 fuzz.py
+```
 
 ## Fuzz Management Frames
 
@@ -29,9 +38,9 @@ This tool is capable of fuzzing either any management frame of the 802.11 protoc
 
 ### Description
 STEP1: Update the config file with the targeted AP and STA MAC addresses, the SSID of the AP and the interface name, which will be injecting the frames.  
-STEP2: Run the fuzzer via the command 
+STEP2: Pick the option 1), namely:
 ```
-    sudo python3 fuzz.py
+    Fuzz management frames
 ```
 STEP3: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.    
 STEP4: After the injecting interface initialization that is being held automatically, pick one of the following modes:  
@@ -54,8 +63,15 @@ STEP5: The tool will check if the STA is alive, meaning connected to the targete
     7) Reassociation response frames
     8) Authentication frames
 ```
-STEP6: From this point on the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is being asked to reconnect and resume the fuzzing process.
+STEP6: From this point on the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is being asked to reconnect and resume the fuzzing process.  
+STEP7: Exit the fuzzing process with 2 consecutive Ctrl+c.
 
 ## Fuzz SAE-exchange
 
-## Mage802.11 (DoS attack vector)
+## Mage802.11 (DoS attack)
+The name of this module derives from the word **ma**na**ge**ment. It gathers all the problematic frames that were detected during the management frames fuzzing and transmit them endlessly. Note that, this DoS attack can only be deployed for the AP and STA that the fuzzing was held for; you cant define new MAC adresses.
+
+### Description
+STEP1: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.  
+STEP2: Input the security standard that you want to deploy the attack against. The tool will only gather the corresponding log files that the fuzzer produced.  
+STEP3: Exit the attack with Ctrl+c.
