@@ -138,6 +138,6 @@ elif choice == 2:
     subprocess.call(['sudo python dos-sae.py'], shell=True)
 elif choice == 3:
     subprocess.call(['clear'], shell=True)
-    subprocess.call(['sudo python3 attack.py'], shell=True)
+    subprocess.call(['sudo python3 mage.py'], shell=True)
 else:
     print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
