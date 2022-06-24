@@ -79,9 +79,13 @@ https://user-images.githubusercontent.com/66206274/175341903-3bf80965-db8a-413a-
 The name of this module derives from the word **ma**na**ge**ment. It gathers all the problematic frames that were detected during the management frames fuzzing and transmit them endlessly. Note that, this DoS attack can only be deployed for the AP and STA that the fuzzing was held for; you cant define new MAC adresses.
 
 ### Description
-STEP1: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.  
-STEP2: Input the security standard that you want to deploy the attack against. The tool will only gather the corresponding log files that the fuzzer produced.  
-STEP3: Exit the attack with Ctrl+c.
+STEP1: Pick the option 3), namely:
+```
+    DoS attack
+```
+STEP2: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.  
+STEP3: Input the security standard that you want to deploy the attack against. The tool will only gather the corresponding log files that the fuzzer produced.  
+STEP4: Exit the attack with Ctrl+c.
 
 ### Overview
 
