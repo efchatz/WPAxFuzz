@@ -82,3 +82,8 @@ The name of this module derives from the word **ma**na**ge**ment. It gathers all
 STEP1: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.  
 STEP2: Input the security standard that you want to deploy the attack against. The tool will only gather the corresponding log files that the fuzzer produced.  
 STEP3: Exit the attack with Ctrl+c.
+
+### Overview
+
+https://user-images.githubusercontent.com/66206274/175541739-29700b3e-22d5-47b7-96fa-76a8540ef172.mp4  
+
