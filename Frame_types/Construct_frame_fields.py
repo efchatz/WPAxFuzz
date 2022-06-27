@@ -207,6 +207,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
             
         init_logs = LogFiles(self.AP_sec)
         counter = 1
+        frames_till_disr = []
         caused_disc = [(999, 999, 999)]
         if mode == 'standard' or mode == 'random':
             subprocess.call(['clear'], shell=True)
@@ -214,7 +215,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
             print('You selected mode:', mode)
             while True:
                 subprocess.call(['echo' + f' Fuzzing cycle No.{counter}\n'], shell=True)
-                subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
+                subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring processes with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
                 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
                 for i in list_of_fields:
                     if list_of_fields[i]["conn_loss"] == True:
@@ -227,11 +228,16 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                             ['echo' + f' Sending {2*NUM_OF_FRAMES_TO_SEND} {i} {self.frame_name} frames'], shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
+                            frames_till_disr += frame
                             if not settings.is_alive:
                                 list_of_fields[i]["conn_loss"] = True
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Unresponsiveness found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                frames_till_disr = []
                                 check_conn()
                                 break
                             elif settings.conn_loss:
@@ -239,6 +245,10 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Connection loss found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.deauth_path)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                frames_till_disr = []
                                 check_conn()
                                 break
                             else:
@@ -252,11 +262,16 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                             ['echo' + f' Sending {2*NUM_OF_FRAMES_TO_SEND} {self.frame_name} frames with random {i}'], shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
+                            frames_till_disr += frame
                             if not settings.is_alive:
                                 list_of_fields[i]["conn_loss"] = True
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.is_alive_path)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                frames_till_disr = []
                                 check_conn()
                                 break
                             if settings.conn_loss:
@@ -264,6 +279,10 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.deauth_path)
+                                init_logs.logging_conn_loss(f"Prior to connection loss, the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                frames_till_disr = []
                                 check_conn()
                                 break
                             else:
