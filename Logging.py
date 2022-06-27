@@ -10,8 +10,9 @@ class LogFiles:
         self.folder_path = 'Logs/' + self.folder_name
         self.deauth_path = self.folder_path + datetime.now().strftime(f"/Deauth_path_{self.AP_sec}_%d-%m-%y__%H:%M:%S")
         self.is_alive_path = self.folder_path + datetime.now().strftime(f"/Aliveness_check_{self.AP_sec}_%d-%m-%y__%H:%M:%S")
-        subprocess.call(['mkdir -m 777 -p Logs'], shell=True)
-        subprocess.call(['mkdir -m 777 -p ' + self.folder_path], shell=True)
+        self.frames_till_disr = self.folder_path + datetime.now().strftime(f"/frames_till_disr_{self.AP_sec}_%d-%m-%y__%H:%M:%S")
+        subprocess.call(['mkdir -m 777 -p Logs'], shell = True)
+        subprocess.call(['mkdir -m 777 -p ' + self.folder_path], shell = True)
 
     def logging_conn_loss(self, reason, write_to):
         f = open(write_to, "a")
