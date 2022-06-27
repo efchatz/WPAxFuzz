@@ -66,13 +66,6 @@ STEP5: The tool will check if the STA is alive, meaning connected to the targete
 STEP6: From this point on the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is being asked to reconnect and resume the fuzzing process.  
 STEP7: Exit the fuzzing process with 2 consecutive Ctrl+c.
 
-### Overview
-
-
-https://user-images.githubusercontent.com/66206274/175341903-3bf80965-db8a-413a-a063-38850b1c18d2.mp4
-
-
-
 ## Fuzz SAE-exchange
 
 ## Mage802.11 (DoS attack)
@@ -86,8 +79,4 @@ STEP1: Pick the option 3), namely:
 STEP2: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.  
 STEP3: Input the security standard that you want to deploy the attack against. The tool will only gather the corresponding log files that the fuzzer produced.  
 STEP4: Exit the attack with Ctrl+c.
-
-### Overview
-
-https://user-images.githubusercontent.com/66206274/175541739-29700b3e-22d5-47b7-96fa-76a8540ef172.mp4  
 
