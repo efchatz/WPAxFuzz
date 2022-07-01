@@ -44,7 +44,7 @@ STEP2: Set your WNIC to monitor mode:
     sudo airmon-ng check kill
     sudo airmon-ng start {NAME_OF_ATT_INTER}
 ```
-STEP3: Set the channel of your WNIC same as the targeted AP transmits on:
+STEP3: Set the channel of your WNIC same as the one that targeted AP transmits on:
 ```
     sudo airodump-ng {NAME_OF_ATT_INTER} \\to find the channel that targeted AP transmits on
     sudo iw {NAME_OF_ATT_INTER} set channel {AP_channel} HT20 \\to set channel to your WNIC
