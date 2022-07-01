@@ -205,7 +205,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                 pass
             return
             
-        init_logs = LogFiles(self.AP_sec)
+        init_logs = LogFiles()
         counter = 1
         frames_till_disr = []
         caused_disc = [(999, 999, 999)]
@@ -289,3 +289,4 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 self.send_Frame(frame, interface)
                 subprocess.call(['clear'], shell=True)
                 counter += 1
+
