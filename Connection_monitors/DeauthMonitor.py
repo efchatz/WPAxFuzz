@@ -38,8 +38,8 @@ class DeauthMon(threading.Thread):
     def resume_fuzz(self):
         if self.mode == 'fuzzing':
             input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-            print(f"{bcolors.OKCYAN}Pausing for 10'' and procceding to the next batch of frames{bcolors.ENDC}\n")
-            sleep(10)
+            print(f"{bcolors.OKCYAN}Pausing for 20'' and procceding to the next batch of frames{bcolors.ENDC}\n")
+            sleep(20)
             settings.conn_loss = False
             settings.is_alive = True   
         elif self.mode == 'attacking':
