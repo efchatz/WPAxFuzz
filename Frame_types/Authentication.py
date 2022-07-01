@@ -7,7 +7,7 @@ import settings
 class Authentication(Frame):
     def __init__(self, mode, frame_name, dest_addr, source_addr, interface):
         super(Authentication, self).__init__()
-        self.mode = mode  
+        self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr
         self.source_addr = source_addr
@@ -56,17 +56,17 @@ class Authentication(Frame):
         return frame
 
     def send_auth_with_rand_status(self, mode):
-        auth = Dot11Auth(algo=0, seqnum=1, status=randint(1, 9999))
+        auth = Dot11Auth(algo=0, seqnum=1, status=randint(1, 65535))
         frame = self.construct_MAC_header(11, self.dest_addr, self.source_addr, self.dest_addr) / auth
         return frame
 
     def send_auth_with_all_fields_rand(self, mode):
-        auth = Dot11Auth(algo=randint(1, 9999), seqnum=randint(1, 9999), status=randint(1, 9999))
+        auth = Dot11Auth(algo=randint(1, 9999), seqnum=randint(1, 9999), status=randint(1, 65535))
         frame = self.construct_MAC_header(11, self.dest_addr, self.source_addr, self.dest_addr) / auth
         return frame
 
     def fuzz_for_allowed_values(self, caused_disc):
-        init_logs = LogFiles()
+        init_logs = LogFiles(self.AP_sec)
         
         def check_conn():
             sleep(2)
@@ -98,7 +98,12 @@ class Authentication(Frame):
                                 caused_disc.append((algo, seq, status))
                                 init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.deauth_path)
                                 print("\nHexDump of frame:")
-                                hexdump(frame)   
+                                hexdump(frame)
+                                input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
+                                print(f"{bcolors.OKCYAN}Pausing for 20'' and procceding to the next batch of frames{bcolors.ENDC}\n")
+                                sleep(20)
+                                settings.is_alive = True
+                                settings.conn_loss = False   
                                 check_conn()
                                 break
                             if not settings.is_alive:
