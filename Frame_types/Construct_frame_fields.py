@@ -214,6 +214,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
             print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ')
             print('You selected mode:', mode)
             while True:
+                frames_till_disr = []
                 subprocess.call(['echo' + f' Fuzzing cycle No.{counter}\n'], shell=True)
                 subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring processes with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
                 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
