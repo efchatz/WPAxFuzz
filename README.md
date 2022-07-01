@@ -16,8 +16,7 @@ Hence, you can execute the tool with the command:
 
 ### Prequisites
 1) SCAPY: https://scapy.readthedocs.io/en/latest/  
-2) BLAB: https://gitlab.com/akihe/blab  
-3) PANDAS: https://pandas.pydata.org/  
+2) BLAB: https://gitlab.com/akihe/blab   
 4) NMAP: https://nmap.org/download.html
 
 ### Requirements and dependencies
@@ -38,11 +37,23 @@ Hence, you can execute the tool with the command:
 
 ### Description
 STEP1: Update the config file with the targeted AP and STA MAC addresses, the SSID of the AP and the interface name, which will be injecting the frames.  
-STEP2: Pick the option 1), namely:
+STEP2: Set your WNIC to monitor mode:  
+```
+    sudo airmon-ng
+    sudo airmon-ng check
+    sudo airmon-ng check kill
+    sudo airmon-ng start {NAME_OF_ATT_INTER}
+```
+STEP3: Set the channel of your WNIC same as the targeted AP transmits on:
+```
+    sudo airodump-ng {NAME_OF_ATT_INTER} \\to find the channel that targeted AP transmits on
+    sudo iw {NAME_OF_ATT_INTER} set channel {AP_channel} HT20 \\to set channel to your WNIC
+```
+STEP4: Pick the option 1), namely:
 ```
     Fuzz management frames
 ```
-STEP3: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.    
+STEP5: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.    
 STEP4: After the injecting interface initialization that is being held automatically, pick one of the following modes:  
 ```
     Standard: All the frame fields, including the ones being produced with ``Blab'',  
@@ -52,7 +63,7 @@ STEP4: After the injecting interface initialization that is being held automatic
     Random: The fields produced via the seed generator have a random value length,  
     which can be either lesser or greater than that defined by the 802.11 standard.  
 ```
-STEP5: The tool will check if the STA is alive, meaning connected to the targeted AP and then it will ask for the user to pick one of the following frames to fuzz with:
+STEP6: The tool will check if the STA is alive, meaning connected to the targeted AP and then it will ask for the user to pick one of the following frames to fuzz with:
 ```
     1) Beacon frames
     2) Probe request frames
@@ -63,8 +74,8 @@ STEP5: The tool will check if the STA is alive, meaning connected to the targete
     7) Reassociation response frames
     8) Authentication frames
 ```
-STEP6: From this point on the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is being asked to reconnect and resume the fuzzing process.  
-STEP7: Exit the fuzzing process with 2 consecutive Ctrl+c.
+STEP7: From this point on the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is being asked to reconnect and resume the fuzzing process.  
+STEP8: Exit the fuzzing process with 2 consecutive Ctrl+c.
 
 ## Fuzz SAE-exchange
 
