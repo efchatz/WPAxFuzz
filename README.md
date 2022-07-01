@@ -86,5 +86,11 @@ STEP1: Pick the option 3), namely:
 ```
     DoS attack
 ```
-(TO DO)
+STEP2: Pick the attack module you wish
+```
+    1) Frames detected at the moment of connectivity disruption, one-by-one
+    2) Sequence of frames till the moment of the dirsuption detection (BETA)
+    3) Frames detected at the moment of connectivity disruption (BETA)
+```
+STEP3: First mode exit when no more frames can be found in the log files that the fuzzer produced. The rest of the module exit with Ctrl + c.
 
