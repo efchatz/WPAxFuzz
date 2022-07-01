@@ -65,7 +65,7 @@ if choice == 1:
     except:
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
-    Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface, 'fuzzing')
+    Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
     if choice2 == 1:
         fuzz_beacons = Beacon(mode, "beacon", targeted_AP, att_interface, real_ap_ssid)
