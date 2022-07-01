@@ -33,8 +33,6 @@ except:
     print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
     sys.exit()
 if choice == 1:
-    initiate_NIC()
-    AP_sec = find_APs_sec()
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames) 
     print('Type "standard" for the standard mode')
@@ -70,7 +68,7 @@ if choice == 1:
     Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface, 'fuzzing')
     Deauth_monitor.start()
     if choice2 == 1:
-        fuzz_beacons = Beacon(mode, AP_sec, "beacon", targeted_AP, att_interface, real_ap_ssid)
+        fuzz_beacons = Beacon(mode, "beacon", targeted_AP, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.beacon)        
         print(ascii_art.wifi)
@@ -78,7 +76,7 @@ if choice == 1:
         sleep(5)
         fuzz_beacons.fuzz_beacon()  
     elif choice2 == 2:
-        fuzz_probe_reqs = ProbeReq(mode, AP_sec, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        fuzz_probe_reqs = ProbeReq(mode, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_req)      
         print(ascii_art.wifi)
@@ -86,7 +84,7 @@ if choice == 1:
         sleep(5)
         fuzz_probe_reqs.fuzz_probe_req()
     elif choice2 == 3:
-        fuzz_probe_resp = Proberesp(mode, AP_sec, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid)
+        fuzz_probe_resp = Proberesp(mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_resp)    
         print(ascii_art.wifi)
@@ -94,7 +92,7 @@ if choice == 1:
         sleep(5)
         fuzz_probe_resp.fuzz_probe_resp()
     elif choice2 == 4:
-        fuzz_asso_reqs = AssoReq(mode, AP_sec, "association request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        fuzz_asso_reqs = AssoReq(mode, "association request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_req)
         print(ascii_art.wifi)
@@ -102,7 +100,7 @@ if choice == 1:
         sleep(5)
         fuzz_asso_reqs.fuzz_asso_req()
     elif choice2 == 5:
-        fuzz_asso_resp = AssoResp(mode, AP_sec, "association response", targeted_STA, targeted_AP, att_interface)
+        fuzz_asso_resp = AssoResp(mode, "association response", targeted_STA, targeted_AP, att_interface)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_resp)     
         print(ascii_art.wifi)
@@ -110,7 +108,7 @@ if choice == 1:
         sleep(5)
         fuzz_asso_resp.fuzz_asso_resp()
     elif choice2 == 6:
-        fuzz_reasso_reqs = ReassoReq(mode, AP_sec, "reassociation request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        fuzz_reasso_reqs = ReassoReq(mode, "reassociation request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_req) 
         print(ascii_art.wifi)
@@ -118,7 +116,7 @@ if choice == 1:
         sleep(5)
         fuzz_reasso_reqs.fuzz_reasso_req()
     elif choice2 == 7:
-        fuzz_asso_resp = ReassoResp(mode, AP_sec, "reassociation response", targeted_STA, targeted_AP, att_interface)
+        fuzz_asso_resp = ReassoResp(mode, "reassociation response", targeted_STA, targeted_AP, att_interface)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_resp)  
         print(ascii_art.wifi)
@@ -126,7 +124,7 @@ if choice == 1:
         sleep(5)
         fuzz_asso_resp.fuzz_reasso_resp()
     elif choice2 == 8:
-        fuzz_auth = Authentication(mode, AP_sec, "authentication", targeted_AP, targeted_STA, att_interface)
+        fuzz_auth = Authentication(mode, "authentication", targeted_AP, targeted_STA, att_interface)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.auth)  
         print(ascii_art.wifi)
