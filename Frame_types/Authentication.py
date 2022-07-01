@@ -5,10 +5,9 @@ import settings
 
 
 class Authentication(Frame):
-    def __init__(self, mode, AP_sec, frame_name, dest_addr, source_addr, interface):
+    def __init__(self, mode, frame_name, dest_addr, source_addr, interface):
         super(Authentication, self).__init__()
-        self.mode = mode
-        self.AP_sec = AP_sec  
+        self.mode = mode  
         self.frame_name = frame_name
         self.dest_addr = dest_addr
         self.source_addr = source_addr
@@ -67,7 +66,7 @@ class Authentication(Frame):
         return frame
 
     def fuzz_for_allowed_values(self, caused_disc):
-        init_logs = LogFiles(self.AP_sec)
+        init_logs = LogFiles()
         
         def check_conn():
             sleep(2)
