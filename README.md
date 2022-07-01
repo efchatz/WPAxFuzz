@@ -53,7 +53,7 @@ STEP4: Pick the option 1), namely:
 ```
     Fuzz management frames
 ```
-STEP4: Pick one of the following modes:  
+STEP5: Pick one of the following modes:  
 ```
     Standard: All the frame fields, including the ones being produced with ``Blab'',  
     carry a value length that abides by the 802.11 standard. This way, the frame will not risk  
