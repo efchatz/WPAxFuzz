@@ -28,8 +28,8 @@ class AllvCheck(threading.Thread):
                     while True:
                         input(bcolors.WARNING + 'Reconnect and press Enter to resume:\n' + bcolors.ENDC)
                         if self.pingg(targeted_sta_IP) == 'found':
-                            print(f"{bcolors.OKCYAN}Pausing for 10'' and procceding to the next batch of frames{bcolors.ENDC}\n")
-                            sleep(10)
+                            print(f"{bcolors.OKCYAN}Pausing for 20'' and procceding to the next batch of frames{bcolors.ENDC}\n")
+                            sleep(20)
                             settings.is_alive = True
                             settings.conn_loss = False
                             break
