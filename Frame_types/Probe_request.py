@@ -3,10 +3,9 @@ from scapy.all import Dot11ProbeReq, Dot11Elt
 
 
 class ProbeReq(Frame):
-    def __init__(self, mode, AP_sec, frame_name, dest_addr, source_addr, interface, ssid):
+    def __init__(self, mode, frame_name, dest_addr, source_addr, interface, ssid):
         super(ProbeReq, self).__init__()
         self.mode = mode
-        self.AP_sec = AP_sec
         self.frame_name = frame_name
         self.dest_addr = dest_addr
         self.source_addr = source_addr
