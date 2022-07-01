@@ -14,7 +14,7 @@ from time import sleep
 def nec_checks():
     Aliveness = AllvCheck(targeted_STA, 'attacking')
     Aliveness.start()
-    Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface, 'attacking')
+    Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
 
 
