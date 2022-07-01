@@ -4,10 +4,9 @@ from random import randint
 
 class Beacon(Frame):
 
-    def __init__(self, mode, AP_sec, frame_name, source_addr, interface, ssid):
+    def __init__(self, mode, frame_name, source_addr, interface, ssid):
         super(Beacon, self).__init__()
         self.mode = mode
-        self.AP_sec = AP_sec 
         self.frame_name = frame_name
         self.source_addr = source_addr
         self.interface = interface
