@@ -53,8 +53,7 @@ STEP4: Pick the option 1), namely:
 ```
     Fuzz management frames
 ```
-STEP5: Input the frequency band that the targeted AP transmites on. The tool is responsible to automatically detect and set the right channel for the injecting interface, namely the same with the AP.    
-STEP4: After the injecting interface initialization that is being held automatically, pick one of the following modes:  
+STEP4: Pick one of the following modes:  
 ```
     Standard: All the frame fields, including the ones being produced with ``Blab'',  
     carry a value length that abides by the 802.11 standard. This way, the frame will not risk  
