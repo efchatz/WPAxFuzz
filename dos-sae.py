@@ -707,20 +707,12 @@ class neccessary_Tests():
 			if channel == infos.AP_CHANNEL:
 				print("Channel of " + infos.ATTACKING_INTERFACE + " IS set to: " +infos.AP_CHANNEL+'\n\n')
 				break;
-			elif foundd == 1 and channel != infos.AP_CHANNEL:
-				print(bcolors.FAIL + "Change of channel failed"+bcolors.ENDC)
-				
 			else:
-				print("Channel of " + infos.ATTACKING_INTERFACE + " IS NOT set to: " +infos.AP_CHANNEL)
-				print("Attempting to change  the channel of " + infos.ATTACKING_INTERFACE + " to: " +infos.AP_CHANNEL)
-				try:
-					subprocess.call(['iwconfig ' + infos.ATTACKING_INTERFACE + ' channel ' + infos.AP_CHANNEL], shell = True)
-					channel = subprocess.check_output(['iw '+ infos.ATTACKING_INTERFACE+' info | grep channel | cut -d " " -f2'], shell = True)
-				except subprocess.CalledProcessError as e:
-					channel = '11'
-				channel = channel[:-1]
-				print("Channel of " + infos.ATTACKING_INTERFACE + " IS set to: " +channel+'\n\n')
-				foundd = 1
+				print("Channel of " + infos.ATTACKING_INTERFACE + " IS NOT set to: " +infos.AP_CHANNEL + " OR  i cannot correctly retrieve the channel information\n")
+				print("You are suggested to manually check and set the interface to the correct channel (if needed)")
+				print("If you are sure that the channel is set correctly, INGORE this message.\n\n")
+				break;
+				
 			
 
 	def search_AP(self):
