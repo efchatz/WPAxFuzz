@@ -79,7 +79,7 @@ STEP8: Exit the fuzzing process with 2 consecutive Ctrl+c.
 ## Fuzz SAE-exchange
 
 ## Mage802.11 (DoS attack)
-The name of this module derives from the word **ma**na**ge**ment. It gathers all the problematic frames that were detected during the management frames fuzzing and transmit them endlessly. Note that, this DoS attack can only be deployed for the AP and STA that the fuzzing was held for; you cant define new MAC adresses.
+The name of this module derives from the word **ma**na**ge**ment. It gathers all the problematic frames that were detected during the management frames fuzzing and transmit them based on the attack module that the user will pick. Note that, this DoS attack can only be deployed for the AP and STA that the fuzzing was held for; you cant define new MAC adresses.
 
 ### Description
 STEP1: Pick the option 3), namely:
@@ -92,5 +92,7 @@ STEP2: Pick the attack module you wish
     2) Sequence of frames till the moment of the dirsuption detection (BETA)
     3) Frames detected at the moment of connectivity disruption (BETA)
 ```
-STEP3: First mode exit when no more frames can be found in the log files that the fuzzer produced. The rest of the module exit with Ctrl + c.
+STEP3: First moded of Mage802.11, tests all the frames that the fuzzer detected. It's a second hand filtering to seperate the true positive from the false positive frames. In case that a frame is positive, i.e causes a DoS to the associated STA, an exploit is being produced automatically.   
+STEP4: Mage802.11 exits when no more frames can be found in the log files that the fuzzer produced.  
 
+**The rest to modules only implement preliminary functionalities. It is to our future goals, to enrich them with additional capabilities.
