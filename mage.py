@@ -50,7 +50,7 @@ def DoS_attack_init(file_list, mode):
     
     
 def print_exploit(frame):
-    print(bcolors.OKGREEN + "\n----You got yourself an exploit----" + bcolors.ENDC)
+    print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
     print(f'\n{frame[32:]}\n')
     print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
     subtype = int(int.from_bytes(frame[8:9], "big") / 16)
@@ -138,4 +138,3 @@ sleep(20)
 
 subprocess.call(['clear'], shell=True)
 send_frames(init_att, choice)
-
