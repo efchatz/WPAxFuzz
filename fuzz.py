@@ -26,9 +26,9 @@ print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                             
 print('1) Fuzz Management Frames')
 print('2) Fuzz SAE exchange')
-print('3) DoS attack\n\n')
+print('3) DoS attack module\n\n')
 try:
-    choice = int(input('Type your choice: '))
+    choice = int(input('Enter a choice: '))
 except:
     print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
     sys.exit()
@@ -37,7 +37,7 @@ if choice == 1:
     print(ascii_art.mngmt_frames) 
     print('Type "standard" for the standard mode')
     print('Type "random" for the random mode\n\n')
-    mode = input('Type your choice: ').lower()
+    mode = input('Enter a choice: ').lower()
     if mode == 'standard' or mode == 'random':
         Aliveness = AllvCheck(targeted_STA, 'fuzzing')
         Aliveness.start()
@@ -51,7 +51,7 @@ if choice == 1:
         sys.exit()
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames)
-    print('Which frames do you choose to fuzz with')
+    print('Which frames would you like to fuzz?')
     print('1) Beacon frames')
     print('2) Probe request frames')
     print('3) Probe response frames')
@@ -61,7 +61,7 @@ if choice == 1:
     print('7) Reassociation response frames')
     print('8) Authentication frames\n\n')
     try:
-        choice2 = int(input('Pick a frame to fuzz with: '))
+        choice2 = int(input('Select a frame to fuzz: '))
     except:
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
@@ -72,7 +72,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.beacon)        
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_beacons.fuzz_beacon()  
     elif choice2 == 2:
@@ -80,7 +80,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_req)      
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_probe_reqs.fuzz_probe_req()
     elif choice2 == 3:
@@ -88,7 +88,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_resp)    
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_probe_resp.fuzz_probe_resp()
     elif choice2 == 4:
@@ -96,7 +96,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_req)
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_asso_reqs.fuzz_asso_req()
     elif choice2 == 5:
@@ -104,7 +104,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_resp)     
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_asso_resp.fuzz_asso_resp()
     elif choice2 == 6:
@@ -112,7 +112,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_req) 
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_reasso_reqs.fuzz_reasso_req()
     elif choice2 == 7:
@@ -120,7 +120,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_resp)  
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_asso_resp.fuzz_reasso_resp()
     elif choice2 == 8:
@@ -128,7 +128,7 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.auth)  
         print(ascii_art.wifi)
-        print("Fasten your seatbelts fuzzing is about to begin!!")
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_auth.fuzz_auth()
 elif choice == 2:
