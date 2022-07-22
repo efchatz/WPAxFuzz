@@ -226,13 +226,13 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                         break
                     if i == 'empty':
                         subprocess.call(
-                            ['echo' + f' Sending {2*NUM_OF_FRAMES_TO_SEND} {i} {self.frame_name} frames'], shell=True)
+                            ['echo' + f'Transmitting {2*NUM_OF_FRAMES_TO_SEND} {i} {self.frame_name} frames'], shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
                             frames_till_disr += frame
                             if not settings.is_alive:
                                 list_of_fields[i]["conn_loss"] = True
-                                print("\nHexDump of frame:")
+                                print('\nHexDump of frame:')
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Unresponsiveness found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
@@ -251,7 +251,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
                                 frames_till_disr = []
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f"{bcolors.OKCYAN}Pausing for 20'' and procceding to the next batch of frames{bcolors.ENDC}\n")
+                                print(f'{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n')
                                 sleep(20)
                                 settings.is_alive = True
                                 settings.conn_loss = False
@@ -265,13 +265,13 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                         pass
                     else:
                         subprocess.call(
-                            ['echo' + f' Sending {2*NUM_OF_FRAMES_TO_SEND} {self.frame_name} frames with random {i}'], shell=True)
+                            ['echo' + f'Transmitting {2*NUM_OF_FRAMES_TO_SEND} {self.frame_name} frames with random {i}'], shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
                             frames_till_disr += frame
                             if not settings.is_alive:
                                 list_of_fields[i]["conn_loss"] = True
-                                print("\nHexDump of frame:")
+                                print('\nHexDump of frame:')
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.is_alive_path)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
@@ -282,7 +282,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 break
                             elif settings.conn_loss:
                                 list_of_fields[i]["conn_loss"] = True
-                                print("\nHexDump of frame:")
+                                print('\nHexDump of frame:')
                                 hexdump(frame)
                                 init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.deauth_path)
                                 init_logs.logging_conn_loss(f"Prior to connection loss, the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
@@ -290,7 +290,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
                                 frames_till_disr = []
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f"{bcolors.OKCYAN}Pausing for 20'' and procceding to the next batch of frames{bcolors.ENDC}\n")
+                                print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n")
                                 sleep(20)
                                 settings.is_alive = True
                                 settings.conn_loss = False
