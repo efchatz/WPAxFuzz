@@ -87,7 +87,7 @@ class Authentication(Frame):
                         break
                     else:
                         subprocess.call([
-                        'echo' + f' Sending authentication frames with '
+                        'echo' + f'Transmiting authentication frames with '
                                  f'authentication algorithm number {algo}, sequence number {seq} an'
                                  f'd status {status}'],
                         shell=True)
@@ -100,7 +100,7 @@ class Authentication(Frame):
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f"{bcolors.OKCYAN}Pausing for 20'' and procceding to the next batch of frames{bcolors.ENDC}\n")
+                                print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n")
                                 sleep(20)
                                 settings.is_alive = True
                                 settings.conn_loss = False   
