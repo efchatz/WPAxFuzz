@@ -66,7 +66,7 @@ class Authentication(Frame):
         return frame
 
     def fuzz_for_allowed_values(self, caused_disc):
-        init_logs = LogFiles(self.AP_sec)
+        init_logs = LogFiles()
         
         def check_conn():
             sleep(2)
@@ -87,9 +87,9 @@ class Authentication(Frame):
                         break
                     else:
                         subprocess.call([
-                        'echo' + f'Transmiting authentication frames with '
-                                 f'authentication algorithm number {algo}, sequence number {seq} an'
-                                 f'd status {status}'],
+                        'echo' + f' Transmiting authentication frames with'
+                                 f' authentication algorithm number {algo}, sequence number {seq} and'
+                                 f' status {status}'],
                         shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             auth = Dot11Auth(algo=algo, seqnum=seq, status=status)
