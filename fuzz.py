@@ -68,7 +68,7 @@ if choice == 1:
     Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
     if choice2 == 1:
-        fuzz_beacons = Beacon(mode, "beacon", targeted_AP, att_interface, real_ap_ssid)
+        fuzz_beacons = Beacon(mode, "beacon", targeted_STA, targeted_AP, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.beacon)        
         print(ascii_art.wifi)
