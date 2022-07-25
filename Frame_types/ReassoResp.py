@@ -118,8 +118,8 @@ class ReassoResp(Frame):
     def send_Reasso_resp_with_reverse_addresses(self, mode):
         asso_resp = Dot11ReassoResp(cap=4920)
         frame = self.construct_MAC_header(3, self.source_addr, self.dest_addr, self.source_addr) / asso_resp / \
-                SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / \
-                STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
+                self.generate_supp_speed(mode) / self.generate_HT_capabilities(mode) / self.generate_HT_information(mode) / \
+                self.generate_overlapping_BSS(mode) / self.generate_extended_HT_capabilities(mode) / self.generate_RM_enabled_capabilities(mode)
         return frame
 
     def send_Reasso_resp_with_all_fields_rand(self, mode):
