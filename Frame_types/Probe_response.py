@@ -163,8 +163,8 @@ class Proberesp(Frame):
     def send_probe_resp_with_reverse_addresses(self, mode):
         probe_resp = Dot11ProbeResp(cap=4920)
         frame = self.construct_MAC_header(5, self.source_addr, self.dest_addr, self.source_addr) / probe_resp / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_RM_CAPS / STANDARD_HT_CAPABILITIES / \
-                STANDARD_HT_INFORMATION / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
+                self.ssid / self.generate_supp_speed(mode) / self.generate_channel_use(mode) / self.generate_RM_enabled_capabilities(mode) /\
+                self.generate_HT_capabilities(mode) / self.generate_HT_information(mode) / self.generate_extended_HT_capabilities(mode) / self.construct_RSN(mode)
         return frame
 
     def fuzz_probe_resp(self):
