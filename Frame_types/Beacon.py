@@ -4,10 +4,11 @@ from random import randint
 
 class Beacon(Frame):
 
-    def __init__(self, mode, frame_name, source_addr, interface, ssid):
+    def __init__(self, mode, frame_name, dest_addr, source_addr, interface, ssid):
         super(Beacon, self).__init__()
         self.mode = mode
         self.frame_name = frame_name
+        self.dest_addr = dest_addr
         self.source_addr = source_addr
         self.interface = interface
         self.ssid = Dot11Elt(ID='SSID', info=ssid, len=len(ssid))
@@ -64,6 +65,10 @@ class Beacon(Frame):
                 "send_function": self.send_beacon_with_rand_source_mac,
                 "conn_loss": False
                 },
+            "addresses reversed '(destination = AP, source = STA)'": {
+                "send_function": self.send_beacon_with_reverse_addresses,
+                "conn_loss": False
+            },    
             "all fields": {
                 "send_function": self.send_beacon_with_all_fields_rand,
                 "conn_loss": False
@@ -155,6 +160,14 @@ class Beacon(Frame):
         frame = self.construct_MAC_header(8, 'ff:ff:ff:ff:ff:ff', self.source_addr, self.source_addr) / beacon / \
                 self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / self.generate_extended_HT_capabilities(mode)/\
                 STANDARD_TIM / STANDARD_RM_CAPS / STANDARD_RSN
+        return frame
+        
+    def send_beacon_with_reverse_addresses(self, mode):
+        beacon = Dot11Beacon(timestamp=randint(1, 9999), beacon_interval=randint(1, 9999), cap=randint(1, 9999))
+        frame = self.construct_MAC_header(8, self.source_addr, self.dest_addr, self.dest_addr) / beacon / \
+                self.ssid / self.generate_supp_speed(mode) / self.generate_channel_use(mode) / self.generate_HT_capabilities(mode) /\
+                self.generate_HT_information(mode) / self.generate_extended_HT_capabilities(mode) / self.construct_TIM(mode) / \
+                self.generate_RM_enabled_capabilities(mode) / self.construct_RSN(mode)
         return frame
 
     def send_beacon_with_all_fields_rand(self, mode):
