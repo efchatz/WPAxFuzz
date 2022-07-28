@@ -31,7 +31,7 @@ try:
     choice = int(input('Enter a choice: '))
 except:
     print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
-    sys.exit()
+    os._exit(0)
 if choice == 1:
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames) 
@@ -43,12 +43,12 @@ if choice == 1:
         Aliveness.start()
         while not settings.retrieving_IP:
             if settings.IP_not_alive:
-              sys.exit()
+              os._exit(0)
         sleep(10)
         subprocess.call(['clear'], shell=True)
     else:
         print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
-        sys.exit()
+        os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames)
     print('Which frames would you like to fuzz?')
@@ -68,7 +68,25 @@ if choice == 1:
     Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
     if choice2 == 1:
-        fuzz_beacons = Beacon(mode, "beacon", targeted_STA, targeted_AP, att_interface, real_ap_ssid)
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.beacon)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_beacons = Beacon(mode, "beacon", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.beacon)        
         print(ascii_art.wifi)
@@ -84,7 +102,25 @@ if choice == 1:
         sleep(5)
         fuzz_probe_reqs.fuzz_probe_req()
     elif choice2 == 3:
-        fuzz_probe_resp = Proberesp(mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid)
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.probe_resp)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_probe_resp = Proberesp(mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_resp)    
         print(ascii_art.wifi)
@@ -100,7 +136,25 @@ if choice == 1:
         sleep(5)
         fuzz_asso_reqs.fuzz_asso_req()
     elif choice2 == 5:
-        fuzz_asso_resp = AssoResp(mode, "association response", targeted_STA, targeted_AP, att_interface)
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.asso_resp)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_asso_resp = AssoResp(mode, "association response", targeted_STA, targeted_AP, att_interface, direction)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_resp)     
         print(ascii_art.wifi)
@@ -116,7 +170,25 @@ if choice == 1:
         sleep(5)
         fuzz_reasso_reqs.fuzz_reasso_req()
     elif choice2 == 7:
-        fuzz_asso_resp = ReassoResp(mode, "reassociation response", targeted_STA, targeted_AP, att_interface)
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.reasso_resp)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_asso_resp = ReassoResp(mode, "reassociation response", targeted_STA, targeted_AP, att_interface, direction)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_resp)  
         print(ascii_art.wifi)
