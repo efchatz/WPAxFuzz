@@ -226,7 +226,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                         break
                     if i == 'empty':
                         subprocess.call(
-                            ['echo' + f' Transmitting {2*NUM_OF_FRAMES_TO_SEND} {i} {self.frame_name} frames'], shell=True)
+                            ['echo' + f' Transmitting {2*NUM_OF_FRAMES_TO_SEND} {i} {bcolors.OKBLUE}{self.frame_name}{bcolors.ENDC} frames'], shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
                             frames_till_disr += frame
@@ -265,7 +265,7 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                         pass
                     else:
                         subprocess.call(
-                            ['echo' + f' Transmitting {2*NUM_OF_FRAMES_TO_SEND} {self.frame_name} frames with random {i}'], shell=True)
+                            ['echo' + f' Transmitting {2*NUM_OF_FRAMES_TO_SEND} {bcolors.OKBLUE}{self.frame_name}{bcolors.ENDC} frames with random {i}'], shell=True)
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
                             frames_till_disr += frame
