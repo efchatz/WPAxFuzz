@@ -87,7 +87,7 @@ class Authentication(Frame):
                         break
                     else:
                         subprocess.call([
-                        'echo' + f' Transmiting authentication frames with'
+                        'echo' + f' Transmiting {bcolors.OKBLUE}authentication{bcolors.ENDC} frames with'
                                  f' authentication algorithm number {algo}, sequence number {seq} and'
                                  f' status {status}'],
                         shell=True)
