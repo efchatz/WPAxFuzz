@@ -96,7 +96,7 @@ class Authentication(Frame):
                             frame = self.construct_MAC_header(11, self.dest_addr, self.source_addr, self.dest_addr) / auth
                             if settings.conn_loss:
                                 caused_disc.append((algo, seq, status))
-                                init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.deauth_path)
+                                init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.deauth_path_mngmt)
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
@@ -108,7 +108,7 @@ class Authentication(Frame):
                                 break
                             if not settings.is_alive:
                                 caused_disc.append((algo, seq, status))
-                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.is_alive_path)
+                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
                                 check_conn()
