@@ -234,10 +234,10 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 list_of_fields[i]["conn_loss"] = True
                                 print('\nHexDump of frame:')
                                 hexdump(frame)
-                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path)
-                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
-                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 check_conn()
                                 break
@@ -245,10 +245,10 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 list_of_fields[i]["conn_loss"] = True
                                 print("\nHexDump of frame:")
                                 hexdump(frame)
-                                init_logs.logging_conn_loss(f"Connection loss found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.deauth_path)
-                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                init_logs.logging_conn_loss(f"Connection loss found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.deauth_path_mngmt)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
-                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
                                 print(f'{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n')
@@ -273,10 +273,10 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 list_of_fields[i]["conn_loss"] = True
                                 print('\nHexDump of frame:')
                                 hexdump(frame)
-                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.is_alive_path)
-                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
-                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 check_conn()
                                 break
@@ -284,10 +284,10 @@ A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                                 list_of_fields[i]["conn_loss"] = True
                                 print('\nHexDump of frame:')
                                 hexdump(frame)
-                                init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.deauth_path)
-                                init_logs.logging_conn_loss(f"Prior to connection loss, the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr)
+                                init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.deauth_path_mngmt)
+                                init_logs.logging_conn_loss(f"Prior to connection loss, the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
-                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr)
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
                                 print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n")
