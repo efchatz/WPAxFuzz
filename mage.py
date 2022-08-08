@@ -1,5 +1,5 @@
 from scapy.all import sendp
-from NIC_init import *
+from fuzzer_init import *
 from Frame_types.Construct_frame_fields import NUM_OF_FRAMES_TO_SEND, bcolors
 from Connection_monitors.DeauthMonitor import DeauthMon
 from Connection_monitors.AlivenessCheck import AllvCheck
