@@ -11,7 +11,7 @@ from Connection_monitors.DeauthMonitor import DeauthMon
 from Connection_monitors.AlivenessCheck import AllvCheck
 from Frame_types.Construct_frame_fields import bcolors
 from ControlFrames import ControlFrames
-from NIC_init import *
+from fuzzer_init import *
 from time import sleep
 import threading
 import settings
