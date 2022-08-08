@@ -10,6 +10,7 @@ from Frame_types.ReassoResp import ReassoResp
 from Connection_monitors.DeauthMonitor import DeauthMon
 from Connection_monitors.AlivenessCheck import AllvCheck
 from Frame_types.Construct_frame_fields import bcolors
+from ControlFrames import ControlFrames
 from NIC_init import *
 from time import sleep
 import threading
@@ -26,7 +27,8 @@ print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                             
 print('1) Fuzz Management Frames')
 print('2) Fuzz SAE exchange')
-print('3) DoS attack module\n\n')
+print('3) Fuzz Control Frames')
+print('4) DoS attack module\n\n')
 try:
     choice = int(input('Enter a choice: '))
 except:
@@ -43,7 +45,7 @@ if choice == 1:
         Aliveness.start()
         while not settings.retrieving_IP:
             if settings.IP_not_alive:
-              os._exit(0)
+                os._exit(0)
         sleep(10)
         subprocess.call(['clear'], shell=True)
     else:
@@ -207,6 +209,24 @@ elif choice == 2:
     subprocess.call(['clear'], shell=True)
     subprocess.call(['sudo python3 dos-sae.py'], shell=True)
 elif choice == 3:
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
+    Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+    Aliveness.start()
+    while not settings.retrieving_IP:
+        if settings.IP_not_alive:
+            os._exit(0)
+    sleep(10)
+    Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
+    Deauth_monitor.start()
+    fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface)
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
+    print(ascii_art.wifi)
+    print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    sleep(5)
+    fuzz_ctrl.fuzz_ctrl_frames()
+elif choice == 4:
     subprocess.call(['clear'], shell=True)
     subprocess.call(['sudo python3 mage.py'], shell=True)
 else:
