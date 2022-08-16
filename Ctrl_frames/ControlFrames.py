@@ -107,7 +107,7 @@ class ControlFrames:
             print(f'Sending {bcolors.OKBLUE}{FRAME_NAMES[frame_id-16]}{bcolors.ENDC} frames with random payload multiplied in range (1,4)')
             for multiplier in range(1, 5):
                 for _ in range(0, NUM_OF_BATCHES):
-                    frame = self.generate_random_payload(frame_id, randint(0,257), multiplier, frame_id)
+                    frame = self.generate_random_payload(frame_id, randint(0,257), multiplier)
                     if self.check_conn_aliveness(frame):
                         init_logs.logging_conn_loss(f"Connectivity issues detected while sending {FRAME_NAMES[frame_id-16]} frames with payload size equal to {multiplier*32} bytes\nframe = {frame}\n\n", init_logs.is_alive_path_ctrl)
                         break
@@ -122,7 +122,7 @@ class ControlFrames:
             print(f'Sending {bcolors.OKBLUE}{FRAME_NAMES[frame_id-16]}{bcolors.ENDC} frames with Frame Control Flags checked within the range (0,256) and with random payload multiplied in range (1,4)')
             for flag_byte in range (0, 256):
                 for multiplier in range(1, 5):
-                    frame = self.generate_random_payload(frame_id, flag_byte, multiplier, frame_id)
+                    frame = self.generate_random_payload(frame_id, flag_byte, multiplier)
                     if self.check_conn_aliveness(frame):
                         init_logs.logging_conn_loss(f"Connectivity issues detected while sending {FRAME_NAMES[frame_id-16]} frames with Frame Control Flags equal to {flag_byte} and payload size equal to {multiplier*32} bytes\nframe = {frame}\n\n", init_logs.is_alive_path_ctrl)
                         break
