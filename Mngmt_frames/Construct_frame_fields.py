@@ -230,7 +230,7 @@ class Frame:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f'{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n')
+                                print(f'{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next subtype of frames{bcolors.ENDC}\n')
                                 sleep(20)
                                 settings.is_alive = True
                                 settings.conn_loss = False
@@ -269,7 +269,7 @@ class Frame:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n")
+                                print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next sutype of frames{bcolors.ENDC}\n")
                                 sleep(20)
                                 settings.is_alive = True
                                 settings.conn_loss = False
