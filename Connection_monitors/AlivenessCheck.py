@@ -28,7 +28,7 @@ class AllvCheck(threading.Thread):
                     while True:
                         input(bcolors.WARNING + 'Reconnect the STA and press Enter to resume:\n' + bcolors.ENDC)
                         if self.pingg(targeted_sta_IP) == 'found':
-                            print(f'{bcolors.OKCYAN}Pausing for 20s and proceeding to the next batch of frames{bcolors.ENDC}\n')
+                            print(f'{bcolors.OKCYAN}Pausing for 20s and proceeding to the next subtype of frames{bcolors.ENDC}\n')
                             sleep(20)
                             settings.is_alive = True
                             settings.conn_loss = False
