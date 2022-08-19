@@ -25,11 +25,13 @@ class ControlFrames:
                 "frame_id": 4,
                 "frame_name": "Beamforming Report Poll",
                 "payload_size": 1,
+                "standard_payload": binascii.unhexlify(self.source_addr.replace(':', '')) + b'\xfd',
                 },
                {
                  "frame_id": 5,
                 "frame_name": "VHT/HE NDP Announcement",
                 "payload_size": 5,
+                "standard_payload": binascii.unhexlify(self.source_addr.replace(':', '')) + b'\x00\x00\x00\x00\x00',
                 },
                {
                 "frame_id": 6,
@@ -89,46 +91,55 @@ class ControlFrames:
                 "frame_id": 7,
                 "frame_name": "Control wrapper",
                 "payload_size": 28,
+                "standard_payload": b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
                 },
                {
                 "frame_id": 8,
                 "frame_name": "Block Ack Request (BAR)",
                 "payload_size": 16,
+                "standard_payload": b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
                 },
                {
                 "frame_id": 9,
                 "frame_name": "Block Ack",
                 "payload_size": 16,
+                "standard_payload": b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
                 },
                {
                 "frame_id": 10,
                 "frame_name": "PS-Poll (Power Save-Poll)",
                 "payload_size": 0,
+                "standard_payload": b'',
                 },
                {
                 "frame_id": 11,
                 "frame_name": "RTS–Request to Send",
                 "payload_size": 0,
+                "standard_payload": b'',
                 },
                {
                 "frame_id": 12,
                 "frame_name": "CTS-Clear to Send",
                 "payload_size": 0,
+                "standard_payload": b'',
                 },
                {
                 "frame_id": 13,
                 "frame_name": "ACK",
                 "payload_size": 0,
+                "standard_payload": b'',
                 },
                {
                 "frame_id": 14,
                 "frame_name": "CF-End (Contention Free-End)",
                 "payload_size": 0,
+                "standard_payload": b'',
                 },
                {
                 "frame_id": 15,
                 "frame_name": "CF-End & CF-ACK",
                 "payload_size": 0,
+                "standard_payload": b'',
                 }
         ]
         self.fuzzer_state = {
@@ -192,7 +203,8 @@ class ControlFrames:
                 return self.construct_bytes(frame_info['payload_size'])
 
     def generate_frame_with_random_FCf(self):
-        return self.generate_MAC_header(int.from_bytes(self.construct_bytes(1), "big"))
+        frame_info = self.extract_frame_info()
+        return self.generate_MAC_header(int.from_bytes(self.construct_bytes(1), "big")) / frame_info["standard_payload"]
         
     def generate_frame_with_random_payload(self, FCf=0):
         MAC_header = self.generate_MAC_header(FCf)
