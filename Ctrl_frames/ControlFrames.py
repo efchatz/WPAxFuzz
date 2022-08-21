@@ -31,7 +31,7 @@ class ControlFrames:
                  "frame_id": 5,
                 "frame_name": "VHT/HE NDP Announcement",
                 "payload_size": 5,
-                "standard_payload": binascii.unhexlify(self.source_addr.replace(':', '')) + b'\x00\x00\x00\x00\x00',
+                "standard_payload": binascii.unhexlify(self.source_addr.replace(':', '')) + b'\xd3\x57\x68\xf1\x33',
                 },
                {
                 "frame_id": 6,
@@ -91,19 +91,19 @@ class ControlFrames:
                 "frame_id": 7,
                 "frame_name": "Control wrapper",
                 "payload_size": 28,
-                "standard_payload": b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
+                "standard_payload": b'\x03\x22\x65\x87\x32\xaa\xed\x43\x11\x00\xe1\x55\x01\xd1\xff\x91\x85\x39\x45\xe1\xe1\x23\x78\xdd\xda\xad\xe8\x93',
                 },
                {
                 "frame_id": 8,
                 "frame_name": "Block Ack Request (BAR)",
-                "payload_size": 16,
-                "standard_payload": b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
+                "payload_size": 12,
+                "standard_payload": b'\x00\x05\x97\x30\x00\x00\x00\x00\x00\x00\x00\x00',
                 },
                {
                 "frame_id": 9,
                 "frame_name": "Block Ack",
-                "payload_size": 16,
-                "standard_payload": b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+                "payload_size": 12,
+                "standard_payload": b'\x60\x05\x03\x50\x00\x00\x00\x00\x00\x00\x00\x00'
                 },
                {
                 "frame_id": 10,
@@ -297,4 +297,4 @@ class ControlFrames:
                             else:
                                 sendp(frame, count=2, iface=self.interface, verbose=0)
                 subprocess.call(['clear'], shell=True)
-                counter += 1  
+                counter += 1
