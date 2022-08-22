@@ -10,7 +10,7 @@ import os
 from Logging import LogFiles
 from generateBytes import *
 
-NUM_OF_FRAMES_TO_SEND = 128
+NUM_OF_FRAMES_TO_SEND = 64
 
 STANDARD_RSN = Dot11Elt(ID='RSNinfo', info=(
     '\x01\x00'  # RSN Version 1
@@ -176,13 +176,34 @@ class Frame:
     def send_Frame(self, frame, interface):
         sendp(frame, count=2, iface=interface, verbose=0)
         
-    def fuzz(self, mode, list_of_fields, interface, is_auth_frame=False):
-    
+    def check_conn_aliveness(self, frame, fuzzing_stage):
+        
         def check_conn():
             sleep(2)
             while settings.conn_loss or not settings.is_alive:
                 pass
             return
+        
+        if not settings.is_alive:
+            self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
+            print('\nHexDump of frame:')
+            hexdump(frame)
+            check_conn()
+            return True
+        elif settings.conn_loss:
+            self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
+            print('\nHexDump of frame:')
+            hexdump(frame)
+            input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
+            print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next subtype of frames{bcolors.ENDC}\n")
+            sleep(20)
+            settings.is_alive = True
+            settings.conn_loss = False
+            check_conn()
+            return True
+        return False
+        
+    def fuzz(self, mode, list_of_fields, interface, is_auth_frame=False):
             
         init_logs = LogFiles()
         counter = 1
@@ -209,32 +230,12 @@ class Frame:
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
                             frames_till_disr += frame
-                            if not settings.is_alive:
-                                list_of_fields[i]["conn_loss"] = True
-                                print('\nHexDump of frame:')
-                                hexdump(frame)
-                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                            if(self.check_conn_aliveness(frame, i)):
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
-                                check_conn()
-                                break
-                            elif settings.conn_loss:
-                                list_of_fields[i]["conn_loss"] = True
-                                print("\nHexDump of frame:")
-                                hexdump(frame)
-                                init_logs.logging_conn_loss(f"Connection loss found while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.deauth_path_mngmt)
-                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
-                                for item in frames_till_disr:
-                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
-                                frames_till_disr = []
-                                input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f'{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next subtype of frames{bcolors.ENDC}\n')
-                                sleep(20)
-                                settings.is_alive = True
-                                settings.conn_loss = False
-                                check_conn()
                                 break
                             else:
                                 self.send_Frame(frame, interface)
@@ -248,32 +249,12 @@ class Frame:
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = list_of_fields[i]["send_function"](mode)
                             frames_till_disr += frame
-                            if not settings.is_alive:
-                                list_of_fields[i]["conn_loss"] = True
-                                print('\nHexDump of frame:')
-                                hexdump(frame)
-                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                            if(self.check_conn_aliveness(frame, i)):
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
-                                check_conn()
-                                break
-                            elif settings.conn_loss:
-                                list_of_fields[i]["conn_loss"] = True
-                                print('\nHexDump of frame:')
-                                hexdump(frame)
-                                init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with malformed {i}\nframe = {frame}\n\n", init_logs.deauth_path_mngmt)
-                                init_logs.logging_conn_loss(f"Prior to connection loss, the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
-                                for item in frames_till_disr:
-                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
-                                frames_till_disr = []
-                                input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next sutype of frames{bcolors.ENDC}\n")
-                                sleep(20)
-                                settings.is_alive = True
-                                settings.conn_loss = False
-                                check_conn()
                                 break
                             else:
                                 self.send_Frame(frame, interface)
