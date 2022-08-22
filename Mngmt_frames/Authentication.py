@@ -67,13 +67,7 @@ class Authentication(Frame):
 
     def fuzz_for_allowed_values(self, caused_disc):
         init_logs = LogFiles()
-        
-        def check_conn():
-            sleep(2)
-            while settings.conn_loss or not settings.is_alive:
-                pass
-            return
-            
+
         def is_payload_reused(conn_loss_vals):    
             for item in conn_loss_vals:
                 if algo == item[0] and seq == item[1] and status == item[2]:
@@ -94,25 +88,9 @@ class Authentication(Frame):
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             auth = Dot11Auth(algo=algo, seqnum=seq, status=status)
                             frame = self.construct_MAC_header(11, self.dest_addr, self.source_addr, self.dest_addr) / auth
-                            if settings.conn_loss:
+                            if self.check_conn_aliveness(frame):
                                 caused_disc.append((algo, seq, status))
-                                init_logs.logging_conn_loss(f"Connection loss found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.deauth_path_mngmt)
-                                print("\nHexDump of frame:")
-                                hexdump(frame)
-                                input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
-                                print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next batch of frames{bcolors.ENDC}\n")
-                                sleep(20)
-                                settings.is_alive = True
-                                settings.conn_loss = False   
-                                check_conn()
-                                break
-                            if not settings.is_alive:
-                                caused_disc.append((algo, seq, status))
-                                init_logs.logging_conn_loss(f"Unresponsiveness found while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
-                                print("\nHexDump of frame:")
-                                hexdump(frame)
-                                check_conn()
-                                break
+                                init_logs.logging_conn_loss(f"onnectivity issues detected while sending {self.frame_name} frames with authentication algorithm: {algo}, sequence number: {seq} and status: {status}\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                             else:
                                 self.send_Frame(frame, self.interface)
         return caused_disc
