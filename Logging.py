@@ -9,7 +9,6 @@ class LogFiles:
         self.folder_name_ctrl = datetime.now().strftime("fuzz_ctrl_frames")
         self.folder_path_mngmt = 'Logs/' + self.folder_name_mngmt
         self.folder_path_ctrl = 'Logs/' + self.folder_name_ctrl
-        self.deauth_path_mngmt = self.folder_path_mngmt + datetime.now().strftime(f"/Deauth_path_%d-%m-%y__%H:%M:%S")
         self.is_alive_path_mngmt = self.folder_path_mngmt + datetime.now().strftime(f"/Aliveness_check_%d-%m-%y__%H:%M:%S")
         self.is_alive_path_ctrl = self.folder_path_ctrl + datetime.now().strftime(f"/Aliveness_check_%d-%m-%y__%H:%M:%S")
         self.frames_till_disr_mngmt = self.folder_path_mngmt + datetime.now().strftime(f"/frames_till_disr_%d-%m-%y__%H:%M:%S")
