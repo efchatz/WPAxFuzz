@@ -23,7 +23,7 @@ def DoS_attack_init(file_list, mode, frames_dir):
     frames_list = []
     subprocess.call(['clear'], shell=True)
     print(dos_attack)
-    print(wifi)
+    print('\n---------------------------------------------------------------------------------------------------------------------\n')
     if mode == 1 or mode == 3:
         for file in file_list:
             if 'Aliveness'in file:
@@ -132,7 +132,7 @@ def send_frames(frames_list, mode, frame_type):
 
 print(dos_attack)
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
-print('\t\tThis module launches a DoS attack based on the data (log files) collected from the fuzzing process.\n\t\tIt can only be performed against the same AP and STA used during the fuzzing process.\n\t\t Namely, the frames that caused any kind of problematic behavior during the fuzzing are being transmitted\n\t\tare transmitted in an endless loop.\n\n')
+print('\t\tThis module launches a DoS attack based on the data (log files) collected from the fuzzing process.\n\t\tIt can only be performed against the same AP and STA used during the fuzzing process.\n\t\tNamely, the frames that caused any kind of problematic behavior during the fuzzing are being\n\t\ttransmitted in an endless loop.\n\n')
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
 print('1) Frames detected at the moment of STA connectivity disruption, one-by-one')
 print('2) Sequence of frames till the moment a disruption was detected ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
@@ -144,6 +144,7 @@ except:
     os._exit(0)
 subprocess.call(['clear'], shell=True)
 print(dos_attack)
+print('\n---------------------------------------------------------------------------------------------------------------------\n')
 print('1) Management Frames')
 print('2) Control Frames\n\n')
 try:
