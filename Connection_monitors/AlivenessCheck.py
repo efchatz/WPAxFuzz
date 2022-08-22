@@ -1,7 +1,7 @@
 import settings
 import threading
 from time import sleep
-from Frame_types.Construct_frame_fields import bcolors
+from Mngmt_frames.Construct_frame_fields import bcolors
 import subprocess
 import os
 
