@@ -2,7 +2,7 @@ import settings
 import threading
 from time import sleep
 from scapy.all import *
-from Frame_types.Construct_frame_fields import bcolors
+from Mngmt_frames.Construct_frame_fields import bcolors
 
 
 class DeauthMon(threading.Thread):
