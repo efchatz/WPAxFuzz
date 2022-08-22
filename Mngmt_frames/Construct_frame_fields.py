@@ -176,7 +176,7 @@ class Frame:
     def send_Frame(self, frame, interface):
         sendp(frame, count=2, iface=interface, verbose=0)
         
-    def check_conn_aliveness(self, frame, fuzzing_stage):
+    def check_conn_aliveness(self, frame, fuzzing_stage=0):
         
         def check_conn():
             sleep(2)
@@ -185,13 +185,19 @@ class Frame:
             return
         
         if not settings.is_alive:
-            self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
+            if fuzzing_stage == 0:
+                pass
+            else:
+                self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
             print('\nHexDump of frame:')
             hexdump(frame)
             check_conn()
             return True
         elif settings.conn_loss:
-            self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
+            if fuzzing_stage == 0:
+                pass
+            else:
+                self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
             print('\nHexDump of frame:')
             hexdump(frame)
             input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
