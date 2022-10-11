@@ -96,3 +96,11 @@ STEP3: The first mode of Mage802.11, tests all the frames that the fuzzer detect
 STEP4: Mage802.11 exits when the log files have been considered.  
 
 **The rest to modules are currently in BETA mode. 
+
+## License
+
+MIT License
+
+Copyright (c) 2022 Vyron Kampourakis (Management frames and DoS tools)<br />
+Copyright (c) 2022 Apostolos Dolmes (SAE Exchange tool)<br />
+Copyright (c) 2022 Efstratios Chatzoglou
