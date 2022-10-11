@@ -101,6 +101,6 @@ STEP4: Mage802.11 exits when the log files have been considered.
 
 MIT License
 
-Copyright (c) 2022 Vyron Kampourakis (Management frames and DoS tools)<br />
+Copyright (c) 2022 Vyron Kampourakis (Management frames, Control frames, Data frames and DoS tools)<br />
 Copyright (c) 2022 Apostolos Dolmes (SAE Exchange tool)<br />
 Copyright (c) 2022 Efstratios Chatzoglou
