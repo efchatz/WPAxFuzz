@@ -2,7 +2,7 @@ import settings
 import threading
 from time import sleep
 from scapy.all import *
-from Mngmt_frames.Construct_frame_fields import bcolors
+from Msgs_colors import bcolors
 
 
 class DeauthMon(threading.Thread):
@@ -29,5 +29,3 @@ class DeauthMon(threading.Thread):
             settings.conn_loss = True
         else:
             pass
-
-            
