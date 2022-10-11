@@ -9,6 +9,7 @@ import pandas as pd
 import os
 from Logging import LogFiles
 from generateBytes import *
+from Msgs_colors import bcolors
 
 NUM_OF_FRAMES_TO_SEND = 64
 
@@ -45,19 +46,6 @@ STANDARD_HT_INFORMATION = Dot11Elt(ID=61, info='\x0b\x00\x05\x00\x00\x00\x00\x00
 STANDARD_RM_CAPS = Dot11Elt(ID=70, info='\x31\x08\x01\x00\x00')
 
 STANDARD_MAC_ADDRESS = '00:14:78:53:01:d8'
-
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
 
 class Frame:
 
@@ -241,6 +229,7 @@ class Frame:
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 break
                             else:
@@ -260,6 +249,7 @@ class Frame:
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
                                 break
                             else:
