@@ -1,0 +1,17 @@
+{
+   "AP_info":{
+      "AP_MAC_ADDRESS":"18:3C:B7:5D:76:30",
+      "AP_SSID":"lego_2.4G",
+      "AP_CHANNEL":12,
+      "AP_MAC_DIFFERENT_FREQUENCY":"9c:9d:7e:92:32:60",
+      "CHANNEL_DIFFERENT_FREQUENCY":36,
+      "PASSWORD":"yourwifipass@"
+   },
+   "STA_info":{
+      "TARGETED_STA_MAC_ADDRESS":"e2:18:bc:a5:a6:0a"
+   },
+   "ATT_interface_info":{
+      "ATTACKING_INTERFACE":"wlan0",
+      "MONITORING_INTERFACE":"wlan1"
+   }
+}
