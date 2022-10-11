@@ -14,6 +14,7 @@ from binascii import unhexlify
 sys.path.append('src/')
 import saee
 import graphs
+import json
 
 
 
@@ -738,34 +739,16 @@ class neccessary_Tests():
 
 os.system('cat src/logo.txt')
 
-config = open('src/config.conf', 'r')
-Lines = config.readlines()
-for line in Lines:
+config = json.load(open('src/config.json', 'r'))
 
-    if ('AP_MAC_ADDRESS' in line ):
-    	info = line.partition(' ')
-    	AP_MAC_ADDRESS = info[len(info)-1].strip()
-    elif ('AP_CHANNEL' in line ):
-     	info = line.partition(' ')
-     	AP_CHANNEL = info[len(info)-1].strip()   
-    elif ('AP_MAC_DIFFERENT_FREQUENCY' in line ):
-    	info = line.partition(' ')
-    	AP_MAC_DIFFERENT_FREQUENCY = info[len(info)-1].strip()
-    elif ('CHANNEL_DIFFERENT_FREQUENCY' in line ):
-    	info = line.partition(' ')
-    	CHANNEL_DIFFERENT_FREQUENCY = info[len(info)-1].strip()	
-    elif ('TARGETED_STA_MAC_ADDRESS' in line ):
-    	info = line.partition(' ')
-    	TARGETED_STA_MAC_ADDRESS = info[len(info) - 1 ].strip()
-    elif ('ATTACKING_INTERFACE' in line ):
-    	info = line.partition(' ')
-    	ATTACKING_INTERFACE = info[len(info) - 1 ].strip()
-    elif ('MONITORING_INTERFACE' in line ):
-    	info = line.partition(' ')
-    	MONITORING_INTERFACE = info[len(info) - 1 ].strip()
-    elif ('PASSWORD' in line ):
-    	info = line.partition(' ')
-    	PASSWORD = info[len(info) - 1 ].strip()
+AP_MAC_ADDRESS = config["AP_info"]["AP_MAC_ADDRESS"]
+AP_CHANNEL = config["AP_info"]["AP_CHANNEL"]
+AP_MAC_DIFFERENT_FREQUENCY = config["AP_info"]["AP_MAC_DIFFERENT_FREQUENCY"]
+CHANNEL_DIFFERENT_FREQUENCY = config["AP_info"]["CHANNEL_DIFFERENT_FREQUENCY"]
+TARGETED_STA_MAC_ADDRESS = config["STA_info"]["TARGETED_STA_MAC_ADDRESS"]
+ATTACKING_INTERFACE = config["ATT_interface_info"]["ATTACKING_INTERFACE"]
+MONITORING_INTERFACE = config["ATT_interface_info"]["MONITORING_INTERFACE"]
+PASSWORD = config["AP_info"]["PASSWORD"]
     	
 
 
