@@ -78,7 +78,7 @@ STEP8: Exit the fuzzing process with two consecutive Ctrl+c.
 
 ## Fuzz SAE-exchange
 
-## Mage802.11 (DoS attack module)
+## DoS802.11 (DoS attack module)
 The name of this module derives from the word **ma**na**ge**ment. It gathers all the problematic frames that were generated during the management frames fuzzing and transmits them based on the attack module that the user has chosen. Note that, this DoS attack can only be conducted against the AP and STA that the fuzzing process was held for in the first place; the MAC addresses should be the same as well.
 
 ### Description
