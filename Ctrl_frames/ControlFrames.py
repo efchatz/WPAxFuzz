@@ -1,4 +1,4 @@
-from Mngmt_frames.Construct_frame_fields import bcolors
+from Msgs_colors import bcolors
 from scapy.all import Dot11, RadioTap, sendp, hexdump
 import subprocess
 import os
@@ -8,6 +8,7 @@ import settings
 from Logging import LogFiles
 from generateBytes import generate_bytes
 import binascii
+from threading import Thread
 
 NUM_OF_FRAMES_TO_SEND = 64
 
@@ -20,6 +21,7 @@ class ControlFrames:
         self.mode = mode
         self.frame_id = frame_id
         self.ctrl_frm_ext = ctrl_frm_ext
+        self.rotating_sym = Thread(target=self.rotating_symbol)
         self.ctrl_subtypes = [
                {
                 "frame_id": 4,
@@ -157,6 +159,9 @@ class ControlFrames:
                 },
         }
         
+    def rotating_symbol(self):
+        subprocess.call(['./Ctrl_frames/rot.sh'])
+        
     def extract_frame_info(self):
         for frame_type in self.ctrl_subtypes:
             if self.frame_id + 3 == frame_type["frame_id"]:
@@ -245,6 +250,7 @@ class ControlFrames:
         return False
         
     def fuzz_ctrl_frames(self):
+        frames_till_disr = []
         counter = 1
         init_logs = LogFiles()
         if self.mode == 'standard' or self.mode == 'random':
@@ -252,6 +258,7 @@ class ControlFrames:
             print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ')
             print('You selected mode:', self.mode)
             while True:
+                frames_till_disr = []
                 subprocess.call(['echo' + f' Fuzzing cycle No.{counter}\n'], shell=True)
                 subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring processes with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
                 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
@@ -266,10 +273,18 @@ class ControlFrames:
                         subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring processes with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
                         print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
                         print(f'Transmitting {bcolors.OKBLUE}{frame_info["frame_name"]}{bcolors.ENDC} frames with random payload')
+                        self.rotating_sym.start()
+                        print('\n')
                         while True:
                             frame =  self.fuzzer_state["payload"]["send_function"](self.ctrl_frm_ext)
+                            frames_till_disr += frame
                             if(self.check_conn_aliveness(frame, i)):
                                 init_logs.logging_conn_loss(f"Connectivity issues detected while sending {frame_info['frame_name']} frames with random {i}\nframe = {frame}\n\n", init_logs.is_alive_path_ctrl)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_ctrl)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_ctrl)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_ctrl)
+                                frames_till_disr = []
                                 break
                             else:
                                 sendp(frame, count=2, iface=self.interface, verbose=0)
@@ -280,10 +295,18 @@ class ControlFrames:
                         subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring processes with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
                         print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
                         print(f'Transmitting {bcolors.OKBLUE}{frame_info["frame_name"]}{bcolors.ENDC} frames with random Frame Control Flags')
+                        self.rotating_sym.start()
+                        print('\n')
                         while True:
                             frame =  self.fuzzer_state["Frame Control Flags"]["send_function"]()
+                            frames_till_disr += frame
                             if(self.check_conn_aliveness(frame, i)):
                                 init_logs.logging_conn_loss(f"Connectivity issues detected while sending {frame_info['frame_name']} frames with random {i}\nframe = {frame}\n\n", init_logs.is_alive_path_ctrl)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_ctrl)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_ctrl)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_ctrl)
+                                frames_till_disr = []
                                 break
                             else:
                                 sendp(frame, count=2, iface=self.interface, verbose=0)
@@ -291,8 +314,14 @@ class ControlFrames:
                         print(f'Transmitting {bcolors.OKBLUE}{frame_info["frame_name"]}{bcolors.ENDC} frames with random {i}')
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame =  self.fuzzer_state[i]["send_function"]()
+                            frames_till_disr += frame
                             if(self.check_conn_aliveness(frame, i)):
                                 init_logs.logging_conn_loss(f"Connectivity issues detected while sending {frame_info['frame_name']} frames with random {i}\nframe = {frame}\n\n", init_logs.is_alive_path_ctrl)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_ctrl)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_ctrl)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_ctrl)
+                                frames_till_disr = []
                                 break
                             else:
                                 sendp(frame, count=2, iface=self.interface, verbose=0)
