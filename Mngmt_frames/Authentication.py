@@ -1,4 +1,5 @@
 from Mngmt_frames.Construct_frame_fields import *
+from Msgs_colors import bcolors
 from Logging import LogFiles
 from scapy.all import Dot11Auth, Dot11Elt, hexdump
 import settings
