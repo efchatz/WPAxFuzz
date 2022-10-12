@@ -1,18 +1,20 @@
 # WPAxFuzz
 
 ## A full-featured open-source Wi-Fi fuzzer 
-This tool is capable of fuzzing any management frame of the 802.11 protocol and the SAE exchange. For the management frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management frame fuzzing can be executed against any AP (WPA2 or WPA3). The fuzzer also includes a DoS Attack module, which exploits the findings of the management frames fuzzing. Overall, WPAxFuzz offers  the below options:
+This tool is capable of fuzzing either any management, control or data frame of the 802.11 protocol or the SAE exchange. For the management, control or data frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management, control or data frame fuzzing can be executed against any AP (WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of the management, control or data frames fuzzing. Overall, WPAxFuzz offers  the below options:
 ```
     1) Fuzz Management Frames
     2) Fuzz SAE exchange
-    3) DoS attack
+    3) Fuzz Control Frames
+    4) Fuzz Data Frames (BETA)
+    5) DoS attack module
 ```
 You can execute the tool using the below command:
 ```
     sudo python3 fuzz.py
 ```
 
-## Fuzz Management Frames
+## Fuzz Management, Control and Data Frames
 
 ### Perquisites
 1) SCAPY: https://scapy.readthedocs.io/en/latest/  
@@ -49,9 +51,11 @@ STEP3: Set the channel of your WNIC to be the same as the one the targeted AP tr
     sudo airodump-ng {NAME_OF_ATT_INTER} \\to find the channel that targeted AP transmits on
     sudo iw {NAME_OF_ATT_INTER} set channel {AP_channel} HT20 \\to set channel to your WNIC
 ```
-STEP4: Choose  option (1), namely:
+STEP4: Choose  option (1), (3) or (4) namely:
 ```
-    Fuzz management frames
+    1) Fuzz management frames
+    3) Fuzz Control Frames
+    4) Fuzz Data Frames (BETA)
 ```
 STEP5: Choose one of the following modes:  
 ```
@@ -62,38 +66,27 @@ STEP5: Choose one of the following modes:
     Random: The fields produced via the seed generator have a random value length,  
     which can be either lesser or greater than that defined by the 802.11 standard.  
 ```
-STEP6: The tool will check if the STA is alive, meaning associated with the targeted AP, and then it will ask for the user to choose one of the following frames to fuzz with:
-```
-    1) Beacon frames
-    2) Probe request frames
-    3) Probe response frames
-    4) Association request frames
-    5) Association response frames
-    6) Reassociation request frames
-    7) Reassociation response frames
-    8) Authentication frames
-```
+
 STEP7: From this point on, the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is asked to reconnect the STA and resume the fuzzing process.  
 STEP8: Exit the fuzzing process with two consecutive Ctrl+c.
 
 ## Fuzz SAE-exchange
 
 ## DoS802.11 (DoS attack module)
-The name of this module derives from the word **ma**na**ge**ment. It gathers all the problematic frames that were generated during the management frames fuzzing and transmits them based on the attack module that the user has chosen. Note that, this DoS attack can only be conducted against the AP and STA that the fuzzing process was held for in the first place; the MAC addresses should be the same as well.
+This module launches a DoS attack based on the data (log files) collected from the fuzzing process. It can only be performed against the same AP and STA used during the fuzzing process. Namely, the frames that caused any kind of problematic behavior during the fuzzing are being transmitted in a way decided by the below options.
 
 ### Description
-STEP1: Pick the option 3), namely:
+STEP1: Pick the option 5), namely:
 ```
-    DoS attack
+   5) DoS attack module
 ```
 STEP2: Pick the attack module you wish
 ```
     1) Frames detected at the moment of connectivity disruption, one-by-one
     2) Sequence of frames till the moment a disruption was detected (BETA)
-    3) Frames detected at the moment of connectivity disruption (BETA)
 ```
-STEP3: The first mode of Mage802.11, tests all the frames that the fuzzer detected up to that moment. It is a second hand filtering to separate the true positive from the false positive frames. In case  a frame is positive, i.e., causes a DoS to the associated STA, an exploit is being produced automatically.   
-STEP4: Mage802.11 exits when the log files have been considered.  
+STEP3: The first mode of DoS802.11, tests all the frames that the fuzzer detected up to that moment. It is a second hand filtering to separate the true positive from the false positive frames. In case  a frame is positive, i.e., causes a DoS to the associated STA, an exploit is being produced automatically.   
+STEP4: DoS802.11 exits when the log files have been considered.  
 
 **The rest to modules are currently in BETA mode. 
 
