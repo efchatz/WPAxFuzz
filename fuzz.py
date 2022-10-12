@@ -23,13 +23,13 @@ import ascii_art
 
 print(ascii_art.logo)
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
-print('\t\tThis tool is capable of fuzzing either any management frame of the 802.11 protocol\n\t\tor the SAE exchange. For the management frames, you can choose either the "standard"\n\t\tmode where all of the frames transmitted have valid size values or the "random" mode\n\t\twhere the size value is random. The SAE fuzzing operation requires an AP that supports\n\t\tWPA3. Management frame fuzzing can be executed against any AP (WPA2 or WPA3).\n\t\tFinally, a DoS attack vector is implemented, which exploits the findings of the\n\t\tmanagement frames fuzzing.\n')
+print('\t\tThis tool is capable of fuzzing either any management, control or data frame of the 802.11\n\t\tprotocol or the SAE exchange. For the management, control or data frames, you can choose\n\t\teither the "standard" mode where all of the frames transmitted have valid size values or\n\t\tthe "random" mode where the size value is random. The SAE fuzzing operation requires an AP\n\t\tthat supports WPA3. Management, control or data frame fuzzing can be executed against any AP\n\t\t(WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of\n\t\tthe management, control or data frames fuzzing.\n')
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
                             
 print('1) Fuzz Management Frames')
 print('2) Fuzz SAE exchange')
 print('3) Fuzz Control Frames')
-print('4) Fuzz Data Frames ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
+print('4) Fuzz Data Frames '+ bcolors.WARNING + '(BETA)' + bcolors.ENDC)
 print('5) DoS attack module\n\n')
 try:
     choice = int(input('Enter a choice: '))
