@@ -102,6 +102,8 @@ STEP4: DoS802.11 exits when the log files have been considered.
 
 **The rest to modules are currently in BETA mode. 
 
+**Based on the publication named "WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi implementations"**
+
 ## License
 
 MIT License
