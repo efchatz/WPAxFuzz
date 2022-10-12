@@ -77,7 +77,7 @@ In more detail, the current module, selected through WPAxFuzz's CLI, optionally 
 1. An empty SAE auth frame.
 2. A valid (well-formed) SAE-Commit frame followed by (1).
 3. A valid SAE-Commit frame, followed by a SAE-Confirm frame with the so-called Send-Confirm field set to 0. Recall that the Send-Confirm field carries the counter of the already sent Confirm frames, hence acting as an anti-replay counter.
-4. As with (3), but the value of the Send-Confirm field is set to 2. This specific value (2) was chosen because as explained in [ 2], using a value between 2 and 65,534 for this field, "the AP disconnected the target STA after 20 sec on average". 
+4. As with (3), but the value of the Send-Confirm field is set to 2. This specific value (2) was chosen, using a value between 2 and 65,534 for this field, "the AP disconnected the target STA after 20 sec on average". 
 5. A valid SAE-Commit frame. 
 6. A valid SAE-Confirm frame with the Send-Confirm field equal to 0. 
 7. As with (6), but the Send-Confirm field’s value is set to 2.
