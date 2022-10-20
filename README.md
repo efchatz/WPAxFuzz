@@ -102,7 +102,7 @@ STEP4: DoS802.11 exits when the log files have been considered.
 
 **The rest to modules are currently in BETA mode. 
 
-**Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi implementations"](https://www.mdpi.com/2410-387X/6/4/53) and expanding the methodology that was established on work "How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"**
+**Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi implementations"](https://www.mdpi.com/2410-387X/6/4/53) and expanding the methodology that was established on work ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X)**
 
 ## License
 
