@@ -107,18 +107,15 @@ STEP4: DoS802.11 exits when the log files have been considered.
 Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi implementations"](https://www.mdpi.com/2410-387X/6/4/53) and expanding the methodology that was established on work ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X). The BibTeX format for citting the latter are mentionded below.
 
 ```
-@Article{cryptography6040053,
-AUTHOR = {Kampourakis, Vyron and Chatzoglou, Efstratios and Kambourakis, Georgios and Dolmes, Apostolos and Zaroliagis, Christos},
-TITLE = {WPAxFuzz: Sniffing Out Vulnerabilities in Wi-Fi Implementations},
-JOURNAL = {Cryptography},
-VOLUME = {6},
-YEAR = {2022},
-NUMBER = {4},
-ARTICLE-NUMBER = {53},
-URL = {https://www.mdpi.com/2410-387X/6/4/53},
-ISSN = {2410-387X},
-ABSTRACT = {This work attempts to provide a way of scrutinizing the security robustness of Wi-Fi implementations in an automated fashion. To this end, to our knowledge, we contribute the first full-featured and extensible Wi-Fi fuzzer. At the time of writing, the tool, made publicly available as open source, covers the IEEE 802.11 management and control frame types and provides a separate module for the pair of messages of the Simultaneous Authentication of Equals (SAE) authentication and key exchange method. It can be primarily used to detect vulnerabilities potentially existing in wireless Access Points (AP) under the newest Wi-Fi Protected Access 3 (WPA3) certification, but its functionalities can also be exploited against WPA2-compatible APs. Moreover, the fuzzer incorporates: (a) a dual-mode network monitoring module that monitors, in real time, the behavior of the connected AP stations and logs possible service or connection disruptions and (b) an attack tool used to verify any glitches found and automatically craft the corresponding exploit. We present results after testing the fuzzer against an assortment of off-the-shelf APs by different renowned vendors. Adhering to a coordinated disclosure process, we have reported the discovered issues to the affected vendors, already receiving positive feedback from some of them.},
-DOI = {10.3390/cryptography6040053}
+@article{kampourakis2022wpaxfuzz,
+  title={WPAxFuzz: Sniffing Out Vulnerabilities in Wi-Fi Implementations},
+  author={Kampourakis, Vyron and Chatzoglou, Efstratios and Kambourakis, Georgios and Dolmes, Apostolos and Zaroliagis, Christos},
+  journal={Cryptography},
+  volume={6},
+  number={4},
+  pages={53},
+  year={2022},
+  publisher={MDPI}
 }
 ```
 ```
