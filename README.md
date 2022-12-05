@@ -130,6 +130,19 @@ Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi
 }
 ```
 
+## Vulnerabilities
+
+So far, the fuzzer managed to identify the following CVE IDs: 
+
+| CVE ID                                                                          | Chipset(s) | WPA2/WPA3 | Status   |
+|---------------------------------------------------------------------------------|------------|-----------|----------|
+| [CVE-2022-32654](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32654) | TBA        | TBA       | Reserved |
+| [CVE-2022-32655](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32655) | TBA        | TBA       | Reserved |
+| [CVE-2022-32656](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32656) | TBA        | TBA       | Reserved |
+| [CVE-2022-32657](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32657) | TBA        | TBA       | Reserved |
+| [CVE-2022-32658](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32658) | TBA        | TBA       | Reserved |
+| [CVE-2022-32659](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32659) | TBA        | TBA       | Reserved |
+
 ## License
 
 MIT License
