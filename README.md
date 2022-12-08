@@ -142,6 +142,7 @@ So far, the fuzzer managed to identify the following CVE IDs:
 | [CVE-2022-32657](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32657) | TBA        | TBA       | Reserved |
 | [CVE-2022-32658](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32658) | TBA        | TBA       | Reserved |
 | [CVE-2022-32659](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32659) | TBA        | TBA       | Reserved |
+| [CVE-2022-46740](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46740) | WS7100-20  | Both      | Reserved |
 
 ## License
 
