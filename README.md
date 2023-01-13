@@ -144,6 +144,8 @@ So far, the fuzzer managed to identify the following CVE IDs:
 | [CVE-2022-32659](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32659)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986/mt8518s/mt8532                         | Both          | Published | 6.7 (Medium)     |
 | [CVE-2022-46740](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46740)  | WS7100-20                   | Both          | Published | 6.5 (Medium)     |
 
+We would like also to thank the MediaTek and Huawei security teams, for acknowledging and fixing these security issues, as stated in the following two security advisories: [MediaTek](https://corp.mediatek.com/product-security-acknowledgements) and [Huawei](https://www.huawei.com/en/psirt/security-advisories/2022/huawei-sa-dosvihswr-8f632df1-en).
+
 ## License
 
 MIT License
