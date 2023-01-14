@@ -102,6 +102,31 @@ STEP4: DoS802.11 exits when the log files have been considered.
 
 **The rest to modules are currently in BETA mode. 
 
+## Vulnerabilities
+
+So far, the fuzzer managed to identify the following CVE IDs, with the assist of Management frames: 
+
+| CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
+|----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
+| [CVE-2022-32654](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32654)  | TBA                         | TBA           | Reserved | -     |
+| [CVE-2022-32655](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32655)  | TBA                         | TBA           | Reserved | -     |
+| [CVE-2022-32656](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32656)  | TBA                         | TBA           | Reserved | -     |
+| [CVE-2022-32657](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32657)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986                         | Both          | Published | 6.7 (Medium)     |
+| [CVE-2022-32658](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32658)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986                         | Both          | Published | 6.7 (Medium)     |
+| [CVE-2022-32659](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32659)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986/mt8518s/mt8532                         | Both          | Published | 6.7 (Medium)     |
+| [CVE-2022-46740](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46740)  | WS7100-20                   | Both          | Published | 6.5 (Medium)     |
+
+We would like also to thank the MediaTek and Huawei security teams, for acknowledging and fixing these security issues, as stated in the following two security advisories: [MediaTek](https://corp.mediatek.com/product-security-acknowledgements) and [Huawei](https://www.huawei.com/en/psirt/security-advisories/2022/huawei-sa-dosvihswr-8f632df1-en).
+
+Also, by following the methodology of ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X) work, the fuzzer is capable of identifying the following CVE IDs, with the assist of SAE frames: 
+
+| CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
+|----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
+| [CVE-2021-37910](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-37910)  | All ASUS RX-based models | WPA3-SAE | Published | 5.3 (medium)     |
+| [CVE-2021-40288](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-40288)  | AX10v1             | WPA3-SAE | Published | 7.5 (high)     |
+| [CVE-2021-41753](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41753)  | DIR-x1560/DIR-X6060 | WPA3-SAE | Published | 7.5 (high)     |
+| [CVE-2021-41788](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41788)  | mt7603E/mt7612/mt7613<br />mt7615/mt7622/mt7628<br />mt7629/mt7915| WPA3-SAE           | Published | 7.5 (high)     |
+
 ## Related Work
 
 Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi implementations"](https://www.mdpi.com/2410-387X/6/4/53) and expanding the methodology that was established on work ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X). The BibTeX format for citting the latter are mentionded below.
@@ -130,26 +155,10 @@ Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi
 }
 ```
 
-## Vulnerabilities
-
-So far, the fuzzer managed to identify the following CVE IDs: 
-
-| CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
-|----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
-| [CVE-2022-32654](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32654)  | TBA                         | TBA           | Reserved | -     |
-| [CVE-2022-32655](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32655)  | TBA                         | TBA           | Reserved | -     |
-| [CVE-2022-32656](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32656)  | TBA                         | TBA           | Reserved | -     |
-| [CVE-2022-32657](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32657)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986                         | Both          | Published | 6.7 (Medium)     |
-| [CVE-2022-32658](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32658)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986                         | Both          | Published | 6.7 (Medium)     |
-| [CVE-2022-32659](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32659)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986/mt8518s/mt8532                         | Both          | Published | 6.7 (Medium)     |
-| [CVE-2022-46740](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46740)  | WS7100-20                   | Both          | Published | 6.5 (Medium)     |
-
-We would like also to thank the MediaTek and Huawei security teams, for acknowledging and fixing these security issues, as stated in the following two security advisories: [MediaTek](https://corp.mediatek.com/product-security-acknowledgements) and [Huawei](https://www.huawei.com/en/psirt/security-advisories/2022/huawei-sa-dosvihswr-8f632df1-en).
-
 ## License
 
 MIT License
 
-Copyright (c) 2022 Vyron Kampourakis (Management frames, Control frames, Data frames and DoS tools)<br />
+Copyright (c) 2022-2023 Vyron Kampourakis (Management frames, Control frames, Data frames and DoS tools)<br />
 Copyright (c) 2022 Apostolos Dolmes (SAE Exchange tool)<br />
-Copyright (c) 2022 Efstratios Chatzoglou (Methodology)
+Copyright (c) 2022-2023 Efstratios Chatzoglou (Methodology)
