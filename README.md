@@ -104,7 +104,7 @@ STEP4: DoS802.11 exits when the log files have been considered.
 
 ## Vulnerabilities
 
-So far, the fuzzer managed to identify the following CVE IDs, with the assist of Management frames: 
+So far, the fuzzer managed to identify the following CVE IDs, by exploiting different Management frames: 
 
 | CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
 |----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
@@ -118,7 +118,7 @@ So far, the fuzzer managed to identify the following CVE IDs, with the assist of
 
 We would like also to thank the MediaTek and Huawei security teams, for acknowledging and fixing these security issues, as stated in the following two security advisories: [MediaTek](https://corp.mediatek.com/product-security-acknowledgements) and [Huawei](https://www.huawei.com/en/psirt/security-advisories/2022/huawei-sa-dosvihswr-8f632df1-en).
 
-Also, by following the methodology of ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X) work, the fuzzer is capable of identifying the following CVE IDs, with the assist of SAE frames: 
+Moreover, by following the methodology of the work titled ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X), the fuzzer can identify the same SAE vulnerabilities which are linked to the below CVE IDs:
 
 | CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
 |----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
