@@ -5,7 +5,6 @@ from random import randint
 from scapy.all import Dot11, Dot11Elt, RadioTap, sendp, hexdump
 from time import sleep
 import settings
-import pandas as pd
 import os
 from Logging import LogFiles
 from generateBytes import *
