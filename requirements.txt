@@ -1,4 +1,2 @@
 scapy
 Aircrack-ng
-Nmap
-blab
