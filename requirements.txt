@@ -1,4 +1,4 @@
-scapy==2.4.4
-Aircrack-ng==1.6
-Nmap==7.92
+scapy
+Aircrack-ng
+Nmap
 blab
