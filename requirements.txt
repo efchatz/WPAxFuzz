@@ -1,0 +1,3 @@
+scapy==2.4.4
+aircrack-ng==1.6
+nmap==7.92
