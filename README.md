@@ -16,18 +16,14 @@ You can execute the tool using the below command:
 
 ## Fuzz Management, Control and Data Frames
 
-### Perquisites
-1) SCAPY: https://scapy.readthedocs.io/en/latest/  
-2) BLAB: https://gitlab.com/akihe/blab   
-4) NMAP: https://nmap.org/download.html
-
 ### Requirements and dependencies
-1) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
+1) Make sure to fullfill the requirements enlisted in the requirements.txt file.
+2) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
 ```
     nmap -sP {ip_prefix}.*
 ```
-2) In case the fuzz testing is executed on a Virtual Machine (VM), and the targeted STA happens to also run on the host machine, it may lead to false deductions. It is recommended to place the STA and the fuzzing operation to different physical machines.
-3) If the targeted STA is an MS Windows OS machine, it may be necessary to modify the firewall to allow ``pinging'' within the local network. This enables the monitoring mode to check the aliveness of the associated STA..
+3) In case the fuzz testing is executed on a Virtual Machine (VM), and the targeted STA happens to also run on the host machine, it may lead to false deductions. It is recommended to place the STA and the fuzzing operation to different physical machines.
+4) If the targeted STA is an MS Windows OS machine, it may be necessary to modify the firewall to allow ``pinging'' within the local network. This enables the monitoring mode to check the aliveness of the associated STA..
 5) Regarding the Blab tool (seed generation), due to OS inconsistencies you have to place the binary file of Blab to the main directory of the fuzzer project. In this way, the fuzzer is compatible regardless the host OS.
 ```
     git clone https://haltp.org/git/blab.git
