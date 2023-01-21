@@ -17,7 +17,7 @@ You can execute the tool using the below command:
 ## Fuzz Management, Control and Data Frames
 
 ### Requirements and dependencies
-1) Make sure to fullfill the requirements enlisted in the requirements.txt file.
+1) Make sure to fullfill the requirements enlisted in the requirements.txt file, plus the Nmap (https://github.com/nmap/nmap) and blab(https://gitlab.com/akihe/blab) repositories.
 2) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
 ```
     nmap -sP {ip_prefix}.*
