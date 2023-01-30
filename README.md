@@ -125,7 +125,7 @@ Moreover, by following the methodology of the work titled ["How is your Wi-Fi co
 
 ## Related Work
 
-Based on the publication named ["WPAxFuzz: Sniffing out vulnerabilities in Wi-Fi implementations"](https://www.mdpi.com/2410-387X/6/4/53) and expanding the methodology that was established on work ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X). The BibTeX format for citting the latter are mentionded below.
+The interested readers are referred to the below publications regarding the methodology used to build [WPAxFuzz](https://www.mdpi.com/2410-387X/6/4/53). Note that the paper titled ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X) published in the international Journal of Information Security and Applications (JISA), Elsevier has received the Dr KW Wong Annual Best Paper Award for 2022. The announcement can be found at: https://www.sciencedirect.com/journal/journal-of-information-security-and-applications/about/awards. Overall, the methodology detailed in the JISA paper is expanded in the WPAxFuzz publication.
 
 ```
 @article{kampourakis2022wpaxfuzz,
