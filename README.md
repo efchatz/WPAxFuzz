@@ -1,6 +1,57 @@
-# WPAxFuzz
+[![Contributors][contributors-shield]][contributors-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Forks][forks-shield]][forks-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-## A full-featured open-source Wi-Fi fuzzer 
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/efchatz/WPAxFuzz">
+    <img src="images/logo-no-background.png" alt="Logo" width="430" height="120">
+  </a>
+
+  <p align="center">
+    <h3 align="center">A full-fledged Wi-Fi Fuzzer</h3>
+    <br />
+    <a href="https://github.com/efchatz/WPAxFuzz/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/efchatz/WPAxFuzz/issues">Request Feature</a>
+  </p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#fuzz-management-and-control-and-data-frames">Fuzz Management and Control and Data Frames</a>
+      <ul>
+        <li><a href="#requirements-and-dependencies">Requirements and Dependencies</a></li>
+        <li><a href="#description">Description</a></li>
+      </ul>
+    </li>
+    <li><a href="#fuzz-sae-exchange">Fuzz SAE-exchange</a></li>
+    <li><a href="#dos-attack-module">DoS attack module</a>
+    <ul>
+        <li><a href="#description">Description</a></li>
+      </ul>
+    </li>
+    <li><a href="#vulnerabilities">Vulnerabilities</a></li>
+    <li><a href="#related-work">Related Work</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+
+
+## About the project
+
 This tool is capable of fuzzing either any management, control or data frame of the 802.11 protocol or the SAE exchange. For the management, control or data frames, you can choose either the "standard" mode where all of the frames transmitted have valid size values or the "random" mode where the size value is random. The SAE fuzzing operation requires an AP that supports WPA3. Management, control or data frame fuzzing can be executed against any AP (WPA2 or WPA3). Finally, a DoS attack vector is implemented, which exploits the findings of the management, control or data frames fuzzing. Overall, WPAxFuzz offers  the below options:
 ```
     1) Fuzz Management Frames
@@ -14,10 +65,17 @@ You can execute the tool using the below command:
     sudo python3 fuzz.py
 ```
 
-## Fuzz Management, Control and Data Frames
 
-### Requirements and dependencies
-1) Make sure to fullfill the requirements enlisted in the requirements.txt file, plus the Nmap (https://github.com/nmap/nmap) and blab (https://gitlab.com/akihe/blab) repositories.
+
+## Fuzz Management and Control and Data Frames
+
+
+### Requirements and Dependencies
+
+1) Make sure to have the below pre-installed. Probably other versions of Scapy and Python will be applicable too.
+
+    [![Python][Python.py]][Python-url] [![Scapy][Scapy]][Scapy-url] [![Nmap][Nmap]][Nmap-url] [![Blab][Blab]][Blab-url]  
+
 2) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
 ```
     nmap -sP {ip_prefix}.*
@@ -33,7 +91,9 @@ You can execute the tool using the below command:
     cp blab {fuzzer directory}                                    ex. cp blab /home/kali/Desktop/WPAxFuzz
 ```
 
+
 ### Description
+
 STEP1: Update the config file with the (i) targeted AP and associated STA MAC addresses, (ii) SSID of the AP,  and (iii) the wireless interface name.  
 STEP2: Set the WNIC to monitor mode:  
 ```
@@ -66,7 +126,10 @@ STEP5: Choose one of the following modes:
 STEP7: From this point on, the only interaction with the user is when a connection interruption happens or a deauthentication/disassociation frame is detected. In this case, the user is asked to reconnect the STA and resume the fuzzing process.  
 STEP8: Exit the fuzzing process with two consecutive Ctrl+c.
 
+
+
 ## Fuzz SAE-exchange
+
 This module focuses on the so-called SAE Commit and SAE Confirm Authentication frames which are exchanged during the SAE handshake. According to the 802.11 standard, both these frames carry the Authentication algorithm (3), the Authentication Sequence (1 for Commit and 2 for Confirm), and a Status code, namely, a value between 0 and 65535, with 0 standing for “Successful”. Note that Status code values between 1 and 129 (except 4, 8, 9, 20, 21, 26, 29, 36, 48, 66, 69-71, 90-91, 116, 124, and 127) designate a different failure cause, while the rest are reserved by the protocol. 
 
 In more detail, the current module, selected through WPAxFuzz's CLI, optionally capitalizes on the burst frame sending mode, namely, it sprays multiple frames, i.e., 128, at once towards the target AP. It comprises four different circles: (i) transmit SAE (Authentication) frames to the radio channel the target STA operates, (ii) transmit SAE frames to a different radio channel than that of the target STA(s), and (iii) either of the previous, but with the burst mode enabled. Further, each fuzzing cycle is executed over seven diverse variants based on the stateless approach of WPA3-SAE authentication procedure as follows:
@@ -80,10 +143,15 @@ In more detail, the current module, selected through WPAxFuzz's CLI, optionally 
 
 As with the Management frames module, the present one uses the same monitoring logic and is split in two different types of fuzzing procedures, namely, Standard and Extensive. For instance, the Authentication algorithm field is fuzzed using specific, cherry-picked values, including 0, 1, 2, and 200, and not random ones generated by Blab or otherwise. On the other hand, the Extensive mode concentrates on grindingly testing every valid SAE field combination, that is, every possible value in the range of 0 to 65535, making it far more time-consuming vis-à-vis the Standard mode.
 
-## DoS802.11 (DoS attack module)
+
+
+## DoS attack module
+
 This module launches a DoS attack based on the data (log files) collected from the fuzzing process. It can only be performed against the same AP and STA used during the fuzzing process. Namely, the frames that caused any kind of problematic behavior during the fuzzing are being transmitted in a way decided by the below options.
 
+
 ### Description
+
 STEP1: Pick the option 5), namely:
 ```
    5) DoS attack module
@@ -97,6 +165,8 @@ STEP3: The first mode of DoS802.11, tests all the frames that the fuzzer detecte
 STEP4: DoS802.11 exits when the log files have been considered.  
 
 **The rest to modules are currently in BETA mode. 
+
+
 
 ## Vulnerabilities
 
@@ -122,6 +192,8 @@ Moreover, by following the methodology of the work titled ["How is your Wi-Fi co
 | [CVE-2021-40288](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-40288)  | AX10v1             | WPA3-SAE | Published | 7.5 (high)     |
 | [CVE-2021-41753](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41753)  | DIR-x1560/DIR-X6060 | WPA3-SAE | Published | 7.5 (high)     |
 | [CVE-2021-41788](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41788)  | mt7603E/mt7612/mt7613<br />mt7615/mt7622/mt7628<br />mt7629/mt7915| WPA3-SAE           | Published | 7.5 (high)     |
+
+
 
 ## Related Work
 
@@ -151,6 +223,8 @@ The interested readers are referred to the below publications regarding the meth
 }
 ```
 
+
+
 ## License
 
 MIT License
@@ -158,3 +232,36 @@ MIT License
 Copyright (c) 2022-2023 Vyron Kampourakis (Management frames, Control frames, Data frames and DoS tools)<br />
 Copyright (c) 2022 Apostolos Dolmes (SAE Exchange tool)<br />
 Copyright (c) 2022-2023 Efstratios Chatzoglou (Methodology)
+
+
+## Contact
+
+Efstratios Chatzoglou -  efchatzoglou@gmail.com  <br />
+Vyron Kampourakis -  byrkam@gmail.com  
+
+
+## Acknowledgments
+
+We would like to thank all the vendors we contacted and reported these attacks, along with the retrieved bug bounties we received. Also, we would like to give some acknowledgement [the README template repo](https://github.com/othneildrew/Best-README-Template), which helped us to create this README file and [logo.com](https://logo.com/), which allowed us to create the WPAxFuzz tool logo.
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/badge/Contributors-3-brightgreen?style=for-the-badge
+[contributors-url]: https://github.com/efchatz/WPAxFuzz/contributors
+[stars-shield]: https://img.shields.io/badge/Stars-53-blue?style=for-the-badge
+[stars-url]: https://github.com/efchatz/WPAxFuzz/stargazers
+[forks-shield]: https://img.shields.io/badge/Forks-2-blue?style=for-the-badge
+[forks-url]: https://github.com/efchatz/WPAxFuzz/network/members
+[issues-shield]: https://img.shields.io/badge/Issues-1-lightgrey?style=for-the-badge
+[issues-url]: https://github.com/efchatz/WPAxFuzz/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/efchatz/WPAxFuzz/blob/main/LICENSE
+[Python.py]: https://img.shields.io/badge/Python-3.7-blue
+[Python-url]: https://www.python.org/
+[Scapy]: https://img.shields.io/badge/scapy-2.4.3-blue
+[Scapy-url]: https://github.com/secdev/scapy
+[Nmap]: https://img.shields.io/badge/Nmap-7.93-blue
+[Nmap-url]: https://nmap.org/
+[Blab]: https://img.shields.io/badge/Blab-1.0-blue
+[Blab-url]: https://gitlab.com/akihe/blab/-/tree/master
