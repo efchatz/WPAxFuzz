@@ -251,7 +251,7 @@ We would like to thank all the vendors we contacted and reported these attacks, 
 [contributors-url]: https://github.com/efchatz/WPAxFuzz/contributors
 [stars-shield]: https://img.shields.io/badge/Stars-54-blue?style=for-the-badge
 [stars-url]: https://github.com/efchatz/WPAxFuzz/stargazers
-[forks-shield]: https://img.shields.io/badge/Forks-2-blue?style=for-the-badge
+[forks-shield]: https://img.shields.io/badge/Forks-3-blue?style=for-the-badge
 [forks-url]: https://github.com/efchatz/WPAxFuzz/network/members
 [issues-shield]: https://img.shields.io/badge/Issues-1-lightgrey?style=for-the-badge
 [issues-url]: https://github.com/efchatz/WPAxFuzz/issues
