@@ -249,9 +249,9 @@ We would like to thank all the vendors we contacted and reported these attacks, 
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/badge/Contributors-3-brightgreen?style=for-the-badge
 [contributors-url]: https://github.com/efchatz/WPAxFuzz/contributors
-[stars-shield]: https://img.shields.io/badge/Stars-72-blue?style=for-the-badge
+[stars-shield]: https://img.shields.io/badge/Stars-75-blue?style=for-the-badge
 [stars-url]: https://github.com/efchatz/WPAxFuzz/stargazers
-[forks-shield]: https://img.shields.io/badge/Forks-4-blue?style=for-the-badge
+[forks-shield]: https://img.shields.io/badge/Forks-5-blue?style=for-the-badge
 [forks-url]: https://github.com/efchatz/WPAxFuzz/network/members
 [issues-shield]: https://img.shields.io/badge/Issues-0-lightgrey?style=for-the-badge
 [issues-url]: https://github.com/efchatz/WPAxFuzz/issues
