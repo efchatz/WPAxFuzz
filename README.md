@@ -174,7 +174,6 @@ So far, the fuzzer managed to identify the following CVE IDs, by exploiting diff
 
 | CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
 |----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
-|[CVE-2022-32666](https://cve.mitre.org/cgi-bin/cvename.cgi?name=2022-32666)| mt7603/mt7613/mt7615<br />mt7622/mt7628mt7629<br />mt7915/mt7916/mt7981<br />mt7986/mt8365                         | Both          | Published | 7.5 (High) |
 | [CVE-2022-32654](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32654)  | mt5221/mt7603/mt7613<br />mt7615/mt7622/mt7628<br />mt7629/mt7663/mt7668<br />mt7682/mt7686/mt7687<br />mt7697/mt7902/mt7915<br />mt7916/mt7921/mt7933<br />mt7981/mt7986/mt8167S<br />mt8175/mt8362A/mt8365<br />mt8385/mt8518S/mt8532<br />mt8695/mt8696/mt8788                         | Both          | Published | 6.7 (Medium) |
 | [CVE-2022-32655](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32655)  | mt5221/mt7603/mt7613<br />mt7615/mt7622/mt7628<br />mt7629/mt7663/mt7668<br />mt7682/mt7686/mt7687<br />mt7697/mt7902/mt7915<br />mt7916/mt7921/mt7933<br />mt7981/mt7986/mt8167S<br />mt8175/mt8362A/mt8365<br />mt8385/mt8518S/mt8532<br />mt8695/mt8696/mt8788                         | Both          | Published |6.7 (Medium)  |
 | [CVE-2022-32656](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32656)  | mt5221/mt7603/mt7613<br />mt7615/mt7622/mt7628<br />mt7629/mt7663/mt7668<br />mt7682/mt7686/mt7687<br />mt7697/mt7902/mt7915<br />mt7916/mt7921/mt7933<br />mt7981/mt7986/mt8167S<br />mt8175/mt8362A/mt8365<br />mt8385/mt8518S/mt8532<br />mt8695/mt8696/mt8788                         | Both          | Published | 6.7 (Medium) |
@@ -182,6 +181,12 @@ So far, the fuzzer managed to identify the following CVE IDs, by exploiting diff
 | [CVE-2022-32658](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32658)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986                         | Both          | Published | 6.7 (Medium)     |
 | [CVE-2022-32659](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-32659)  | mt7603/mt7613/mt7615<br />mt7622/mt7628/mt7629<br />mt7915/mt7916/mt7981<br />mt7986/mt8518s/mt8532                         | Both          | Published | 6.7 (Medium)     |
 | [CVE-2022-46740](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46740)  | WS7100-20                   | Both          | Published | 6.5 (Medium)     |
+
+Additionally, the fuzzer managed to identify the following CVE IDs, by exploiting different Control frames. 
+
+| CVE IDs                                                                          | Vulnerable Devices/Chipsets | WPA2/WPA3-SAE | Status   | Score |
+|----------------------------------------------------------------------------------|-----------------------------|---------------|----------|-------|
+|[CVE-2022-32666](https://cve.mitre.org/cgi-bin/cvename.cgi?name=2022-32666)| mt7603/mt7613/mt7615<br />mt7622/mt7628mt7629<br />mt7915/mt7916/mt7981<br />mt7986/mt8365                         | Both          | Published | 7.5 (High) |
 
 We would like also to thank the MediaTek and Huawei security teams, for acknowledging and fixing these security issues, as stated in the following two security advisories: [MediaTek](https://corp.mediatek.com/product-security-acknowledgements) and [Huawei](https://www.huawei.com/en/psirt/security-advisories/2022/huawei-sa-dosvihswr-8f632df1-en).
 
@@ -194,11 +199,9 @@ Moreover, by following the methodology of the work titled ["How is your Wi-Fi co
 | [CVE-2021-41753](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41753)  | DIR-x1560/DIR-X6060 | WPA3-SAE | Published | 7.5 (high)     |
 | [CVE-2021-41788](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41788)  | mt7603E/mt7612/mt7613<br />mt7615/mt7622/mt7628<br />mt7629/mt7915| WPA3-SAE           | Published | 7.5 (high)     |
 
-
-
 ## Related Work
 
-The interested readers are referred to the below publications regarding the methodology used to build [WPAxFuzz](https://www.mdpi.com/2410-387X/6/4/53). Note that the paper titled ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X) published in the international Journal of Information Security and Applications (JISA), Elsevier has received the Dr KW Wong Annual Best Paper Award for 2022. The announcement can be found at: https://www.sciencedirect.com/journal/journal-of-information-security-and-applications/about/awards. Overall, the methodology detailed in the JISA paper is expanded in the WPAxFuzz publication.
+The interested readers are referred to the below publications regarding the methodology used to build [WPAxFuzz](https://www.mdpi.com/2410-387X/6/4/53). Also, the readers are directed to ["Bl0ck: Paralyzing 802.11 connections through Block Ack frames"](https://arxiv.org/abs/2302.05899) for the further details on the control frames expolits. Note that the paper titled ["How is your Wi-Fi connection today? DoS attacks on WPA3-SAE"](https://www.sciencedirect.com/science/article/pii/S221421262100243X) published in the international Journal of Information Security and Applications (JISA), Elsevier has received the Dr KW Wong Annual Best Paper Award for 2022. The announcement can be found at: https://www.sciencedirect.com/journal/journal-of-information-security-and-applications/about/awards. Overall, the methodology detailed in the JISA paper is expanded in the WPAxFuzz publication.
 
 ```
 @article{kampourakis2022wpaxfuzz,
@@ -210,6 +213,14 @@ The interested readers are referred to the below publications regarding the meth
   pages={53},
   year={2022},
   publisher={MDPI}
+}
+```
+```
+@article{chatzoglou2023bl0ck,
+  title={Bl0ck: Paralyzing 802.11 connections through Block Ack frames},
+  author={Chatzoglou, Efstratios and Kampourakis, Vyron and Kambourakis, Georgios},
+  journal={arXiv preprint arXiv:2302.05899},
+  year={2023}
 }
 ```
 ```
@@ -250,7 +261,7 @@ We would like to thank all the vendors we contacted and reported these attacks, 
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/badge/Contributors-3-brightgreen?style=for-the-badge
 [contributors-url]: https://github.com/efchatz/WPAxFuzz/contributors
-[stars-shield]: https://img.shields.io/badge/Stars-92-blue?style=for-the-badge
+[stars-shield]: https://img.shields.io/badge/Stars-100-blue?style=for-the-badge
 [stars-url]: https://github.com/efchatz/WPAxFuzz/stargazers
 [forks-shield]: https://img.shields.io/badge/Forks-9-blue?style=for-the-badge
 [forks-url]: https://github.com/efchatz/WPAxFuzz/network/members
