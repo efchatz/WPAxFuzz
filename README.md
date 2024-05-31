@@ -216,11 +216,13 @@ The interested readers are referred to the below publications regarding the meth
 }
 ```
 ```
-@article{chatzoglou2023bl0ck,
-  title={Bl0ck: Paralyzing 802.11 connections through Block Ack frames},
+@inproceedings{chatzoglou2023bl0ck,
+  title={Bl0ck: Paralyzing 802.11 connections through block ack frames},
   author={Chatzoglou, Efstratios and Kampourakis, Vyron and Kambourakis, Georgios},
-  journal={arXiv preprint arXiv:2302.05899},
-  year={2023}
+  booktitle={IFIP International Conference on ICT Systems Security and Privacy Protection},
+  pages={250--264},
+  year={2023},
+  organization={Springer}
 }
 ```
 ```
