@@ -11,6 +11,7 @@ def generate_bytes(num_of_bytes, mode):
 A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                 console_data = [output.decode('ISO-8859-1').strip() for output in console_data.stdout.readlines()]
                 all_bytes = str(console_data[0])
+                # converts the "all_bytes" string of hexadecimal byte values into a list of integers
                 bytes = [int(all_bytes[index: index + 2], 16) for index in range(0, len(all_bytes), 2)]
                 if len(bytes) == num_of_bytes:
                     right_length = True
