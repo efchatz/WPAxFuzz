@@ -7,6 +7,7 @@ from time import sleep
 import settings
 import os
 from Logging import LogFiles
+from fuzz import fuzzer
 from generateBytes import *
 from Msgs_colors import bcolors
 
@@ -62,31 +63,31 @@ class Frame:
                      bytearray(b'\x01\x00'),  # Authentication Key Management Suite (line below)
                      bytearray(b'\x00\x0f\xac'),
                      bytearray(b'')]  # RSN Capabilities
-        for item in generate_bytes(1, mode):
+        for item in generate_bytes(1, fuzzer, mode):
             rsn_array[1].append(item)
-        for item in generate_bytes(1, mode):
+        for item in generate_bytes(1, fuzzer, mode):
             rsn_array[3].append(item)
-        for item in generate_bytes(1, mode):
+        for item in generate_bytes(1, fuzzer, mode):
             rsn_array[5].append(item)
-        for item in generate_bytes(2, mode):
+        for item in generate_bytes(2, fuzzer, mode):
             rsn_array[6].append(item)
         rsn_bytes = b''.join(rsn_array)
         return Dot11Elt(ID='RSNinfo', info=rsn_bytes, len=len(rsn_bytes))
 
     def construct_TIM(self, mode):
         tim_bytes = bytearray(b'')
-        for item in generate_bytes(6, mode):
+        for item in generate_bytes(6, fuzzer, mode):
             tim_bytes.append(item)
         return Dot11Elt(ID='TIM', info=tim_bytes)
 
     def generate_MAC(self):
-        mac_bytes = generate_bytes(6, 'standard')
+        mac_bytes = generate_bytes(6, fuzzer, 'standard')
         return '%02x:%02x:%02x:%02x:%02x:%02x' % (mac_bytes[0], mac_bytes[1], mac_bytes[2], mac_bytes[3],
                                               mac_bytes[4], mac_bytes[5])
 
     def generate_SSID(self, mode):
         ssid = bytearray(b'')
-        for item in generate_bytes(16, mode):
+        for item in generate_bytes(16, fuzzer, mode):
             ssid.append(item)
         return Dot11Elt(ID='SSID', info=ssid, len=len(ssid))
 
@@ -95,9 +96,9 @@ class Frame:
         supported_rates = bytearray(b'')
         # standard supp rates are \x30\x48\60\x6c
         extended_supported_rates = bytearray(b'')
-        for item in generate_bytes(8, mode):
+        for item in generate_bytes(8, fuzzer, mode):
             supported_rates.append(item)
-        for item in generate_bytes(4, mode):
+        for item in generate_bytes(4, fuzzer, mode):
             extended_supported_rates.append(item)
         rates = Dot11Elt(ID='Rates', info=supported_rates, len=len(supported_rates)) \
         / Dot11Elt(ID='ESRates', info=extended_supported_rates, len=len(extended_supported_rates))
@@ -114,49 +115,49 @@ class Frame:
         # (freqs. 5845–5925) future
         # not all U-NII bands are available worldwide
         channel = bytearray(b'')
-        for item in generate_bytes(1, mode):
+        for item in generate_bytes(1, fuzzer, mode):
             channel.append(item)
         return Dot11Elt(ID='DSset', info=channel, len=len(channel))
 
     def generate_HT_capabilities(self, mode):
         ht_cap = bytearray(b'')
-        for item in generate_bytes(26, mode):
+        for item in generate_bytes(26, fuzzer, mode):
             ht_cap.append(item)
         return Dot11Elt(ID=45, info=ht_cap, len=len(ht_cap))
 
     def generate_extended_HT_capabilities(self, mode):
         ext_ht_cap = bytearray(b'')
-        for item in generate_bytes(8, mode):
+        for item in generate_bytes(8, fuzzer, mode):
             ext_ht_cap.append(item)
         return Dot11Elt(ID=127, info=ext_ht_cap, len=len(ext_ht_cap))
 
     def generate_power_capability(self, mode):
         power_cap = bytearray(b'')
-        for item in generate_bytes(2, mode):
+        for item in generate_bytes(2, fuzzer, mode):
             power_cap.append(item)
         return Dot11Elt(ID=33, info=power_cap, len=len(power_cap))
 
     def generate_supported_channels(self, mode):
         supp_ch = bytearray(b'')
-        for item in generate_bytes(2, mode):
+        for item in generate_bytes(2, fuzzer, mode):
             supp_ch.append(item)
         return Dot11Elt(ID=36, info=supp_ch, len=len(supp_ch))
 
     def generate_overlapping_BSS(self, mode):
         overl_bss = bytearray(b'')
-        for item in generate_bytes(14, mode):
+        for item in generate_bytes(14, fuzzer, mode):
             overl_bss.append(item)
         return Dot11Elt(ID=74, info=overl_bss, len=len(overl_bss))
 
     def generate_HT_information(self, mode):
         ht_info = bytearray(b'')
-        for item in generate_bytes(22, mode):
+        for item in generate_bytes(22, fuzzer, mode):
             ht_info.append(item)
         return Dot11Elt(ID=61, info=ht_info, len=len(ht_info))
 
     def generate_RM_enabled_capabilities(self, mode):
         rm_caps = bytearray(b'')
-        for item in generate_bytes(5, mode):
+        for item in generate_bytes(5, fuzzer, mode):
             rm_caps.append(item)
         return Dot11Elt(ID=70, info=rm_caps, len=len(rm_caps))
 

@@ -23,6 +23,8 @@ from Mngmt_frames.FuzzMngmntFrames import fuzzMngmtFrames
 from Ctrl_frames.fuzzControlFrames import fuzzControlFrames
 from Data_frames.fuzzDataFrames import fuzzDataFrames
 
+global fuzzer
+
 print(ascii_art.logo)
 print(
     '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')

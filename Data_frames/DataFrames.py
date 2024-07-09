@@ -5,6 +5,7 @@ import os
 from time import sleep
 import settings
 from Logging import LogFiles
+from fuzz import fuzzer
 from generateBytes import generate_bytes
 from threading import Thread
 
@@ -148,7 +149,7 @@ class DataFrames:
         
     def construct_bytes(self, num_of_bytes):
         payload = bytearray(b'')
-        for item in generate_bytes(num_of_bytes, self.mode):
+        for item in generate_bytes(num_of_bytes, fuzzer, self.mode):
             payload.append(item)
         return bytes(payload)
         

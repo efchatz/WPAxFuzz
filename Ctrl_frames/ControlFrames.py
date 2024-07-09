@@ -6,6 +6,7 @@ from time import sleep
 from random import randint
 import settings
 from Logging import LogFiles
+from fuzz import fuzzer
 from generateBytes import generate_bytes
 import binascii
 from threading import Thread
@@ -173,7 +174,7 @@ class ControlFrames:
         
     def construct_bytes(self, num_of_bytes):
         payload = bytearray(b'')
-        for item in generate_bytes(num_of_bytes, self.mode):
+        for item in generate_bytes(num_of_bytes, fuzzer, self.mode):
             payload.append(item)
         return bytes(payload)
         
