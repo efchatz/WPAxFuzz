@@ -1,10 +1,11 @@
-from Mngmt_frames.Construct_frame_fields import *
-from scapy.all import Dot11AssoReq, Dot11Elt
+from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
+from scapy.layers.dot11 import Dot11AssoReq, Dot11Elt
 
 
 class AssoReq(Frame):
-    def __init__(self, mode, frame_name, dest_addr, source_addr, interface, ssid):
+    def __init__(self, fuzzer, mode, frame_name, dest_addr, source_addr, interface, ssid):
         super(AssoReq, self).__init__()
+        self.fuzzer = fuzzer
         self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr
@@ -66,7 +67,7 @@ class AssoReq(Frame):
 
     def send_Asso_req_with_rand_source_mac(self, mode):
         asso_req = Dot11AssoReq(cap=4920)
-        frame = self.construct_MAC_header(0, self.dest_addr, self.generate_MAC(), self.dest_addr) / asso_req / \
+        frame = self.construct_MAC_header(0, self.dest_addr, self.generate_MAC(self.fuzzer), self.dest_addr) / asso_req / \
                 self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
                 STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
         return frame
@@ -81,7 +82,7 @@ class AssoReq(Frame):
     def send_Asso_req_with_rand_supp_speed(self, mode):
         asso_req = Dot11AssoReq(cap=4920)
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
-                self.ssid / self.generate_supp_speed(mode) / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
+                self.ssid / self.generate_supp_speed(self.fuzzer, mode) / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
                 STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
@@ -89,35 +90,35 @@ class AssoReq(Frame):
         asso_req = Dot11AssoReq(cap=4920)
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
                 self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
-                self.generate_HT_capabilities(mode) / STANDARD_EXT_HT_CAPABILITIES
+                self.generate_HT_capabilities(self.fuzzer, mode) / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_Asso_req_with_rand_ext_HT_capabilities(self, mode):
         asso_req = Dot11AssoReq(cap=4920)
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
                 self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
-                STANDARD_HT_CAPABILITIES / self.generate_extended_HT_capabilities(mode)
+                STANDARD_HT_CAPABILITIES / self.generate_extended_HT_capabilities(self.fuzzer, mode)
         return frame
 
     def send_Asso_req_with_rand_power_caps(self, mode):
         asso_req = Dot11AssoReq(cap=4920)
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / self.generate_power_capability(mode) / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / self.generate_power_capability(self.fuzzer, mode) / STANDARD_SUPP_CHANNELS / STANDARD_RSN /\
                 STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_Asso_req_with_rand_supp_channels(self, mode):
         asso_req = Dot11AssoReq(cap=4920)
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / self.generate_supported_channels(mode) / STANDARD_RSN /\
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / self.generate_supported_channels(self.fuzzer, mode) / STANDARD_RSN /\
                 STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_Asso_req_with_all_fields_rand(self, mode):
         asso_req = Dot11AssoReq(cap=randint(1, 9999))
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
-                self.ssid / self.generate_supp_speed(mode) / self.generate_power_capability(mode) / self.generate_supported_channels(mode) /\
-                self.construct_RSN(mode) / self.generate_HT_capabilities(mode) / self.generate_extended_HT_capabilities(mode)
+                self.ssid / self.generate_supp_speed(self.fuzzer, mode) / self.generate_power_capability(self.fuzzer, mode) / self.generate_supported_channels(self.fuzzer, mode) /\
+                self.construct_RSN(mode) / self.generate_HT_capabilities(self.fuzzer, mode) / self.generate_extended_HT_capabilities(self.fuzzer, mode)
         return frame
 
     def fuzz_asso_req(self):

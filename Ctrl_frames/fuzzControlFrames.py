@@ -1,12 +1,14 @@
 import subprocess
 import os
-import ascii_art
-from Msgs_colors import bcolors
-from Ctrl_frames.ControlFrames import ControlFrames
-from fuzzer_init import *
+from WPAxFuzz import ascii_art
+from WPAxFuzz.Msgs_colors import bcolors
+from WPAxFuzz.Ctrl_frames.ControlFrames import ControlFrames
+from WPAxFuzz.fuzzer_init import *
 from time import sleep
 
-def fuzzControlFrames(mode):
+def fuzzControlFrames(fuzzer, mode):
+    subprocess.call(['clear'], shell=True)
+    print(ascii_art.control_frames)
     print("1) Target the STA and impersonate the AP")
     print("2) Target the AP and impersonate the STA\n\n")
     try:
@@ -58,14 +60,14 @@ def fuzzControlFrames(mode):
             print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
             os._exit(0)
         if direction == 1:
-            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, choice3 + 1)
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, fuzzer, mode, choice2, choice3 + 1)
         else:
-            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, mode, choice2, choice3 + 1)
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, fuzzer, mode, choice2, choice3 + 1)
     else:
         if direction == 1:
-            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, 0)
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, fuzzer, mode, choice2, 0)
         else:
-            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, mode, choice2, 0)
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, fuzzer, mode, choice2, 0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
     print(ascii_art.wifi)

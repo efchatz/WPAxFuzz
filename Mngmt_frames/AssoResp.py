@@ -1,11 +1,12 @@
-from Mngmt_frames.Construct_frame_fields import *
-from scapy.all import Dot11AssoResp, Dot11Elt
+from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
+from scapy.layers.dot11 import Dot11AssoResp, Dot11Elt
 
 
 class AssoResp(Frame):
 
-    def __init__(self, mode, frame_name, dest_addr, source_addr, interface, direction):
+    def __init__(self, fuzzer, mode, frame_name, dest_addr, source_addr, interface, direction):
         super(AssoResp, self).__init__()
+        self.fuzzer = fuzzer
         self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr
@@ -73,32 +74,32 @@ class AssoResp(Frame):
 
     def send_asso_resp_with_rand_supp_speed(self, mode):
         asso_resp = Dot11AssoResp(cap=4920)
-        frame = self.MAC_header(mode) / asso_resp / self.generate_supp_speed(mode) / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES
+        frame = self.MAC_header(mode) / asso_resp / self.generate_supp_speed(self.fuzzer, mode) / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_asso_resp_with_rand_HT_capabilities(self, mode):
         asso_resp = Dot11AssoResp(cap=4920)
-        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / self.generate_HT_capabilities(mode) / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES
+        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / self.generate_HT_capabilities(self.fuzzer, mode) / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_asso_resp_with_rand_HT_information(self, mode):
         asso_resp = Dot11AssoResp(cap=4920)
-        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / self.generate_HT_information(mode) / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES
+        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / self.generate_HT_information(self.fuzzer, mode) / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_asso_resp_with_rand_overlapping_BSS(self, mode):
         asso_resp = Dot11AssoResp(cap=4920)
-        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / self.generate_overlapping_BSS(mode) / STANDARD_EXT_HT_CAPABILITIES
+        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / self.generate_overlapping_BSS(self.fuzzer, mode) / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
     def send_asso_resp_with_rand_extended_HT_caps(self, mode):
         asso_resp = Dot11AssoResp(cap=4920)
-        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / self.generate_extended_HT_capabilities(mode)
+        frame = self.MAC_header(mode) / asso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / self.generate_extended_HT_capabilities(self.fuzzer, mode)
         return frame
 
     def send_asso_resp_with_all_fields_rand(self, mode):
         asso_resp = Dot11AssoResp(cap=randint(1, 9999))
-        frame = self.MAC_header(mode) / asso_resp / self.generate_supp_speed(mode) / self.generate_HT_capabilities(mode) / self.generate_HT_information(mode) / self.generate_overlapping_BSS(mode) / self.generate_extended_HT_capabilities(mode)
+        frame = self.MAC_header(mode) / asso_resp / self.generate_supp_speed(self.fuzzer, mode) / self.generate_HT_capabilities(self.fuzzer, mode) / self.generate_HT_information(self.fuzzer, mode) / self.generate_overlapping_BSS(self.fuzzer, mode) / self.generate_extended_HT_capabilities(self.fuzzer, mode)
         return frame
         
     def fuzz_asso_resp(self):

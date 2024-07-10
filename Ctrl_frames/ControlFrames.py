@@ -1,13 +1,11 @@
-from Msgs_colors import bcolors
-from scapy.all import Dot11, RadioTap, sendp, hexdump
+from scapy.utils import hexdump
+from WPAxFuzz.Msgs_colors import bcolors
+from scapy.layers.dot11 import Dot11, RadioTap, sendp
 import subprocess
-import os
 from time import sleep
-from random import randint
-import settings
-from Logging import LogFiles
-from fuzz import fuzzer
-from generateBytes import generate_bytes
+from WPAxFuzz import settings
+from WPAxFuzz.Logging import LogFiles
+from WPAxFuzz.generateBytes import generate_bytes
 import binascii
 from threading import Thread
 
@@ -15,10 +13,11 @@ NUM_OF_FRAMES_TO_SEND = 64
 
 class ControlFrames:
 
-    def __init__(self, dest_addr, source_addr, interface, mode, frame_id, ctrl_frm_ext):
+    def __init__(self, dest_addr, source_addr, interface, fuzzer, mode, frame_id, ctrl_frm_ext):
         self.dest_addr = dest_addr
         self.source_addr = source_addr
         self.interface = interface
+        self.fuzzer = fuzzer
         self.mode = mode
         self.frame_id = frame_id
         self.ctrl_frm_ext = ctrl_frm_ext
@@ -174,7 +173,7 @@ class ControlFrames:
         
     def construct_bytes(self, num_of_bytes):
         payload = bytearray(b'')
-        for item in generate_bytes(num_of_bytes, fuzzer, self.mode):
+        for item in generate_bytes(num_of_bytes, self.fuzzer, self.mode):
             payload.append(item)
         return bytes(payload)
         

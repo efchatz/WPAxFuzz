@@ -1,10 +1,11 @@
-from Mngmt_frames.Construct_frame_fields import *
-from scapy.all import Dot11ProbeReq, Dot11Elt
+from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
+from scapy.layers.dot11 import Dot11ProbeReq, Dot11Elt
 
 
 class ProbeReq(Frame):
-    def __init__(self, mode, frame_name, dest_addr, source_addr, interface, ssid):
+    def __init__(self, fuzzer, mode, frame_name, dest_addr, source_addr, interface, ssid):
         super(ProbeReq, self).__init__()
+        self.fuzzer = fuzzer
         self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr
@@ -52,43 +53,43 @@ class ProbeReq(Frame):
     def send_Probe_req_with_rand_RSN(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / self.construct_RSN(mode)
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / self.construct_RSN(self.fuzzer, mode)
         return frame
 
     def send_Probe_req_with_rand_source_mac(self, mode):
         probe_req = Dot11ProbeReq()
-        frame = self.construct_MAC_header(4, self.dest_addr, self.generate_MAC(), self.dest_addr) / probe_req / \
+        frame = self.construct_MAC_header(4, self.dest_addr, self.generate_MAC(self.fuzzer), self.dest_addr) / probe_req / \
                 self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
         return frame
 
     def send_Probe_req_with_rand_supp_speed(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / self.generate_supp_speed(mode) / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
+                self.ssid / self.generate_supp_speed(self.fuzzer, mode) / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
         return frame
 
     def send_Probe_req_with_rand_DSset(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / self.generate_channel_use(mode) / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / self.generate_channel_use(self.fuzzer, mode) / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
         return frame
 
     def send_Probe_req_with_rand_HT_capabilities(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / self.generate_HT_capabilities(mode) / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / self.generate_HT_capabilities(self.fuzzer, mode) / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RSN
         return frame
 
     def send_Probe_req_with_rand_ext_HT_capabilities(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / self.generate_extended_HT_capabilities(mode) / STANDARD_RSN
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / self.generate_extended_HT_capabilities(self.fuzzer, mode) / STANDARD_RSN
         return frame
 
     def send_Probe_req_with_all_fields_rand(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / self.generate_supp_speed(mode) / self.generate_channel_use(mode) / self.generate_HT_capabilities(mode) / self.generate_extended_HT_capabilities(mode) / self.construct_RSN(mode)
+                self.ssid / self.generate_supp_speed(self.fuzzer, mode) / self.generate_channel_use(self.fuzzer, mode) / self.generate_HT_capabilities(self.fuzzer, mode) / self.generate_extended_HT_capabilities(self.fuzzer, mode) / self.construct_RSN(mode)
         return frame
 
     def fuzz_probe_req(self):

@@ -1,29 +1,14 @@
 import subprocess
-from Mngmt_frames.Beacon import Beacon
-from Mngmt_frames.AssoReq import AssoReq
-from Mngmt_frames.AssoResp import AssoResp
-from Mngmt_frames.Authentication import Authentication
-from Mngmt_frames.Probe_request import ProbeReq
-from Mngmt_frames.Probe_response import Proberesp
-from Mngmt_frames.ReassoReq import ReassoReq
-from Mngmt_frames.ReassoResp import ReassoResp
-from Connection_monitors.DeauthMonitor import DeauthMon
 from Connection_monitors.AlivenessCheck import AllvCheck
 from Msgs_colors import bcolors
-from Ctrl_frames.ControlFrames import ControlFrames
-from Data_frames.DataFrames import DataFrames
 from fuzzer_init import *
 from time import sleep
-import threading
 import settings
-import sys
 import os
 import ascii_art
 from Mngmt_frames.FuzzMngmntFrames import fuzzMngmtFrames
 from Ctrl_frames.fuzzControlFrames import fuzzControlFrames
 from Data_frames.fuzzDataFrames import fuzzDataFrames
-
-global fuzzer
 
 print(ascii_art.logo)
 print(
@@ -70,22 +55,18 @@ if (choice == 1 or choice == 3 or choice == 4):
         print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
         os._exit(0)
 
-if choice == 1:
-    subprocess.call(['clear'], shell=True)
-    fuzzMngmtFrames(mode)
-
-elif choice == 2:
-    subprocess.call(['clear'], shell=True)
-    subprocess.call(['sudo python3 dos-sae.py'], shell=True)
-elif choice == 3:
-    subprocess.call(['clear'], shell=True)
-    print(ascii_art.control_frames)
-    fuzzControlFrames(mode)
-elif choice == 4:
-    subprocess.call(['clear'], shell=True)
-    fuzzDataFrames(mode)
-elif choice == 5:
-    subprocess.call(['clear'], shell=True)
-    subprocess.call(['sudo python3 mage.py'], shell=True)
-else:
-    print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
+match choice:
+    case 1:
+        fuzzMngmtFrames(fuzzer, mode)
+    case 2:
+        subprocess.call(['clear'], shell=True)
+        subprocess.call(['sudo python3 dos-sae.py'], shell=True)
+    case 3:
+        fuzzControlFrames(fuzzer, mode)
+    case 4:
+        fuzzDataFrames(fuzzer, mode)
+    case 5:
+        subprocess.call(['clear'], shell=True)
+        subprocess.call(['sudo python3 mage.py'], shell=True)
+    case _:
+        print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)

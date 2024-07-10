@@ -1,13 +1,14 @@
-from Mngmt_frames.Construct_frame_fields import *
-from Msgs_colors import bcolors
-from Logging import LogFiles
-from scapy.all import Dot11Auth, Dot11Elt, hexdump
-import settings
-
+from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
+from WPAxFuzz.Msgs_colors import bcolors
+from WPAxFuzz.Logging import LogFiles
+from scapy.layers.dot11 import Dot11Auth, Dot11Elt
+from WPAxFuzz import settings
+from random import randint
 
 class Authentication(Frame):
-    def __init__(self, mode, frame_name, dest_addr, source_addr, interface):
+    def __init__(self, fuzzer, mode, frame_name, dest_addr, source_addr, interface):
         super(Authentication, self).__init__()
+        self.fuzzer = fuzzer
         self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr

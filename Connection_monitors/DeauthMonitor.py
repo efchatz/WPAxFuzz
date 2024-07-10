@@ -1,8 +1,6 @@
-import settings
-import threading
-from time import sleep
+from scapy.layers.dot11 import Dot11Deauth, Dot11Disas
+from WPAxFuzz import settings
 from scapy.all import *
-from Msgs_colors import bcolors
 
 
 class DeauthMon(threading.Thread):
