@@ -1,4 +1,4 @@
-from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
+from Mngmt_frames.Construct_frame_fields import *
 from scapy.layers.dot11 import Dot11AssoReq, Dot11Elt
 
 

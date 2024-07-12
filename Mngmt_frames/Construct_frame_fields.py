@@ -4,12 +4,12 @@ from time import sleep
 
 from scapy.utils import hexdump
 
-from WPAxFuzz import settings
-from WPAxFuzz.Logging import LogFiles
-from WPAxFuzz.generateBytes import *
-from WPAxFuzz.Msgs_colors import bcolors
+import settings
+from Logging import LogFiles
+from generateBytes import *
+from Msgs_colors import bcolors
 
-from WPAxFuzz.generateBytes import generate_bytes
+from generateBytes import generate_bytes
 
 NUM_OF_FRAMES_TO_SEND = 64
 

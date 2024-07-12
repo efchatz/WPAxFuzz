@@ -1,12 +1,12 @@
 from scapy.utils import hexdump
 
-from WPAxFuzz.Msgs_colors import bcolors
+from Msgs_colors import bcolors
 from scapy.layers.dot11 import Dot11, RadioTap, sendp
 import subprocess
 from time import sleep
-from WPAxFuzz import settings
-from WPAxFuzz.Logging import LogFiles
-from WPAxFuzz.generateBytes import generate_bytes
+import settings
+from Logging import LogFiles
+from generateBytes import generate_bytes
 from threading import Thread
 
 NUM_OF_FRAMES_TO_SEND = 64

@@ -1,12 +1,12 @@
 import subprocess
 import os
-from WPAxFuzz import ascii_art
-from WPAxFuzz.Connection_monitors.AlivenessCheck import AllvCheck
-from WPAxFuzz.Msgs_colors import bcolors
-from WPAxFuzz.Data_frames.DataFrames import DataFrames
-from WPAxFuzz.fuzzer_init import *
+import ascii_art
+from Connection_monitors.AlivenessCheck import AllvCheck
+from Msgs_colors import bcolors
+from Data_frames.DataFrames import DataFrames
+from fuzzer_init import *
 from time import sleep
-from WPAxFuzz import settings
+import settings
 
 def fuzzDataFrames(fuzzer, mode):
     subprocess.call(['clear'], shell=True)

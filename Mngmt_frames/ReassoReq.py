@@ -1,6 +1,6 @@
 from random import randint
 
-from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
+from Mngmt_frames.Construct_frame_fields import *
 from scapy.layers.dot11 import Dot11ReassoReq, Dot11Elt
 
 

@@ -1,5 +1,5 @@
 from scapy.layers.dot11 import Dot11Deauth, Dot11Disas
-from WPAxFuzz import settings
+import settings
 from scapy.all import *
 
 

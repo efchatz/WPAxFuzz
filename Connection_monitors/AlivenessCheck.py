@@ -1,8 +1,8 @@
 from venv import logger
-from WPAxFuzz import settings
+import settings
 import threading
 from time import sleep
-from WPAxFuzz.Msgs_colors import bcolors
+from Msgs_colors import bcolors
 import subprocess
 import os
 

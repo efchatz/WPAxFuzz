@@ -1,9 +1,9 @@
 import subprocess
 import os
-from WPAxFuzz import ascii_art
-from WPAxFuzz.Msgs_colors import bcolors
-from WPAxFuzz.Ctrl_frames.ControlFrames import ControlFrames
-from WPAxFuzz.fuzzer_init import *
+import ascii_art
+from Msgs_colors import bcolors
+from Ctrl_frames.ControlFrames import ControlFrames
+from fuzzer_init import *
 from time import sleep
 
 def fuzzControlFrames(fuzzer, mode):

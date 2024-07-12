@@ -1,8 +1,7 @@
-from WPAxFuzz.Mngmt_frames.Construct_frame_fields import *
-from WPAxFuzz.Msgs_colors import bcolors
-from WPAxFuzz.Logging import LogFiles
+from Mngmt_frames.Construct_frame_fields import *
+from Msgs_colors import bcolors
+from Logging import LogFiles
 from scapy.layers.dot11 import Dot11Auth, Dot11Elt
-from WPAxFuzz import settings
 from random import randint
 
 class Authentication(Frame):

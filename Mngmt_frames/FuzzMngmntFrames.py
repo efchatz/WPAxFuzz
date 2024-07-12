@@ -1,17 +1,17 @@
 import subprocess
 import os
-from WPAxFuzz import ascii_art
-from WPAxFuzz.Mngmt_frames import AssoReq
-from WPAxFuzz.Mngmt_frames import AssoResp
-from WPAxFuzz.Mngmt_frames import Authentication
-from WPAxFuzz.Mngmt_frames import Beacon
-from WPAxFuzz.Mngmt_frames import ReassoReq
-from WPAxFuzz.Mngmt_frames import ReassoResp
-from WPAxFuzz.Connection_monitors.DeauthMonitor import DeauthMon
-from WPAxFuzz.Mngmt_frames.Probe_request import ProbeReq
-from WPAxFuzz.Mngmt_frames.Probe_response import Proberesp
-from WPAxFuzz.Msgs_colors import bcolors
-from WPAxFuzz.fuzzer_init import *
+import ascii_art
+from Mngmt_frames import AssoReq
+from Mngmt_frames import AssoResp
+from Mngmt_frames import Authentication
+from Mngmt_frames import Beacon
+from Mngmt_frames import ReassoReq
+from Mngmt_frames import ReassoResp
+from Connection_monitors.DeauthMonitor import DeauthMon
+from Mngmt_frames.Probe_request import ProbeReq
+from Mngmt_frames.Probe_response import Proberesp
+from Msgs_colors import bcolors
+from fuzzer_init import *
 from time import sleep
 
 def fuzzMngmtFrames(fuzzer, mode):
