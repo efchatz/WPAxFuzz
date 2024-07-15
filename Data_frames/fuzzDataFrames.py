@@ -11,19 +11,6 @@ import settings
 def fuzzDataFrames(fuzzer, mode):
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
-    if mode == 'standard' or mode == 'random':
-        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
-        Aliveness.start()
-        while not settings.retrieving_IP:
-            if settings.IP_not_alive:
-                os._exit(0)
-        sleep(10)
-        subprocess.call(['clear'], shell=True)
-    else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
-        os._exit(0)
-    subprocess.call(['clear'], shell=True)
-    print(ascii_art.data_frames)
     print("1) Target the STA and impersonate the AP")
     print("2) Target the AP and impersonate the STA\n\n")
     try:
