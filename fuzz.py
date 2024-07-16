@@ -43,17 +43,21 @@ if (choice == 1 or choice == 3 or choice == 4):
     print('Type "standard" for the standard mode')
     print('Type "random" for the random mode\n\n')
     mode = input('Enter a choice: ').lower()
-    if mode == 'standard' or mode == 'random':
-        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
-        Aliveness.start()
-        while not settings.retrieving_IP:
-            if settings.IP_not_alive:
-                os._exit(0)
-        sleep(10)
-        subprocess.call(['clear'], shell=True)
-    else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
-        os._exit(0)
+
+    print('\nDo you want to start Aliveness? Type "yes" or "no":')
+    aliveness = input().lower
+    if aliveness == 'yes':
+        if mode == 'standard' or mode == 'random':
+            Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+            Aliveness.start()
+            while not settings.retrieving_IP:
+                if settings.IP_not_alive:
+                    os._exit(0)
+            sleep(10)
+            subprocess.call(['clear'], shell=True)
+        else:
+            print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+            os._exit(0)
 
 match choice:
     case 1:
