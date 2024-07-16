@@ -13,11 +13,11 @@ NUM_OF_FRAMES_TO_SEND = 64
 
 class ControlFrames:
 
-    def __init__(self, dest_addr, source_addr, interface, fuzzer, mode, frame_id, ctrl_frm_ext):
+    def __init__(self, dest_addr, source_addr, interface, generator, mode, frame_id, ctrl_frm_ext):
         self.dest_addr = dest_addr
         self.source_addr = source_addr
         self.interface = interface
-        self.fuzzer = fuzzer
+        self.generator = generator
         self.mode = mode
         self.frame_id = frame_id
         self.ctrl_frm_ext = ctrl_frm_ext
@@ -173,7 +173,7 @@ class ControlFrames:
         
     def construct_bytes(self, num_of_bytes):
         payload = bytearray(b'')
-        for item in generate_bytes(num_of_bytes, self.fuzzer, self.mode):
+        for item in generate_bytes(num_of_bytes, self.generator, self.mode):
             payload.append(item)
         return bytes(payload)
         

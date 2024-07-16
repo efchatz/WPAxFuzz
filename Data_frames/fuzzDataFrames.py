@@ -1,14 +1,12 @@
 import subprocess
 import os
 import ascii_art
-from Connection_monitors.AlivenessCheck import AllvCheck
 from Msgs_colors import bcolors
 from Data_frames.DataFrames import DataFrames
 from fuzzer_init import *
 from time import sleep
-import settings
 
-def fuzzDataFrames(fuzzer, mode):
+def fuzzDataFrames(generator, mode):
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
     print("1) Target the STA and impersonate the AP")
@@ -48,9 +46,9 @@ def fuzzDataFrames(fuzzer, mode):
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
     if direction == 1:
-        fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, fuzzer, mode, choice2, True)
+        fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, generator, mode, choice2, True)
     else:
-        fuzz_data = DataFrames(targeted_AP, targeted_STA, att_interface, fuzzer, mode, choice2, False)
+        fuzz_data = DataFrames(targeted_AP, targeted_STA, att_interface, generator, mode, choice2, False)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
     print(ascii_art.wifi)

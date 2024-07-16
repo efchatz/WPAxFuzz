@@ -2,9 +2,9 @@ from Mngmt_frames.Construct_frame_fields import *
 from scapy.layers.dot11 import Dot11ReassoResp, Dot11Elt
 
 class ReassoResp(Frame):
-    def __init__(self, fuzzer, mode, frame_name, dest_addr, source_addr, interface, direction):
+    def __init__(self, generator, mode, frame_name, dest_addr, source_addr, interface, direction):
         super(ReassoResp, self).__init__()
-        self.fuzzer = fuzzer
+        self.generator = generator
         self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr
@@ -66,7 +66,7 @@ class ReassoResp(Frame):
 
     def send_Reasso_resp_with_rand_source_mac(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.construct_MAC_header(3, self.dest_addr, self.generate_MAC(self.fuzzer), self.source_addr) / reasso_resp / \
+        frame = self.construct_MAC_header(3, self.dest_addr, self.generate_MAC(self.generator), self.source_addr) / reasso_resp / \
                 SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / \
                 STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
         return frame
@@ -78,37 +78,37 @@ class ReassoResp(Frame):
 
     def send_Reasso_resp_with_rand_supp_speed(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.MAC_header(mode) / reasso_resp / self.generate_supp_speed(self.fuzzer, mode) / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
+        frame = self.MAC_header(mode) / reasso_resp / self.generate_supp_speed(self.generator, mode) / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
         return frame
 
     def send_Reasso_resp_with_rand_HT_capabilities(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / self.generate_HT_capabilities(self.fuzzer, mode) / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
+        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / self.generate_HT_capabilities(self.generator, mode) / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
         return frame
 
     def send_Reasso_resp_with_rand_HT_information(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / self.generate_HT_information(self.fuzzer, mode) / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
+        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / self.generate_HT_information(self.generator, mode) / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
         return frame
 
     def send_Reasso_resp_with_rand_overlapping_BSS(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / self.generate_overlapping_BSS(self.fuzzer, mode) / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
+        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / self.generate_overlapping_BSS(self.generator, mode) / STANDARD_EXT_HT_CAPABILITIES / STANDARD_RM_CAPS
         return frame
 
     def send_Reasso_resp_with_rand_ext_HT_capabilities(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / self.generate_extended_HT_capabilities(self.fuzzer, mode) / STANDARD_RM_CAPS
+        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / self.generate_extended_HT_capabilities(self.generator, mode) / STANDARD_RM_CAPS
         return frame
 
     def send_Reasso_resp_with_rand_RM_caps(self, mode):
         reasso_resp = Dot11ReassoResp(cap=4920)
-        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / self.generate_RM_enabled_capabilities(self.fuzzer, mode)
+        frame = self.MAC_header(mode) / reasso_resp / SUPPORTED_RATES / SUPPL_RATES / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_OVERLAPPING_BSS / STANDARD_EXT_HT_CAPABILITIES / self.generate_RM_enabled_capabilities(self.generator, mode)
         return frame
 
     def send_Reasso_resp_with_all_fields_rand(self, mode):
         reasso_req = Dot11ReassoResp(cap=randint(1, 9999))
-        frame = self.MAC_header(mode) / reasso_req / self.generate_supp_speed(self.fuzzer, mode) / self.generate_HT_capabilities(self.fuzzer, mode) / self.generate_HT_information(self.fuzzer, mode) / self.generate_overlapping_BSS(self.fuzzer, mode) / self.generate_extended_HT_capabilities(self.fuzzer, mode) / self.generate_RM_enabled_capabilities(self.fuzzer, mode)
+        frame = self.MAC_header(mode) / reasso_req / self.generate_supp_speed(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(self.generator, mode) / self.generate_overlapping_BSS(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.generate_RM_enabled_capabilities(self.generator, mode)
         return frame
 
     def fuzz_reasso_resp(self):

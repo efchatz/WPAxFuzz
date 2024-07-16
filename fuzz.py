@@ -32,12 +32,12 @@ except:
 if (choice == 1 or choice == 3 or choice == 4):
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames)
-    print('Please choose fuzzer tool:')
+    print('Please choose generator tool:')
     print('1) Blab')
     print('2) gramfuzz')
-    fuzzer = int(input('Enter a choice for fuzzer: '))
-    if fuzzer != 1 and fuzzer != 2:
-        print(bcolors.FAIL + '\nNo such fuzzer :(' + bcolors.ENDC)
+    generator = int(input('Enter a choice for generator (1 for Blab or 2 for gramfuzz): '))
+    if generator != 1 and generator != 2:
+        print(bcolors.FAIL + '\nNo such generator :(' + bcolors.ENDC)
         os._exit(0)
 
     print('Type "standard" for the standard mode')
@@ -57,14 +57,14 @@ if (choice == 1 or choice == 3 or choice == 4):
 
 match choice:
     case 1:
-        fuzzMngmtFrames(fuzzer, mode)
+        fuzzMngmtFrames(generator, mode)
     case 2:
         subprocess.call(['clear'], shell=True)
         subprocess.call(['sudo python3 dos-sae.py'], shell=True)
     case 3:
-        fuzzControlFrames(fuzzer, mode)
+        fuzzControlFrames(generator, mode)
     case 4:
-        fuzzDataFrames(fuzzer, mode)
+        fuzzDataFrames(generator, mode)
     case 5:
         subprocess.call(['clear'], shell=True)
         subprocess.call(['sudo python3 mage.py'], shell=True)

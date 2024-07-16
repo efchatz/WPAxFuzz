@@ -6,7 +6,7 @@ from Ctrl_frames.ControlFrames import ControlFrames
 from fuzzer_init import *
 from time import sleep
 
-def fuzzControlFrames(fuzzer, mode):
+def fuzzControlFrames(generator, mode):
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
     print("1) Target the STA and impersonate the AP")
@@ -60,14 +60,14 @@ def fuzzControlFrames(fuzzer, mode):
             print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
             os._exit(0)
         if direction == 1:
-            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, fuzzer, mode, choice2, choice3 + 1)
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, generator, mode, choice2, choice3 + 1)
         else:
-            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, fuzzer, mode, choice2, choice3 + 1)
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, generator, mode, choice2, choice3 + 1)
     else:
         if direction == 1:
-            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, fuzzer, mode, choice2, 0)
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, generator, mode, choice2, 0)
         else:
-            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, fuzzer, mode, choice2, 0)
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, generator, mode, choice2, 0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
     print(ascii_art.wifi)

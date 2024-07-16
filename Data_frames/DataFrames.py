@@ -13,11 +13,11 @@ NUM_OF_FRAMES_TO_SEND = 64
 
 class DataFrames:
     
-    def __init__(self, dest_addr, source_addr, interface, fuzzer, mode, frame_id, is_STA_the_target):
+    def __init__(self, dest_addr, source_addr, interface, generator, mode, frame_id, is_STA_the_target):
         self.dest_addr = dest_addr
         self.source_addr = source_addr
         self.interface = interface
-        self.fuzzer = fuzzer
+        self.generator = generator
         self.mode = mode
         self.frame_id = frame_id
         self.is_STA_the_target = is_STA_the_target
@@ -138,22 +138,22 @@ class DataFrames:
                 "conn_loss": False
                 },
         }
-    
+
     def rotating_symbol(self):
         subprocess.call(['./Data_frames/rot.sh'])
-    
+
     def extract_frame_info(self):
         for frame_type in self.data_subtypes:
             if self.frame_id - 1 == frame_type["frame_id"]:
                 return frame_type
-        
-        
+
+
     def construct_bytes(self, num_of_bytes):
         payload = bytearray(b'')
-        for item in generate_bytes(num_of_bytes, self.fuzzer, self.mode):
+        for item in generate_bytes(num_of_bytes, self.generator, self.mode):
             payload.append(item)
         return bytes(payload)
-        
+
     def generate_MAC_header(self, FCf=11, seq_num=int.from_bytes(b'\x00\x00', "big")):
         if self.is_STA_the_target:
             dot11 = Dot11(type=2, subtype=self.frame_id-1, FCfield=FCf, addr1=self.dest_addr, addr2=self.source_addr, addr3=self.source_addr, SC=seq_num, addr4=self.source_addr)
@@ -161,31 +161,31 @@ class DataFrames:
             dot11 = Dot11(type=2, subtype=self.frame_id-1, FCfield=FCf, addr1=self.dest_addr, addr2=self.source_addr, addr3=self.dest_addr, SC=seq_num, addr4=self.source_addr)
         MAC_header = RadioTap() / dot11
         return MAC_header
-        
+
     def generate_random_payload(self):
         frame_info = self.extract_frame_info()
         if frame_info['payload_size'] == 0:
             return b''
         else:
             return self.construct_bytes(frame_info['payload_size'])
-            
+
     def generate_frame_with_random_SC(self):
         frame_info = self.extract_frame_info()
         while True:
             SC = int.from_bytes(self.construct_bytes(2), "big")
             if SC < 65535:
                 return self.generate_MAC_header(0, SC) / frame_info["standard_payload"]
-        
-        
+
+
     def generate_frame_with_random_FCf(self):
         frame_info = self.extract_frame_info()
         return self.generate_MAC_header(int.from_bytes(self.construct_bytes(1), "big")) / frame_info["standard_payload"]
-        
+
     def generate_frame_with_random_payload(self, FCf=11):
         MAC_header = self.generate_MAC_header(FCf)
         payload = self.generate_random_payload()
         return MAC_header / payload
-    
+
     def generate_frame_with_random_FCf_SC_and_payload(self):
         while True:
             SC = int.from_bytes(self.construct_bytes(2), "big")
@@ -193,15 +193,15 @@ class DataFrames:
                 MAC_header = self.generate_MAC_header(int.from_bytes(self.construct_bytes(1), "big"), SC)
                 payload = self.generate_random_payload()
                 return MAC_header / payload
-        
+
     def check_conn_aliveness(self, frame, fuzzing_stage):
-        
+
         def check_conn():
             sleep(2)
             while settings.conn_loss or not settings.is_alive:
                 pass
             return
-        
+
         if not settings.is_alive:
             self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
             print('\nHexDump of frame:')
@@ -220,7 +220,7 @@ class DataFrames:
             check_conn()
             return True
         return False
-        
+
     def fuzz_data_frames(self):
         frames_till_disr = []
         counter = 1
@@ -260,7 +260,7 @@ class DataFrames:
                                 break
                             else:
                                 sendp(frame, count=16, iface=self.interface, verbose=0)
-                    else:   
+                    else:
                         print(f'Transmitting {bcolors.OKBLUE}{frame_info["frame_name"]}{bcolors.ENDC} frames with random {i}')
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame =  self.fuzzer_state[i]["send_function"]()

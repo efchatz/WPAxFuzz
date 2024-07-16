@@ -5,8 +5,8 @@ import subprocess
 import gramfuzz
 
 
-def generate_bytes(num_of_bytes, fuzzer, mode):
-    match fuzzer:
+def generate_bytes(num_of_bytes, generator, mode):
+    match generator:
         case 1:
             return blab(num_of_bytes, mode)
         case 2:
@@ -41,15 +41,15 @@ def blab(num_of_bytes, mode):
     return bytes
 
 def gramfuzzTool(num_of_bytes, mode):
-    fuzzer = gramfuzz.GramFuzzer()
-    fuzzer.load_grammar("octets_grammar.py")
+    generator = gramfuzz.GramFuzzer()
+    generator.load_grammar("octets_grammar.py")
 
     match mode:
         case 'standard':
-            octets = fuzzer.gen(cat="octets", num=num_of_bytes)
+            octets = generator.gen(cat="octets", num=num_of_bytes)
         case 'random':
             num_of_bytes = random.randint(1,64)
-            octets = fuzzer.gen(cat="octets", num=num_of_bytes)
+            octets = generator.gen(cat="octets", num=num_of_bytes)
 
     octets = [output.decode('ISO-8859-1') for output in octets]
     all_bytes = str(''.join(octets))

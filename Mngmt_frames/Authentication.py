@@ -5,9 +5,9 @@ from scapy.layers.dot11 import Dot11Auth, Dot11Elt
 from random import randint
 
 class Authentication(Frame):
-    def __init__(self, fuzzer, mode, frame_name, dest_addr, source_addr, interface):
+    def __init__(self, generator, mode, frame_name, dest_addr, source_addr, interface):
         super(Authentication, self).__init__()
-        self.fuzzer = fuzzer
+        self.generator = generator
         self.mode = mode
         self.frame_name = frame_name
         self.dest_addr = dest_addr
