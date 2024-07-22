@@ -41,14 +41,14 @@ def fuzzDataFrames(generator, mode):
     print('15) QoS Data + CF-Poll (no data)')
     print('16) QoS CF-ACK + CF-Poll (no data)\n\n')
     try:
-        choice2 = int(input('Select a frame to fuzz: '))
+        data_frame = int(input('Select a frame to fuzz: '))
     except:
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
     if direction == 1:
-        fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, generator, mode, choice2, True)
+        fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, generator, mode, data_frame, True)
     else:
-        fuzz_data = DataFrames(targeted_AP, targeted_STA, att_interface, generator, mode, choice2, False)
+        fuzz_data = DataFrames(targeted_AP, targeted_STA, att_interface, generator, mode, data_frame, False)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
     print(ascii_art.wifi)

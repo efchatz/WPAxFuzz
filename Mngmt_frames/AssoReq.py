@@ -61,7 +61,7 @@ class AssoReq(Frame):
     def send_Asso_req_with_rand_RSN(self, mode):
         asso_req = Dot11AssoReq(cap=4920)
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / self.construct_RSN(mode) /\
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / self.construct_RSN(self.generator, mode) /\
                 STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
         return frame
 

@@ -98,7 +98,7 @@ class Proberesp(Frame):
 
     def send_probe_resp_with_rand_RSN(self, mode):
         probe_resp = Dot11ProbeResp(cap=4920)
-        frame = self.MAC_header(mode) / probe_resp / self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_RM_CAPS / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_EXT_HT_CAPABILITIES / self.construct_RSN(mode)
+        frame = self.MAC_header(mode) / probe_resp / self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_RM_CAPS / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_EXT_HT_CAPABILITIES / self.construct_RSN(self.generator, mode)
         return frame
 
     def send_probe_resp_with_rand_source_mac(self, mode):
@@ -138,7 +138,7 @@ class Proberesp(Frame):
 
     def send_probe_resp_with_all_fields_rand(self, mode):
         probe_resp = Dot11ProbeResp(timestamp=randint(1, 9999), beacon_interval=randint(1, 9999), cap=randint(1, 9999))
-        frame = self.MAC_header(mode) / probe_resp / self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) /self.generate_RM_enabled_capabilities(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(self.generator, mode) /self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_RSN(mode)
+        frame = self.MAC_header(mode) / probe_resp / self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) /self.generate_RM_enabled_capabilities(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(self.generator, mode) /self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_RSN(self.generator, mode)
         return frame
 
     def fuzz_probe_resp(self):

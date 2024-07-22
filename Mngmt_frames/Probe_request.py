@@ -89,7 +89,7 @@ class ProbeReq(Frame):
     def send_Probe_req_with_all_fields_rand(self, mode):
         probe_req = Dot11ProbeReq()
         frame = self.construct_MAC_header(4, self.dest_addr, self.source_addr, self.dest_addr) / probe_req / \
-                self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_RSN(mode)
+                self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_RSN(self.generator, mode)
         return frame
 
     def fuzz_probe_req(self):

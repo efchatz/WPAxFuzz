@@ -100,7 +100,7 @@ class Beacon(Frame):
 
     def send_beacon_with_rand_RSN(self, mode):
         beacon = Dot11Beacon(cap='ESS+privacy')
-        frame = self.MAC_header(mode) / beacon / self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_EXT_HT_CAPABILITIES / STANDARD_TIM / STANDARD_RM_CAPS / self.construct_RSN(mode)
+        frame = self.MAC_header(mode) / beacon / self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / STANDARD_HT_INFORMATION / STANDARD_EXT_HT_CAPABILITIES / STANDARD_TIM / STANDARD_RM_CAPS / self.construct_RSN(self.generator, mode)
         return frame
 
     def send_beacon_with_rand_source_mac(self, mode):
@@ -136,7 +136,7 @@ class Beacon(Frame):
 
     def send_beacon_with_rand_HT_information(self, mode):
         beacon = Dot11Beacon(cap='ESS+privacy')
-        frame = self.MAC_header(mode) / beacon / self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / self.generate_HT_information(mode) / STANDARD_EXT_HT_CAPABILITIES / STANDARD_TIM / STANDARD_RM_CAPS / STANDARD_RSN
+        frame = self.MAC_header(mode) / beacon / self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_DS / STANDARD_HT_CAPABILITIES / self.generate_HT_information(self.generator, mode) / STANDARD_EXT_HT_CAPABILITIES / STANDARD_TIM / STANDARD_RM_CAPS / STANDARD_RSN
         return frame
 
     def send_beacon_with_rand_extended_HT_capabilities(self, mode):
@@ -146,7 +146,7 @@ class Beacon(Frame):
 
     def send_beacon_with_all_fields_rand(self, mode):
         beacon = Dot11Beacon(timestamp=randint(1, 9999), beacon_interval=randint(1, 9999), cap=randint(1, 9999))
-        frame = self.MAC_header(mode) / beacon / self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_TIM(self.generator, mode) /self.generate_RM_enabled_capabilities(self.generator, mode) / self.construct_RSN(mode)
+        frame = self.MAC_header(mode) / beacon / self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_TIM(self.generator, mode) /self.generate_RM_enabled_capabilities(self.generator, mode) / self.construct_RSN(mode)
         return frame
 
     def fuzz_beacon(self):

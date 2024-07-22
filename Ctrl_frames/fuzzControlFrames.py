@@ -37,11 +37,11 @@ def fuzzControlFrames(generator, mode):
     print('11) CF-End (Contention Free-End)')
     print('12) CF-End & CF-ACK\n\n')
     try:
-        choice2 = int(input('Select a frame to fuzz: '))
+        control_frame = int(input('Select a frame to fuzz: '))
     except:
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
-    if choice2 == 3:
+    if control_frame == 3:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.control_frames)
         print('Which frames would you like to fuzz?')
@@ -55,19 +55,19 @@ def fuzzControlFrames(generator, mode):
         print('8) Sector sweep feedback (SSW-Feedback)')
         print('9) Sector sweep Ack (SSW-Ack)\n\n')
         try:
-            choice3 = int(input('Select a frame to fuzz: '))
+            ctrl_frm_ext = int(input('Select a frame to fuzz: '))
         except:
             print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
             os._exit(0)
         if direction == 1:
-            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, generator, mode, choice2, choice3 + 1)
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, generator, mode, control_frame, ctrl_frm_ext + 1)
         else:
-            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, generator, mode, choice2, choice3 + 1)
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, generator, mode, control_frame, ctrl_frm_ext + 1)
     else:
         if direction == 1:
-            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, generator, mode, choice2, 0)
+            fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, generator, mode, control_frame, 0)
         else:
-            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, generator, mode, choice2, 0)
+            fuzz_ctrl = ControlFrames(targeted_AP, targeted_STA, att_interface, generator, mode, control_frame, 0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
     print(ascii_art.wifi)

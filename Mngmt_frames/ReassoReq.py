@@ -71,7 +71,7 @@ class ReassoReq(Frame):
     def send_reasso_req_with_rand_RSN(self, mode):
         reasso_req = Dot11ReassoReq(cap=4920, current_AP=STANDARD_MAC_ADDRESS)
         frame = self.construct_MAC_header(2, self.dest_addr, self.source_addr, self.dest_addr) / reasso_req / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / self.construct_RSN(mode) /\
+                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / self.construct_RSN(self.generator, mode) /\
                 STANDARD_RM_CAPS / STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
         return frame
 
@@ -141,7 +141,7 @@ class ReassoReq(Frame):
     def send_reasso_req_with_all_fields_rand(self, mode):
         reasso_req = Dot11ReassoReq(cap=randint(1, 9999), current_AP=self.generate_MAC(self.generator))
         frame = self.construct_MAC_header(2, self.dest_addr, self.source_addr, self.dest_addr) / reasso_req / \
-                self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_power_capability(self.generator, mode) / self.generate_supported_channels(self.generator, mode) / self.construct_RSN(mode) / self.generate_RM_enabled_capabilities(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode)
+                self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_power_capability(self.generator, mode) / self.generate_supported_channels(self.generator, mode) / self.construct_RSN(self.generator, mode) / self.generate_RM_enabled_capabilities(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode)
         return frame
 
     def fuzz_reasso_req(self):
