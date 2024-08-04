@@ -146,7 +146,7 @@ class Beacon(Frame):
 
     def send_beacon_with_all_fields_rand(self, mode):
         beacon = Dot11Beacon(timestamp=randint(1, 9999), beacon_interval=randint(1, 9999), cap=randint(1, 9999))
-        frame = self.MAC_header(mode) / beacon / self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_TIM(self.generator, mode) /self.generate_RM_enabled_capabilities(self.generator, mode) / self.construct_RSN(mode)
+        frame = self.MAC_header(mode) / beacon / self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_channel_use(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_HT_information(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode) / self.construct_TIM(self.generator, mode) /self.generate_RM_enabled_capabilities(self.generator, mode) / self.construct_RSN(self.generator, mode)
         return frame
 
     def fuzz_beacon(self):

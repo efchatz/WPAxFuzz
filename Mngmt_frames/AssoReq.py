@@ -1,3 +1,5 @@
+from random import randint
+
 from Mngmt_frames.Construct_frame_fields import *
 from scapy.layers.dot11 import Dot11AssoReq, Dot11Elt
 
@@ -118,7 +120,7 @@ class AssoReq(Frame):
         asso_req = Dot11AssoReq(cap=randint(1, 9999))
         frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / asso_req / \
                 self.ssid / self.generate_supp_speed(self.generator, mode) / self.generate_power_capability(self.generator, mode) / self.generate_supported_channels(self.generator, mode) /\
-                self.construct_RSN(mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode)
+                self.construct_RSN(self.generator, mode) / self.generate_HT_capabilities(self.generator, mode) / self.generate_extended_HT_capabilities(self.generator, mode)
         return frame
 
     def fuzz_asso_req(self):
