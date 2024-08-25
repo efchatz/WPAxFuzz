@@ -31,7 +31,6 @@ except:
 
 if (choice == 1 or choice == 3 or choice == 4):
     subprocess.call(['clear'], shell=True)
-    print(ascii_art.mngmt_frames)
     print('Please choose generator tool:')
     print('1) Blab')
     print('2) gramfuzz')
