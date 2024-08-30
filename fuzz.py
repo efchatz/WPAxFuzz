@@ -1,5 +1,6 @@
 import subprocess
 from Connection_monitors.AlivenessCheck import AllvCheck
+from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
 from fuzzer_init import *
 from time import sleep
@@ -9,6 +10,13 @@ import ascii_art
 from Mngmt_frames.FuzzMngmntFrames import fuzzMngmtFrames
 from Ctrl_frames.fuzzControlFrames import fuzzControlFrames
 from Data_frames.fuzzDataFrames import fuzzDataFrames
+import argparse
+
+parser = argparse.ArgumentParser(description="HTTP Server arguments", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+parser.add_argument("-u", "--url", action="server_url", help="HTTP Server url")
+parser.add_argument("-p", "--port", type=int, action="port", help="Port")
+args = vars(parser.parse_args())
 
 print(ascii_art.logo)
 print(
@@ -42,22 +50,29 @@ if (choice == 1 or choice == 3 or choice == 4):
     print('Type "standard" for the standard mode')
     print('Type "random" for the random mode\n\n')
     mode = input('Enter a choice: ').lower()
+    if mode !='standard' and mode != 'random':
+        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        os._exit(0)
 
-    print('\nDo you want to start Aliveness? Type "yes" or "no":')
-    aliveness = input().lower
-    if aliveness == 'yes':
-        if mode == 'standard' or mode == 'random':
+    print('Please choose monitoring method:')
+    print('1) Aliveness')
+    print('2) HTTP Server check')
+    monitoring_method = int(input('Type "1" for Aliveness or "2" for HTTP server check'))
+    match monitoring_method:
+        case 1:
             Aliveness = AllvCheck(targeted_STA, 'fuzzing')
             Aliveness.start()
             while not settings.retrieving_IP:
                 if settings.IP_not_alive:
                     os._exit(0)
-            sleep(10)
-            subprocess.call(['clear'], shell=True)
-        else:
-            print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        case 2:
+            http_check = HttpCheck(args["url"], args["port"])
+            http_check.start()
+        case _:
+            print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
             os._exit(0)
-
+    sleep(10)
+    subprocess.call(['clear'], shell=True)
 match choice:
     case 1:
         fuzzMngmtFrames(generator, mode)
@@ -73,3 +88,4 @@ match choice:
         subprocess.call(['sudo python3 mage.py'], shell=True)
     case _:
         print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
+        os._exit(0)
