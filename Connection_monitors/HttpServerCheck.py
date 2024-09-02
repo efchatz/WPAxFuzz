@@ -1,6 +1,6 @@
-import os
 import threading
 from time import sleep
+
 import requests
 
 import settings
@@ -9,14 +9,14 @@ from Msgs_colors import bcolors
 
 class HttpCheck(threading.Thread):
 
-    def __init__(self, url, port):
+    def __init__(self, url, port, mode):
         super(HttpCheck, self).__init__()
         self.url = url
         self.port = port
-        self.url_host = 'http://'+self.url+':'+self.port
+        self.mode = mode
+        self.url_host = 'http://'+str(self.url)+':'+str(self.port)
 
     def run(self):
-
         if self.mode == 'fuzzing':
             while True:
                 sleep(1)
@@ -46,7 +46,6 @@ class HttpCheck(threading.Thread):
     def check_host(self):
         try:
             response = requests.get(self.url_host, timeout=5)
-            return response
+            return response.status_code
         except requests.exceptions.RequestException as e:
-            print(f"Failed to reach Host: {e}")
-            os._exit(0)
+            return '1'

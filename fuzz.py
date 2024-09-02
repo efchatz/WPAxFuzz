@@ -14,8 +14,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description="HTTP Server arguments", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-parser.add_argument("-u", "--url", action="server_url", help="HTTP Server url")
-parser.add_argument("-p", "--port", type=int, action="port", help="Port")
+parser.add_argument("-u", "--url", help="HTTP Server url")
+parser.add_argument("-p", "--port", type=int, help="Port")
 args = vars(parser.parse_args())
 
 print(ascii_art.logo)
@@ -47,17 +47,17 @@ if (choice == 1 or choice == 3 or choice == 4):
         print(bcolors.FAIL + '\nNo such generator :(' + bcolors.ENDC)
         os._exit(0)
 
-    print('Type "standard" for the standard mode')
+    print('\nType "standard" for the standard mode')
     print('Type "random" for the random mode\n\n')
     mode = input('Enter a choice: ').lower()
     if mode !='standard' and mode != 'random':
         print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
         os._exit(0)
 
-    print('Please choose monitoring method:')
+    print('\nPlease choose monitoring method:')
     print('1) Aliveness')
     print('2) HTTP Server check')
-    monitoring_method = int(input('Type "1" for Aliveness or "2" for HTTP server check'))
+    monitoring_method = int(input('Type "1" for Aliveness or "2" for HTTP server check: '))
     match monitoring_method:
         case 1:
             Aliveness = AllvCheck(targeted_STA, 'fuzzing')
@@ -66,7 +66,7 @@ if (choice == 1 or choice == 3 or choice == 4):
                 if settings.IP_not_alive:
                     os._exit(0)
         case 2:
-            http_check = HttpCheck(args["url"], args["port"])
+            http_check = HttpCheck(args["url"], args["port"], 'fuzzing')
             http_check.start()
         case _:
             print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
