@@ -1,22 +1,21 @@
 import subprocess
-from Connection_monitors.AlivenessCheck import AllvCheck
-from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
-from fuzzer_init import *
 from time import sleep
-import settings
 import os
 import ascii_art
 from Mngmt_frames.FuzzMngmntFrames import fuzzMngmtFrames
 from Ctrl_frames.fuzzControlFrames import fuzzControlFrames
 from Data_frames.fuzzDataFrames import fuzzDataFrames
 import argparse
+from src import utils
 
 parser = argparse.ArgumentParser(description="HTTP Server arguments", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument("-u", "--url", help="HTTP Server url")
 parser.add_argument("-p", "--port", type=int, help="Port")
-args = vars(parser.parse_args())
+args = parser.parse_args()
+
+utils.validate_arguments(args.url, args.port)
 
 print(ascii_art.logo)
 print(
@@ -39,40 +38,13 @@ except:
 
 if (choice == 1 or choice == 3 or choice == 4):
     subprocess.call(['clear'], shell=True)
-    print('Please choose generator tool:')
-    print('1) Blab')
-    print('2) gramfuzz')
-    generator = int(input('Enter a choice for generator (1 for Blab or 2 for gramfuzz): '))
-    if generator != 1 and generator != 2:
-        print(bcolors.FAIL + '\nNo such generator :(' + bcolors.ENDC)
-        os._exit(0)
+    generator = utils.generator_tool_option()
+    mode = utils.mode_option()
+    utils.monitoring_method_option(args.url, args.port)
 
-    print('\nType "standard" for the standard mode')
-    print('Type "random" for the random mode\n\n')
-    mode = input('Enter a choice: ').lower()
-    if mode !='standard' and mode != 'random':
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
-        os._exit(0)
-
-    print('\nPlease choose monitoring method:')
-    print('1) Aliveness')
-    print('2) HTTP Server check')
-    monitoring_method = int(input('Type "1" for Aliveness or "2" for HTTP server check: '))
-    match monitoring_method:
-        case 1:
-            Aliveness = AllvCheck(targeted_STA, 'fuzzing')
-            Aliveness.start()
-            while not settings.retrieving_IP:
-                if settings.IP_not_alive:
-                    os._exit(0)
-        case 2:
-            http_check = HttpCheck(args["url"], args["port"], 'fuzzing')
-            http_check.start()
-        case _:
-            print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
-            os._exit(0)
     sleep(10)
     subprocess.call(['clear'], shell=True)
+
 match choice:
     case 1:
         fuzzMngmtFrames(generator, mode)
