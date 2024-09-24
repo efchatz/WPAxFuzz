@@ -24,6 +24,16 @@ class ControlFrames:
         self.rotating_sym = Thread(target=self.rotating_symbol)
         self.ctrl_subtypes = [
                {
+                "frame_id": 2,
+                "frame_name": "Trigger",
+                "payload_size": 30,
+                },
+               {
+                "frame_id": 3,
+                "frame_name": "TACK",
+                "payload_size": 30,
+                },
+               {
                 "frame_id": 4,
                 "frame_name": "Beamforming Report Poll",
                 "payload_size": 1,
@@ -178,7 +188,7 @@ class ControlFrames:
         return bytes(payload)
         
     def generate_MAC_header(self, FCf=0):
-        dot11 = Dot11(type=1, subtype=self.frame_id+3, FCfield=FCf, addr1=self.dest_addr, addr2=self.source_addr)
+        dot11 = Dot11(type=1, subtype=self.frame_id+1, FCfield=FCf, addr1=self.dest_addr, addr2=self.source_addr)
         MAC_header = RadioTap() / dot11
         return MAC_header
         
@@ -186,8 +196,8 @@ class ControlFrames:
         frame_info = self.extract_frame_info()
         if self.mode == 'standard':
             if frame_info['payload_size'] != 0:
-                if self.frame_id + 3 in {4,5,6}:
-                    if self.frame_id + 3 == 6:
+                if self.frame_id + 1 in {4,5,6}:
+                    if self.frame_id + 1 == 6:
                         if self.ctrl_frm_ext == 5:
                             return binascii.unhexlify(self.source_addr.replace(':', ''))
                         else:
@@ -202,7 +212,7 @@ class ControlFrames:
                 else:
                     return b''
         elif self.mode == 'random':
-            if self.frame_id + 3 in {4,5,6}:
+            if self.frame_id + 1 in {4,5,6}:
                 return binascii.unhexlify(self.source_addr.replace(':', '')) + self.construct_bytes(frame_info['payload_size'])
             else:
                 return self.construct_bytes(frame_info['payload_size'])
