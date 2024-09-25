@@ -8,6 +8,7 @@ from Mngmt_frames import Beacon
 from Mngmt_frames import ReassoReq
 from Mngmt_frames import ReassoResp
 from Connection_monitors.DeauthMonitor import DeauthMon
+from Mngmt_frames.Action import Action
 from Mngmt_frames.Probe_request import ProbeReq
 from Mngmt_frames.Probe_response import Proberesp
 from Msgs_colors import bcolors
@@ -26,6 +27,7 @@ def fuzzMngmtFrames(generator, mode):
     print('6) Reassociation request frames')
     print('7) Reassociation response frames')
     print('8) Authentication frames\n\n')
+    print('9) Action frames\n\n')
     try:
         management_frame = int(input('Select a management frame to fuzz (1-8): '))
     except:
@@ -121,6 +123,13 @@ def fuzzMngmtFrames(generator, mode):
         print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_auth.fuzz_auth()
+    elif management_frame == 9:
+        fuzz_action = Action.Action(generator, mode, "authentication", targeted_AP, targeted_STA, att_interface)
+        subprocess.call(['clear'], shell=True)
+        print(ascii_art.wifi)
+        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        sleep(5)
+        fuzz_action.fuzz_action()
 
 def impersonation_option():
     print(ascii_art.wifi)
