@@ -1,5 +1,5 @@
 from Mngmt_frames.Construct_frame_fields import *
-from scapy.layers.dot11 import Dot11Elt, Dot11Action
+from scapy.layers.dot11 import Dot11Elt, Dot11Action, Dot11SpectrumManagement, Dot11WNM
 
 
 class Action(Frame):
@@ -13,120 +13,12 @@ class Action(Frame):
         self.interface = interface
         self.ssid = Dot11Elt(ID='SSID', info=ssid, len=len(ssid))
         self.fuzzer_state = {
-            "empty": {
-                "send_function": self.send_empty_action,
+            "Spectrum Management": {
+                "send_function": self.send_Spectrum_Management,
                 "conn_loss": False
             },
-            "Event Request": {
-                "send_function": self.send_event_req_action,
-                "conn_loss": False
-            },
-            "Event Report": {
-                "send_function": self.send_event_resp_action,
-                "conn_loss": False
-            },
-            "Diagnostic Request": {
-                "send_function": self.send_diagnostic_req_action,
-                "conn_loss": False
-            },
-            "Diagnostic Report": {
-                "send_function": self.send_diagnostic_report_action,
-                "conn_loss": False
-            },
-            "Location Configuration Request": {
-                "send_function": self.send_location_config_req_action,
-                "conn_loss": False
-            },
-            "Location Configuration Response": {
-                "send_function": self.send_location_config_resp_action,
-                "conn_loss": False
-            },
-            "BSS Transition Management Query": {
-                "send_function": self.send_bss_transition_management_query_action,
-                "conn_loss": False
-            },
-            "BSS Transition Management Request": {
-                "send_function": self.send_bss_transition_management_req_action,
-                "conn_loss": False
-            },
-            "BSS Transition Management Response": {
-                "send_function": self.send_bss_transition_management_resp_action,
-                "conn_loss": False
-            },
-            "FMS Request": {
-                "send_function": self.send_fms_req_action,
-                "conn_loss": False
-            },
-            "FMS Response": {
-                "send_function": self.send_fms_resp_action,
-                "conn_loss": False
-            },
-            "Collocated Interference Request": {
-                "send_function": self.send_collocated_interface_req_action,
-                "conn_loss": False
-            },
-            "Collocated Interference Report": {
-                "send_function": self.send_collocated_interface_report_action,
-                "conn_loss": False
-            },
-            "TFS Request": {
-                "send_function": self.send_tfs_req_action,
-                "conn_loss": False
-            },
-            "TFS Response": {
-                "send_function": self.send_tfs_resp_action,
-                "conn_loss": False
-            },
-            "TFS Notify": {
-                "send_function": self.send_tfs_notify_action,
-                "conn_loss": False
-            },
-            "WNM Sleep Mode Request": {
-                "send_function": self.send_wnm_sleep_mode_req_action,
-                "conn_loss": False
-            },
-            "WNM Sleep Mode Response": {
-                "send_function": self.send_wnm_sleep_mode_resp_action,
-                "conn_loss": False
-            },
-            "TIM Broadcast Request": {
-                "send_function": self.send_tim_broadcast_req_action,
-                "conn_loss": False
-            },
-            "TIM Broadcast Response": {
-                "send_function": self.send_tim_broadcast_resp_action,
-                "conn_loss": False
-            },
-            "QoS Traffic Capability Update": {
-                "send_function": self.send_qos_traffic_capability_update_action,
-                "conn_loss": False
-            },
-            "Channel Usage Request": {
-                "send_function": self.send_channel_usage_req_action,
-                "conn_loss": False
-            },
-            "DMS Request": {
-                "send_function": self.send_dms_req_action,
-                "conn_loss": False
-            },
-            "DMS Response": {
-                "send_function": self.send_dms_resp_action,
-                "conn_loss": False
-            },
-            "Timing Measurement Request": {
-                "send_function": self.send_timing_measurement_req_action,
-                "conn_loss": False
-            },
-            "WNM Notification Request": {
-                "send_function": self.send_wnm_notification_req_action,
-                "conn_loss": False
-            },
-            "WNM Notification Response": {
-                "send_function": self.send_wnm_notification_resp_action,
-                "conn_loss": False
-            },
-            "WNM-Notify Response": {
-                "send_function": self.send_wnm_notify_resp_action,
+            "WNM": {
+                "send_function": self.send_WNM,
                 "conn_loss": False
             },
         }
@@ -134,208 +26,98 @@ class Action(Frame):
     def send_empty_action(self, mode):
         return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr)
 
-    def send_event_req_action(self, mode):
-        action = Dot11Action(category=hex(0x00))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
+    def send_Spectrum_Management(self, action_value):
+        action = Dot11Action(category=0x00)
+        action_code = Dot11SpectrumManagement(action=action_value)
+        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / action_code
         return frame
 
-    def send_event_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x01))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
+    def send_WNM(self, action_value):
+        category = Dot11Action(category=0x0A)
+        action_code = Dot11WNM(action=action_value)
+        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
         return frame
 
-    def send_diagnostic_req_action(self, mode):
-        action = Dot11Action(category=hex(0x02))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
+    def check_conn_aliveness(self, frame, fuzzing_stage=0):
 
-    def send_diagnostic_report_action(self, mode):
-        action = Dot11Action(category=hex(0x03))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
+        def check_conn():
+            sleep(2)
+            while settings.conn_loss or not settings.is_alive:
+                pass
+            return
 
-    def send_location_config_req_action(self, mode):
-        action = Dot11Action(category=hex(0x04))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_location_config_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x05))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_bss_transition_management_query_action(self, mode):
-        action = Dot11Action(category=hex(0x06))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_bss_transition_management_req_action(self, mode):
-        action = Dot11Action(category=hex(0x07))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_bss_transition_management_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x08))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_fms_req_action(self, mode):
-        action = Dot11Action(category=hex(0x09))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_fms_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x0A))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_collocated_interface_req_action(self, mode):
-        action = Dot11Action(category=hex(0x0B))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_collocated_interface_report_action(self, mode):
-        action = Dot11Action(category=hex(0x0C))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_tfs_req_action(self, mode):
-        action = Dot11Action(category=hex(0x0D))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_tfs_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x0E))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_tfs_notify_action(self, mode):
-        action = Dot11Action(category=hex(0x0F))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_wnm_sleep_mode_req_action(self, mode):
-        action = Dot11Action(category=hex(0x10))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_wnm_sleep_mode_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x11))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_tim_broadcast_req_action(self, mode):
-        action = Dot11Action(category=hex(0x12))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_tim_broadcast_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x13))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_qos_traffic_capability_update_action(self, mode):
-        action = Dot11Action(category=hex(0x14))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_channel_usage_req_action(self, mode):
-        action = Dot11Action(category=hex(0x15))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_channel_usage_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x16))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_dms_req_action(self, mode):
-        action = Dot11Action(category=hex(0x17))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_dms_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x18))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_timing_measurement_req_action(self, mode):
-        action = Dot11Action(category=hex(0x19))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_wnm_notification_req_action(self, mode):
-        action = Dot11Action(category=hex(0x1A))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_wnm_notification_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x1B))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
-
-    def send_wnm_notify_resp_action(self, mode):
-        action = Dot11Action(category=hex(0x1C))
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / action / \
-                self.ssid / SUPPORTED_RATES / SUPPL_RATES / STANDARD_POWER_CAPS / STANDARD_SUPP_CHANNELS / STANDARD_RSN / \
-                STANDARD_HT_CAPABILITIES / STANDARD_EXT_HT_CAPABILITIES
-        return frame
+        if not settings.is_alive:
+            if fuzzing_stage == 0:
+                pass
+            else:
+                self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
+            print('\nHexDump of frame:')
+            hexdump(frame)
+            check_conn()
+            return True
+        elif settings.conn_loss:
+            if fuzzing_stage == 0:
+                pass
+            else:
+                self.fuzzer_state[fuzzing_stage]["conn_loss"] = True
+            print('\nHexDump of frame:')
+            hexdump(frame)
+            input(f'\n{bcolors.FAIL}Deauth or Disass frame found.{bcolors.ENDC}\n\n{bcolors.WARNING}Reconnect, if needed, and press Enter to resume:{bcolors.ENDC}\n')
+            print(f"{bcolors.OKCYAN}Pausing for 20'' and proceeding to the next subtype of frames{bcolors.ENDC}\n")
+            sleep(20)
+            settings.is_alive = True
+            settings.conn_loss = False
+            check_conn()
+            return True
+        return False
 
     def fuzz_action(self):
-        self.fuzz(self.mode, self.fuzzer_state, self.interface)
+        init_logs = LogFiles()
+        counter = 1
+        frames_till_disr = []
+        caused_disc = [(999, 999, 999)]
+        subprocess.call(['clear'], shell=True)
+        print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ')
+        print('You selected mode:', self.mode)
+        while True:
+            frames_till_disr = []
+            subprocess.call(['echo' + f' Fuzzing cycle No.{counter}\n'], shell=True)
+            subprocess.call(['echo' + f' {bcolors.OKGREEN}Stop the fuzzing and monitoring processes with 2 consecutive Ctrl+c{bcolors.ENDC}\n'], shell=True)
+            print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
+            for i in self.fuzzer_state:
+                if self.fuzzer_state[i]["conn_loss"]:
+                    continue
+                if i == 'Spectrum Management':
+                    subprocess.call(
+                        ['echo' + f' Transmitting {2*NUM_OF_FRAMES_TO_SEND} {i} {bcolors.OKBLUE}{self.frame_name} - {bcolors.ENDC} frames'], shell=True)
+                    for action_value in range(0x00, 0x04):
+                        for _ in range(1, NUM_OF_FRAMES_TO_SEND):
+                            frame = self.fuzzer_state[i]["send_function"](action_value)
+                            frames_till_disr += frame
+                            if self.check_conn_aliveness(frame, i):
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_mngmt)
+                                frames_till_disr = []
+                                break
+                            else:
+                                sendp(frame, count=2, iface=self.interface, verbose=0)
+                elif i == 'WNM':
+                    subprocess.call(
+                        ['echo' + f' Transmitting {2*NUM_OF_FRAMES_TO_SEND} {i} {bcolors.OKBLUE}{self.frame_name} - {bcolors.ENDC} frames'], shell=True)
+                    for action_value in range(0x00, 0x1C):
+                        for _ in range(1, NUM_OF_FRAMES_TO_SEND):
+                            frame = self.fuzzer_state[i]["send_function"](action_value)
+                            frames_till_disr += frame
+                            if self.check_conn_aliveness(frame, i):
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
+                                for item in frames_till_disr:
+                                    init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
+                                init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_mngmt)
+                                frames_till_disr = []
+                                break
+                            else:
+                                sendp(frame, count=2, iface=self.interface, verbose=0)
