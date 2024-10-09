@@ -26,10 +26,10 @@ def fuzzMngmtFrames(generator, mode):
     print('5) Association response frames')
     print('6) Reassociation request frames')
     print('7) Reassociation response frames')
-    print('8) Authentication frames\n\n')
+    print('8) Authentication frames')
     print('9) Action frames\n\n')
     try:
-        management_frame = int(input('Select a management frame to fuzz (1-8): '))
+        management_frame = int(input('Select a management frame to fuzz (1-9): '))
     except:
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
@@ -124,7 +124,7 @@ def fuzzMngmtFrames(generator, mode):
         sleep(5)
         fuzz_auth.fuzz_auth()
     elif management_frame == 9:
-        fuzz_action = Action.Action(generator, mode, "authentication", targeted_AP, targeted_STA, att_interface)
+        fuzz_action = Action(generator, mode, "action", targeted_AP, targeted_STA, att_interface,)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.wifi)
         print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")

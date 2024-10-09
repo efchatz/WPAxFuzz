@@ -1,10 +1,10 @@
 from Mngmt_frames.ActionFrames import Dot11Block
 from Mngmt_frames.Construct_frame_fields import *
-from scapy.layers.dot11 import Dot11Elt, Dot11Action, Dot11SpectrumManagement, Dot11WNM
+from scapy.layers.dot11 import Dot11Elt, Dot11Action, Dot11SpectrumManagement, Dot11WNM, Dot11EltCSA
 
 
 class Action(Frame):
-    def __init__(self, generator, mode, frame_name, dest_addr, source_addr, interface, ssid):
+    def __init__(self, generator, mode, frame_name, dest_addr, source_addr, interface):
         super(Action, self).__init__()
         self.generator = generator
         self.mode = mode
@@ -12,7 +12,6 @@ class Action(Frame):
         self.dest_addr = dest_addr
         self.source_addr = source_addr
         self.interface = interface
-        self.ssid = Dot11Elt(ID='SSID', info=ssid, len=len(ssid))
         self.fuzzer_state = {
             "Spectrum Management": {
                 "send_function": self.send_Spectrum_Management,
@@ -34,19 +33,19 @@ class Action(Frame):
     def send_Spectrum_Management(self, action_value):
         category = Dot11Action(category=0x00)
         action_code = Dot11SpectrumManagement(action=action_value)
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
+        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11EltCSA()
         return frame
 
     def send_WNM(self, action_value):
         category = Dot11Action(category=0x0A)
         action_code = Dot11WNM(action=action_value)
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
+        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
         return frame
 
     def send_Block_Ack(self, action_value):
         category = Dot11Action(category=0x03)
         action_code = Dot11Block(action=action_value)
-        frame = self.construct_MAC_header(0, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
+        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11EltCSA()
         return frame
 
     def check_conn_aliveness(self, frame, fuzzing_stage=0):
