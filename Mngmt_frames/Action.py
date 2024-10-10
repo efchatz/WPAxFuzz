@@ -1,6 +1,6 @@
-from Mngmt_frames.ActionFrames import Dot11Block
+from Mngmt_frames.ActionFrames import Dot11Block, Dot11DELBA, Dot11ADDBARequest, Dot11ADDBAResponse
 from Mngmt_frames.Construct_frame_fields import *
-from scapy.layers.dot11 import Dot11Elt, Dot11Action, Dot11SpectrumManagement, Dot11WNM, Dot11EltCSA
+from scapy.layers.dot11 import Dot11Action, Dot11SpectrumManagement, Dot11WNM, Dot11EltCSA, Dot11BSSTMRequest, Dot11BSSTMResponse
 
 
 class Action(Frame):
@@ -33,19 +33,32 @@ class Action(Frame):
     def send_Spectrum_Management(self, action_value):
         category = Dot11Action(category=0x00)
         action_code = Dot11SpectrumManagement(action=action_value)
-        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11EltCSA()
+        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / \
+                Dot11EltCSA(ID=random.randint(0,221), mode=random.randint(0,7))
         return frame
 
     def send_WNM(self, action_value):
         category = Dot11Action(category=0x0A)
         action_code = Dot11WNM(action=action_value)
+        if action_value == 0x07:
+            return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / \
+                Dot11BSSTMRequest(token=random.randint(0,300), mode=random.randint(0,31), disassociation_timer=random.randint(0,65535), validity_interval=0,)
+        elif action_value == 0x08:
+            return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / \
+                Dot11BSSTMResponse(token=random.randint(0,300), status=random.randint(0,8))
         frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
         return frame
 
     def send_Block_Ack(self, action_value):
         category = Dot11Action(category=0x03)
         action_code = Dot11Block(action=action_value)
-        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11EltCSA()
+        match action_value:
+            case 0x00:
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11ADDBARequest()
+            case 0x01:
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11ADDBAResponse()
+            case 0x02:
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11DELBA()
         return frame
 
     def check_conn_aliveness(self, frame, fuzzing_stage=0):
