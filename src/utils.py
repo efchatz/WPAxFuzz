@@ -12,6 +12,8 @@ def validate_arguments(ip, port):
     if ((ip and not port) or (not ip and port)):
         print(bcolors.FAIL + "Wrong arguments provided!" + bcolors.ENDC)
         os._exit(0)
+    elif not ip and not port:
+        return True
     else:
         validate_ip(ip)
         validate_port(port)
@@ -59,7 +61,7 @@ def monitoring_method_option(url,port):
                 os._exit(0)
     else:
         print('\nDo you want to start Aliveness? Type "yes" or "no":')
-        aliveness = input().lower
+        aliveness = input()
         if aliveness == 'yes':
             Aliveness = AllvCheck(targeted_STA, 'fuzzing')
             Aliveness.start()

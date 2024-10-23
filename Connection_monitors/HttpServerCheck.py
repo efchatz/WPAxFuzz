@@ -22,7 +22,6 @@ class HttpCheck(threading.Thread):
                 sleep(1)
                 response = self.check_host()
                 if response == 200:
-                    print(bcolors.OKGREEN + "\nHTTP server is responsive" + bcolors.ENDC)
                     settings.retrieving_IP = True
                 else:
                     settings.is_alive = False

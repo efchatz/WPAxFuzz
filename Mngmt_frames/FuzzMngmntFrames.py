@@ -124,7 +124,7 @@ def fuzzMngmtFrames(generator, mode):
         sleep(5)
         fuzz_auth.fuzz_auth()
     elif management_frame == 9:
-        fuzz_action = Action(generator, mode, "action", targeted_AP, targeted_STA, att_interface,)
+        fuzz_action = Action(generator, mode, "action", targeted_STA, targeted_AP, att_interface,)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.wifi)
         print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")

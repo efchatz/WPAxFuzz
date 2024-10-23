@@ -28,12 +28,12 @@ class Action(Frame):
         }
 
     def send_empty_action(self, mode):
-        return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr)
+        return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr)
 
     def send_Spectrum_Management(self, action_value):
         category = Dot11Action(category=0x00)
         action_code = Dot11SpectrumManagement(action=action_value)
-        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / \
+        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / \
                 Dot11EltCSA(ID=random.randint(0,221), mode=random.randint(0,7))
         return frame
 
@@ -41,12 +41,12 @@ class Action(Frame):
         category = Dot11Action(category=0x0A)
         action_code = Dot11WNM(action=action_value)
         if action_value == 0x07:
-            return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / \
-                Dot11BSSTMRequest(token=random.randint(0,300), mode=random.randint(0,31), disassociation_timer=random.randint(0,65535), validity_interval=0,)
+            return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / \
+                Dot11BSSTMRequest(token=random.randint(0,192), mode=random.randint(0,31), disassociation_timer=random.randint(0,65535), validity_interval=0,)
         elif action_value == 0x08:
-            return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / \
-                Dot11BSSTMResponse(token=random.randint(0,300), status=random.randint(0,8))
-        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code
+            return self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / \
+                Dot11BSSTMResponse(token=random.randint(0,192), status=random.randint(0,8))
+        frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code
         return frame
 
     def send_Block_Ack(self, action_value):
@@ -54,11 +54,11 @@ class Action(Frame):
         action_code = Dot11Block(action=action_value)
         match action_value:
             case 0x00:
-                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11ADDBARequest()
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11ADDBARequest()
             case 0x01:
-                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11ADDBAResponse()
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11ADDBAResponse()
             case 0x02:
-                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.dest_addr) / category / action_code / Dot11DELBA()
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11DELBA()
         return frame
 
     def check_conn_aliveness(self, frame, fuzzing_stage=0):
@@ -117,8 +117,10 @@ class Action(Frame):
                         for _ in range(1, NUM_OF_FRAMES_TO_SEND):
                             frame = self.fuzzer_state[i]["send_function"](action_value)
                             frames_till_disr += frame
+                            if self.fuzzer_state[i]["conn_loss"]:
+                                break
                             if self.check_conn_aliveness(frame, i):
-                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending Spectrum Management {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
@@ -133,7 +135,7 @@ class Action(Frame):
                             frame = self.fuzzer_state[i]["send_function"](action_value)
                             frames_till_disr += frame
                             if self.check_conn_aliveness(frame, i):
-                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending WNM {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
@@ -148,7 +150,7 @@ class Action(Frame):
                             frame = self.fuzzer_state[i]["send_function"](action_value)
                             frames_till_disr += frame
                             if self.check_conn_aliveness(frame, i):
-                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending {i} {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
+                                init_logs.logging_conn_loss(f"Connectivity issues detected while sending Block Ack {self.frame_name} frames\nframe = {frame}\n\n", init_logs.is_alive_path_mngmt)
                                 init_logs.logging_conn_loss(f"Prior to connection loss found the above frames were sent. Timestamp of logging is cycle {counter}\n", init_logs.frames_till_disr_mngmt)
                                 for item in frames_till_disr:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
@@ -157,3 +159,5 @@ class Action(Frame):
                                 break
                             else:
                                 sendp(frame, count=2, iface=self.interface, verbose=0)
+            subprocess.call(['clear'], shell=True)
+            counter += 1
