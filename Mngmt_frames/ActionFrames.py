@@ -1,3 +1,5 @@
+import random
+
 from scapy.fields import ByteEnumField, BitField, NBytesField, PacketField
 from scapy.packet import Packet
 
@@ -23,25 +25,12 @@ class Dot11BlockAckParameterSet(Packet):
     ]
 
 
-class Dot11BlockAckTimeoutValue(Packet):
-    name = "Block Ack Timeout Value"
-    fields_desc = [
-        NBytesField("block_ack_timeout_value", 0, 2)
-    ]
-
 
 class Dot11BlockAckStartingSequenceControl(Packet):
     name = "Block Ack Starting Sequence Control"
     fields_desc = [
         BitField("fragment_number", 0, 4),
         BitField("starting_sequence_number", 0, 12)
-    ]
-
-
-class Dot11StatusCode(Packet):
-    name = "Status Code"
-    fields_desc = [
-        NBytesField("status_code", 0, 2)
     ]
 
 
@@ -63,9 +52,9 @@ class Dot11ReasonCode(Packet):
 class Dot11ADDBARequest(Packet):
     name = "ADDBA Request"
     fields_desc = [
-        PacketField("block_ack_parameter_set", Dot11BlockAckParameterSet(), Dot11BlockAckParameterSet),
-        PacketField("block_ack_timeout_value", Dot11BlockAckTimeoutValue(), Dot11BlockAckTimeoutValue),
-        PacketField("block_ack_starting_sequence_control", Dot11BlockAckStartingSequenceControl(),
+        PacketField("block_ack_parameter_set", Dot11BlockAckParameterSet(a_msdu_supported=random.randint(0,1), block_ack_policy=random.randint(0,1), buffer_size=random.randint(0,1023)), Dot11BlockAckParameterSet),
+        NBytesField("block_ack_timeout_value", 0, 2),
+        PacketField("block_ack_starting_sequence_control", Dot11BlockAckStartingSequenceControl(fragment_number=bin(random.randint(0,15)), starting_sequence_number=bin(random.randint(0,4095))),
                     Dot11BlockAckStartingSequenceControl)
     ]
 
@@ -73,15 +62,15 @@ class Dot11ADDBARequest(Packet):
 class Dot11ADDBAResponse(Packet):
     name = "ADDBA Response"
     fields_desc = [
-        PacketField("status_code", Dot11StatusCode(), Dot11StatusCode),
-        PacketField("block_ack_parameter_set", Dot11BlockAckParameterSet(), Dot11BlockAckParameterSet),
-        PacketField("block_ack_timeout_value", Dot11BlockAckTimeoutValue(), Dot11BlockAckTimeoutValue)
+        NBytesField("status_code", 0, 2),
+        PacketField("block_ack_parameter_set", Dot11BlockAckParameterSet(a_msdu_supported=random.randint(0,1), block_ack_policy=random.randint(0,1), buffer_size=random.randint(0,1023)), Dot11BlockAckParameterSet),
+        NBytesField("block_ack_timeout_value", 0, 2),
     ]
 
 
 class Dot11DELBA(Packet):
     name = "DELBA"
     fields_desc = [
-        PacketField("parameters", Dot11DELBAParameters(), Dot11DELBAParameters),
-        PacketField("reason_code", Dot11ReasonCode(), Dot11ReasonCode)
+        PacketField("parameters", Dot11DELBAParameters(initiator=random.getrandbits(1), tid=random.getrandbits(4)), Dot11DELBAParameters),
+        NBytesField("reason_code", 0, 2)
     ]

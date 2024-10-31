@@ -54,11 +54,11 @@ class Action(Frame):
         action_code = Dot11Block(action=action_value)
         match action_value:
             case 0x00:
-                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11ADDBARequest()
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11ADDBARequest(block_ack_timeout_value=random.randint(0,65535))
             case 0x01:
-                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11ADDBAResponse()
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11ADDBAResponse(status_code=random.randint(0,102),block_ack_timeout_value=random.randint(0,65535))
             case 0x02:
-                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11DELBA()
+                frame = self.construct_MAC_header(13, self.dest_addr, self.source_addr, self.source_addr) / category / action_code / Dot11DELBA(reason_code=generate_bytes(2, self.generator, self.mode))
         return frame
 
     def check_conn_aliveness(self, frame, fuzzing_stage=0):
