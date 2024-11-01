@@ -80,7 +80,7 @@ class AllvCheck(threading.Thread):
                     print('Catched. Most likely your WNIC has stopped working!')		
                 ip_prefix = temp	
                 try:	
-                    sta_Ip = subprocess.check_output(['arp -a | grep '+ self.targeted_STA +' | tr -d "()" | cut -d " " -f2'], shell=True)
+                    sta_Ip = subprocess.check_output(['arp -a | grep -i '+ self.targeted_STA +' | tr -d "()" | cut -d " " -f2'], shell=True)
                     sta_Ip = sta_Ip[:-1].decode("utf-8")
                 except Exception as e :
                     print('arp -a exception.')
