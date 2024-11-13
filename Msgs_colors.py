@@ -8,3 +8,6 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    STH = '\33[100m'
+    STH1 = '\33[104m'
+    STH2 = '\33[5m'

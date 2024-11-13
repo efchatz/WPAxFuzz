@@ -1,5 +1,6 @@
 import ipaddress
 import os
+import subprocess
 
 import settings
 from Connection_monitors.AlivenessCheck import AllvCheck
@@ -68,3 +69,25 @@ def monitoring_method_option(url,port):
             while not settings.retrieving_IP:
                 if settings.IP_not_alive:
                     os._exit(0)
+
+def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):
+    terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])
+    print("\n")
+    print('-' * terminal_width)
+    print((bcolors.OKGREEN + "INFORMATION RETRIEVED FROM CONFIG FILE" + bcolors.ENDC).center(terminal_width))
+    print(('  ' + bcolors.STH + 'AP_MAC:   ' + targeted_AP + bcolors.ENDC).center(terminal_width))
+    print(('  ' + bcolors.STH + 'AP_CHANNEL:   ' + AP_CHANNEL + bcolors.ENDC).center(terminal_width))
+    print("\n")
+    print(
+        (bcolors.STH + 'AP_MAC_DIFFERENT_FREQUENCY:   ' + AP_MAC_DIFFERENT_FREQUENCY + bcolors.ENDC).center(terminal_width))
+    print(('  ' + bcolors.STH + 'CHANNEL_DIFFERENT_FREQUENCY:   ' + CHANNEL_DIFFERENT_FREQUENCY + bcolors.ENDC).center(
+        terminal_width))
+    print("\n")
+    print(('  ' + bcolors.STH + 'TARGETED_STA_MAC_ADDRESS:   ' + targeted_STA + bcolors.ENDC).center(
+        terminal_width))
+    print("\n")
+    print(('  ' + bcolors.STH + 'ATTACKING INTERFACE:   ' + att_interface + bcolors.ENDC).center(terminal_width))
+    print(('  ' + bcolors.STH + 'MONITORING INTERFACE:   ' + MONITORING_INTERFACE + bcolors.ENDC).center(terminal_width))
+    print("\n")
+    print(('  ' + bcolors.STH + 'PASSWORD:   ' + PASSWORD + bcolors.ENDC).center(terminal_width))
+    print('-' * terminal_width)

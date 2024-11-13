@@ -26,17 +26,16 @@ print(
     '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
 
 print('1) Fuzz Management Frames')
-print('2) Fuzz SAE exchange')
-print('3) Fuzz Control Frames')
-print('4) Fuzz Data Frames ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
-print('5) DoS attack module\n\n')
+print('2) Fuzz Control Frames')
+print('3) Fuzz Data Frames ' + bcolors.WARNING + '(BETA)' + bcolors.ENDC)
+print('4) DoS attack module\n\n')
 try:
     choice = int(input('Enter a choice: '))
 except:
     print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
     os._exit(0)
 
-if (choice == 1 or choice == 3 or choice == 4):
+if (choice == 1 or choice == 2 or choice == 3):
     subprocess.call(['clear'], shell=True)
     generator = utils.generator_tool_option()
     mode = utils.mode_option()
@@ -49,13 +48,10 @@ match choice:
     case 1:
         fuzzMngmtFrames(generator, mode)
     case 2:
-        subprocess.call(['clear'], shell=True)
-        subprocess.call(['sudo python3 dos-sae.py'], shell=True)
-    case 3:
         fuzzControlFrames(generator, mode)
-    case 4:
+    case 3:
         fuzzDataFrames(generator, mode)
-    case 5:
+    case 4:
         subprocess.call(['clear'], shell=True)
         subprocess.call(['sudo python3 mage.py'], shell=True)
     case _:

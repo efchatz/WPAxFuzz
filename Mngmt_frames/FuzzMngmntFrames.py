@@ -11,9 +11,13 @@ from Connection_monitors.DeauthMonitor import DeauthMon
 from Mngmt_frames.Action import Action
 from Mngmt_frames.Probe_request import ProbeReq
 from Mngmt_frames.Probe_response import Proberesp
+from Mngmt_frames.SAE import SAE
 from Msgs_colors import bcolors
 from fuzzer_init import *
 from time import sleep
+
+from src.utils import start_sae
+
 
 def fuzzMngmtFrames(generator, mode):
     subprocess.call(['clear'], shell=True)
@@ -27,9 +31,10 @@ def fuzzMngmtFrames(generator, mode):
     print('6) Reassociation request frames')
     print('7) Reassociation response frames')
     print('8) Authentication frames')
-    print('9) Action frames\n\n')
+    print('9) Action frames')
+    print('10) SAE exchange')
     try:
-        management_frame = int(input('Select a management frame to fuzz (1-9): '))
+        management_frame = int(input('Select a management frame to fuzz (1-10): '))
     except:
         print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
         os._exit(0)
@@ -130,6 +135,12 @@ def fuzzMngmtFrames(generator, mode):
         print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
         sleep(5)
         fuzz_action.fuzz_action()
+    elif management_frame == 10:
+        start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY,
+                  targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD)
+
+        fuzz_action = SAE(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD)
+        fuzz_action.fuzz_sae()
 
 def impersonation_option():
     print(ascii_art.wifi)
