@@ -3,20 +3,18 @@ import os
 import subprocess
 
 from Msgs_colors import bcolors
-from fuzzer_init import targeted_STA
-
 
 def validate_arguments(ip, port, aliveness, dos, arguments):
-    if ((ip and not port) or (not ip and port)):
-        print(bcolors.FAIL + "Wrong arguments provided!" + bcolors.ENDC)
+    if (ip and not port) or (not ip and port) or (not ip and not port and not aliveness):
+        print(bcolors.FAIL + "\n\t\tMonitoring method is not set.\n\t\tProvide a URL (-u) and a Port (-p) for HTTP Server or set Aliveness (-a) as a monitoring method.\n\t\tIf you don't want to set a Monitoring method, set Aliveness to 'no' (-a no)." + bcolors.ENDC)
         os._exit(0)
     elif not ip and not port:
         return True
     elif ip and port and aliveness:
-        print(bcolors.FAIL + "HTTP server is set as a monitoring method. Cannot set aliveness!" + bcolors.ENDC)
+        print(bcolors.FAIL + "\n\t\tHTTP server is set as a monitoring method. Cannot set aliveness!" + bcolors.ENDC)
         os._exit(0)
     elif dos and len(arguments) > 2:
-        print(bcolors.FAIL + "Cannot provide other arguments when -d (--dos) argument is set." + bcolors.ENDC)
+        print(bcolors.FAIL + "\n\t\tCannot provide other arguments when -d (--dos) argument is set." + bcolors.ENDC)
         os._exit(0)
     else:
         validate_ip(ip)
@@ -27,13 +25,13 @@ def validate_ip(ip):
         ipaddress.ip_address(ip)
         return True
     except ValueError:
-        print(bcolors.FAIL + f"The IP {ip} is not valid!" + bcolors.ENDC)
+        print(bcolors.FAIL + f"\n\t\tThe IP {ip} is not valid!" + bcolors.ENDC)
         os._exit(0)
 
 def validate_port(port):
     if 0 < port <= 65535:
         return True
-    print(bcolors.FAIL + "Port argument is not valid!" + bcolors.ENDC)
+    print(bcolors.FAIL + "\n\t\tPort argument is not valid!" + bcolors.ENDC)
     os._exit(0)
 
 def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):

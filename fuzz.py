@@ -11,7 +11,7 @@ from Data_frames.fuzzDataFrames import fuzzDataFrames
 import argparse
 from src import utils
 
-parser = argparse.ArgumentParser(description="HTTP Server arguments", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser = argparse.ArgumentParser(description="WPAxFuzz tool options", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument("-u", "--url", help="HTTP Server url. Cannot used combined with -a.")
 parser.add_argument("-p", "--port", type=int, help="Port. Cannot used combined with -a.")
