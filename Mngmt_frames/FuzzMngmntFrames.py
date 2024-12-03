@@ -19,25 +19,8 @@ from time import sleep
 from src.utils import start_sae
 
 
-def fuzzMngmtFrames(generator, mode):
-    subprocess.call(['clear'], shell=True)
-    print(ascii_art.mngmt_frames)
-    print('Which Management frames would you like to fuzz?')
-    print('1) Beacon frames')
-    print('2) Probe request frames')
-    print('3) Probe response frames')
-    print('4) Association request frames')
-    print('5) Association response frames')
-    print('6) Reassociation request frames')
-    print('7) Reassociation response frames')
-    print('8) Authentication frames')
-    print('9) Action frames')
-    print('10) SAE exchange')
-    try:
-        management_frame = int(input('Select a management frame to fuzz (1-10): '))
-    except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
-        os._exit(0)
+def fuzzMngmtFrames(generator, mode, subtype):
+    management_frame = subtype
     Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
     if management_frame == 1:

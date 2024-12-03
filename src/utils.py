@@ -1,10 +1,16 @@
 import ipaddress
+import json
 import os
 import subprocess
 
 from Msgs_colors import bcolors
 
-def validate_arguments(ip, port, aliveness, dos, arguments):
+def validate_arguments(ip, port, aliveness, dos, type, subtype, arguments):
+    frames = json.load(open('src/frames.json','r'))
+    lowercase_frames = {key.lower(): value for key, value in frames.items()}
+
+    validate_frame(lowercase_frames, type, subtype)
+
     if (ip and not port) or (not ip and port) or (not ip and not port and not aliveness):
         print(bcolors.FAIL + "\n\t\tMonitoring method is not set.\n\t\tProvide a URL (-u) and a Port (-p) for HTTP Server or set Aliveness (-a) as a monitoring method.\n\t\tIf you don't want to set a Monitoring method, set Aliveness to 'no' (-a no)." + bcolors.ENDC)
         os._exit(0)
@@ -33,6 +39,17 @@ def validate_port(port):
         return True
     print(bcolors.FAIL + "\n\t\tPort argument is not valid!" + bcolors.ENDC)
     os._exit(0)
+    
+def validate_frame(frames, type, subtype):
+
+    if type not in frames.keys():
+        print(bcolors.FAIL + f"\n\t\tType is not valid!\n\t\tValid Types:'management', 'control', 'data'"+ bcolors.ENDC)
+        os._exit(0)
+
+    if subtype not in frames[type].values():
+        print(bcolors.FAIL + f"\n\t\tThis Subtype is not included in {type}'s subtypes!"+ bcolors.ENDC)
+        os._exit(0)
+
 
 def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):
     terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])

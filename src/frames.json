@@ -1,0 +1,50 @@
+{
+  "Management":{
+    "Beacon": 1,
+    "Probe request": 2,
+    "Probe response": 3,
+    "Association request": 4,
+    "Association response": 5,
+    "Reassociation request": 6,
+    "Reassociation response": 7,
+    "Authentication": 8,
+    "Action": 9,
+    "SAE": 10
+  },
+
+  "Control":{
+    "Trigger": 1,
+    "TACK": 2,
+    "Beamforming Report Poll": 3,
+    "VHT/HE NPD Announcement": 4,
+    "Control Frame Extension": 5,
+    "Control Wrapper": 6,
+    "Block Ack Request": 7,
+    "Block Ack": 8,
+    "PS-Poll": 9,
+    "RTS": 10,
+    "CTS": 11,
+    "ACK": 12,
+    "CF-End": 13,
+    "CF-End & CF-Ack": 14
+  },
+
+  "Data":{
+    "Data": 1,
+    "Data + CF-Ack": 2,
+    "Data + CF-Poll": 3,
+    "Data + CF-Ack + CF-Poll": 4,
+    "Null Data": 5,
+    "CF-Ack (no data)": 6,
+    "CF-Poll (no data)": 7,
+    "CF-ACK + CF-Poll (no data)": 8,
+    "QoS Data": 9,
+    "QoS Data + CF-ACK": 10,
+    "QoS Data + CF-Poll": 11,
+    "QoS Data + CF-ACK + CF-Poll": 12,
+    "QoS Null Data": 13,
+    "Reserved Data Frame": 14,
+    "QoS Data + CF-Poll (no data)": 15,
+    "QoS CF-ACK + CF-Poll (no data)": 16
+  }
+}

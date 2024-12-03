@@ -6,7 +6,7 @@ from Data_frames.DataFrames import DataFrames
 from fuzzer_init import *
 from time import sleep
 
-def fuzzDataFrames(generator, mode):
+def fuzzDataFrames(generator, mode, subtype):
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
     print("1) Target the STA and impersonate the AP")
@@ -21,30 +21,9 @@ def fuzzDataFrames(generator, mode):
     else:
         print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
         os._exit(0)
-    subprocess.call(['clear'], shell=True)
-    print(ascii_art.data_frames)
-    print('Which frames would you like to fuzz?')
-    print('1) Data')
-    print('2) Data + CF-ACK')
-    print('3) Data + CF-Poll')
-    print('4) Data + CF-Ack + CF-Poll')
-    print('5) Null Data')
-    print('6) CF-ACK (no data)')
-    print('7) CF-Poll (no data)')
-    print('8) CF-ACK + CF-Poll (no data)')
-    print('9) QoS Data')
-    print('10) QoS Data + CF-ACK')
-    print('11) QoS Data + CF-Poll')
-    print('12) QoS Data + CF-ACK + CF-Poll')
-    print('13) QoS Null Data')
-    print('14) Reserved Data Frame')
-    print('15) QoS Data + CF-Poll (no data)')
-    print('16) QoS CF-ACK + CF-Poll (no data)\n\n')
-    try:
-        data_frame = int(input('Select a frame to fuzz: '))
-    except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
-        os._exit(0)
+
+    data_frame = subtype
+
     if direction == 1:
         fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, generator, mode, data_frame, True)
     else:

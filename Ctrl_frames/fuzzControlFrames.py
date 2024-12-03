@@ -6,7 +6,7 @@ from Ctrl_frames.ControlFrames import ControlFrames
 from fuzzer_init import *
 from time import sleep
 
-def fuzzControlFrames(generator, mode):
+def fuzzControlFrames(generator, mode, subtype):
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
     print("1) Target the STA and impersonate the AP")
@@ -22,27 +22,8 @@ def fuzzControlFrames(generator, mode):
         print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
         os._exit(0)
     subprocess.call(['clear'], shell=True)
-    print(ascii_art.control_frames)
-    print('Which frames would you like to fuzz?')
-    print('1) Trigger')
-    print('2) TACK')
-    print('3) Beamforming Report Poll')
-    print('4) VHT/HE NDP Announcement')
-    print('5) Control Frame Extension')
-    print('6) Control wrapper')
-    print('7) Block Ack Request (BAR)')
-    print('8) Block ACK')
-    print('9) PS-Poll (Power Save-Poll)')
-    print('10) RTS–Request to Send')
-    print('11) CTS-Clear to Send')
-    print('10) ACK')
-    print('11) CF-End (Contention Free-End)')
-    print('12) CF-End & CF-ACK\n\n')
-    try:
-        control_frame = int(input('Select a frame to fuzz: '))
-    except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
-        os._exit(0)
+
+    control_frame = subtype
     if control_frame == 5:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.control_frames)
