@@ -20,11 +20,6 @@ from src import graphs
 
 sys.path.append('src/')
 
-# conf.use_pcap = True
-
-os.system('cat src/logo.txt')
-
-
 def signal_Handler(signum, frame):
     if signum == signal.SIGUSR2:
         global toStop

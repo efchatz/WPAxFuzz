@@ -12,6 +12,8 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
     if dos and len(arguments) > 2:
         print(bcolors.FAIL + "\n\t\tCannot provide other arguments when -d (--dos) argument is set." + bcolors.ENDC)
         os._exit(0)
+    elif dos:
+        subprocess.call(['sudo python3 mage.py'], shell=True)
 
     frameValidation(lowercase_frames, type, subtype)
     monitoringValidation(ip, port, aliveness, dos, arguments)
@@ -34,6 +36,10 @@ def portValidation(port):
     os._exit(0)
     
 def frameValidation(frames, type, subtype):
+
+    if not type or not subtype:
+        print(bcolors.FAIL + f"\n\t\tPlease provide a valid frame with Type and Subtype."+ bcolors.ENDC)
+        os._exit(0)
 
     if type not in frames.keys():
         print(bcolors.FAIL + f"\n\t\tType is not valid!\n\t\tValid Types:'management', 'control', 'data'"+ bcolors.ENDC)

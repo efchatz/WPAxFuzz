@@ -30,9 +30,6 @@ if len(sys.argv) == 1:
 
 utils.argumentsValidation(args.url, args.port, args.aliveness, args.dos, args.type, args.subtype, args.generator, args.mode, sys.argv)
 
-if args.dos:
-    subprocess.call(['sudo python3 mage.py'], shell=True)
-
 print(ascii_art.logo)
 print(
     '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
