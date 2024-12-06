@@ -2,8 +2,14 @@ import ipaddress
 import json
 import os
 import subprocess
+from time import sleep
 
+import settings
+from Connection_monitors.AlivenessCheck import AllvCheck
+from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
+from fuzzer_init import targeted_STA
+import requests
 
 def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, arguments):
     frames = json.load(open('src/frames.json','r'))
@@ -16,10 +22,10 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
         subprocess.call(['sudo python3 mage.py'], shell=True)
 
     frameValidation(lowercase_frames, type, subtype)
-    monitoringValidation(ip, port, aliveness, dos, arguments)
+    monitoringValidation(ip, port, aliveness)
     generatorValidator(generator)
     modeValidator(mode)
-    alivnessValidator(aliveness)
+    alivenessValidator(aliveness)
 
 def ipValidation(ip):
     try:
@@ -49,18 +55,31 @@ def frameValidation(frames, type, subtype):
         print(bcolors.FAIL + f"\n\t\tThis Subtype is not included in {type}'s subtypes!"+ bcolors.ENDC)
         os._exit(0)
 
-def monitoringValidation(ip, port, aliveness, dos, arguments):
+def monitoringValidation(ip, port, aliveness):
     if (ip and not port) or (not ip and port) or (not ip and not port and not aliveness):
         print(bcolors.FAIL + "\n\t\tMonitoring method is not set.\n\t\tProvide a URL (-u) and a Port (-p) for HTTP Server or set Aliveness (-a) as a monitoring method.\n\t\tIf you don't want to set a Monitoring method, set Aliveness to 'no' (-a no)." + bcolors.ENDC)
         os._exit(0)
-    elif not ip and not port:
-        return True
     elif ip and port and aliveness:
-        print(bcolors.FAIL + "\n\t\tHTTP server is set as a monitoring method. Cannot set aliveness!" + bcolors.ENDC)
+        print(bcolors.FAIL + "\n\t\tYou selected both HTTP Server Check and Aliveness as the monitoring method. Please choose only one!" + bcolors.ENDC)
         os._exit(0)
-    else:
-        ipValidation(ip)
-        portValidation(port)
+    elif ip and port and not aliveness:
+        validIP = ipValidation(ip)
+        validPort = portValidation(port)
+        if validIP and validPort:
+            print(bcolors.OKBLUE + "\nHTTP Server is used as the monitoring method." + bcolors.ENDC)
+            check_host_existence(ip)
+            http_check = HttpCheck(ip, port, 'fuzzing')
+            http_check.start()
+            while not settings.retrieving_IP:
+                if settings.IP_not_alive:
+                    os._exit(0)
+    elif not ip and not port and aliveness == 'yes':
+        print(bcolors.OKBLUE + "\nAliveness is used as the monitoring method." + bcolors.ENDC)
+        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+        Aliveness.start()
+        while not settings.retrieving_IP:
+            if settings.IP_not_alive:
+                os._exit(0)
 
 def generatorValidator(generator):
     generators = ['blab', 'gramfuzz']
@@ -74,11 +93,32 @@ def modeValidator(mode):
         print(bcolors.FAIL + f"\n\t\tThis is not a valid mode!\n\t\tValid generators are: 'standard' and 'random'." + bcolors.ENDC)
         os._exit(0)
 
-def alivnessValidator(aliveness_option):
+def alivenessValidator(aliveness_option):
     options = ['yes', 'no']
     if aliveness_option not in options:
         print(bcolors.FAIL + f"\n\t\tThis is not a valid aliveness option!\n\t\tValid aliveness options are: 'yes' and 'no'." + bcolors.ENDC)
         os._exit(0)
+
+def check_host_existence(ip):
+
+    def check_host():
+        try:
+            response = requests.get(ip, timeout=5)
+            return response.status_code
+        except requests.exceptions.RequestException as e:
+            return '1'
+
+    response = check_host()
+    if response == 200:
+        print("\nThe HTTP Server is Alive!")
+        return True
+
+    print(f'\n{bcolors.FAIL}The HTTP Server is down!{bcolors.ENDC}\n')
+    while True:
+        input(bcolors.WARNING + 'Connect the HTTP Server and press Enter to resume:\n' + bcolors.ENDC)
+        if check_host() == 200:
+            print(f'{bcolors.OKCYAN}Pausing for 5 seconds and checking again.{bcolors.ENDC}\n')
+            sleep(5)
 
 def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):
     terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])

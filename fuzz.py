@@ -23,6 +23,8 @@ parser.add_argument("-m", "--mode", type=str, help="Specify mode option. Allowed
 parser.add_argument("-a", "--aliveness", type=str, help="Specify if Aliveness will be set or not. Allowed options: 'yes' or 'no'. Cannot used along with -u and -p")
 args = parser.parse_args()
 
+os.system('cat src/logo.txt')
+
 if len(sys.argv) == 1:
     print("\n")
     parser.print_help()
