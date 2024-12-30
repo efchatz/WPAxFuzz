@@ -7,9 +7,9 @@ import gramfuzz
 
 def generate_bytes(num_of_bytes, generator, mode):
     match generator:
-        case 1:
+        case 'blab':
             return blab(num_of_bytes, mode)
-        case 2:
+        case 'gramfuzz':
             return gramfuzzTool(num_of_bytes, mode)
 
 
@@ -20,8 +20,7 @@ def blab(num_of_bytes, mode):
     match mode:
         case 'standard':
             while not right_length:
-                console_data = subprocess.Popen([f'''{current_dir}/blab -e 'output = octet octet = half_octet half_octet half_octet = [0-9] | [
-    A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
+                console_data = subprocess.Popen([f'''{current_dir}/blab -e 'output = octet octet = half_octet half_octet half_octet = [0-9] | [A-F]' -n {num_of_bytes} '''], stdout=subprocess.PIPE, shell=True)
                 console_data = [output.decode('ISO-8859-1').strip() for output in console_data.stdout.readlines()]
                 all_bytes = str(console_data[0])
                 # converts the "all_bytes" string of hexadecimal byte values into a list of integers
