@@ -12,6 +12,7 @@ from Mngmt_frames.Action import Action
 from Mngmt_frames.Probe_request import ProbeReq
 from Mngmt_frames.Probe_response import Proberesp
 from Mngmt_frames.SAE import SAE
+# I suggest to either import just the function, or the whole Class and then use the Class.fuction() format. Either is fine.
 from Msgs_colors import bcolors
 from fuzzer_init import *
 from time import sleep
@@ -38,7 +39,7 @@ def fuzzMngmtFrames(generator, mode, subtype):
         sleep(5)
         fuzz_beacons.fuzz_beacon()
     elif management_frame == 2:
-        fuzz_probe_reqs = ProbeReq(generator, mode, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid) #ProbeReq.ProbeReq()???
+        fuzz_probe_reqs = ProbeReq(generator, mode, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_req)
         print(ascii_art.wifi)
@@ -52,7 +53,7 @@ def fuzzMngmtFrames(generator, mode, subtype):
             direction = impersonation_option()
         else:
             direction = 1
-        fuzz_probe_resp = Proberesp(generator, mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction) #Proberesp.Proberesp()???
+        fuzz_probe_resp = Proberesp(generator, mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction)
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_resp)
         print(ascii_art.wifi)
