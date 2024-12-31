@@ -38,7 +38,7 @@ def fuzzMngmtFrames(generator, mode, subtype):
         sleep(5)
         fuzz_beacons.fuzz_beacon()
     elif management_frame == 2:
-        fuzz_probe_reqs = ProbeReq(generator, mode, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid)
+        fuzz_probe_reqs = ProbeReq(generator, mode, "probe request", targeted_AP, targeted_STA, att_interface, real_ap_ssid) #ProbeReq.ProbeReq()???
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_req)
         print(ascii_art.wifi)
@@ -52,7 +52,7 @@ def fuzzMngmtFrames(generator, mode, subtype):
             direction = impersonation_option()
         else:
             direction = 1
-        fuzz_probe_resp = Proberesp(generator, mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction)
+        fuzz_probe_resp = Proberesp(generator, mode, "probe response", targeted_STA, targeted_AP, att_interface, real_ap_ssid, direction) #Proberesp.Proberesp()???
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_resp)
         print(ascii_art.wifi)
