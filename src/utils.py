@@ -8,10 +8,9 @@ import settings
 from Connection_monitors.AlivenessCheck import AllvCheck
 from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
-from fuzzer_init import targeted_STA
 import requests
 
-def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, arguments):
+def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, arguments):
     frames = json.load(open('src/frames.json','r'))
     lowercase_frames = {key.lower(): value for key, value in frames.items()}
 
@@ -21,8 +20,9 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
     elif dos:
         subprocess.call(['sudo python3 mage.py'], shell=True)
 
+    update_config(sta_mac)
     frameValidation(lowercase_frames, type, subtype)
-    monitoringValidation(ip, port, aliveness)
+    monitoringValidation(ip, port, aliveness, sta_mac)
     generatorValidator(generator)
     modeValidator(mode)
     alivenessValidator(aliveness)
@@ -55,7 +55,7 @@ def frameValidation(frames, type, subtype):
         print(bcolors.FAIL + f"\n\t\tThis Subtype is not included in {type}'s subtypes!"+ bcolors.ENDC)
         os._exit(0)
 
-def monitoringValidation(ip, port, aliveness):
+def monitoringValidation(ip, port, aliveness, sta_mac):
     if (ip and not port) or (not ip and port) or (not ip and not port and not aliveness):
         print(bcolors.FAIL + "\n\t\tMonitoring method is not set.\n\t\tProvide a URL (-u) and a Port (-p) for HTTP Server or set Aliveness (-a) as a monitoring method.\n\t\tIf you don't want to set a Monitoring method, set Aliveness to 'no' (-a no)." + bcolors.ENDC)
         os._exit(0)
@@ -75,7 +75,7 @@ def monitoringValidation(ip, port, aliveness):
                     os._exit(0)
     elif not ip and not port and aliveness == 'yes':
         print(bcolors.OKBLUE + "\nAliveness is used as the monitoring method." + bcolors.ENDC)
-        Aliveness = AllvCheck(targeted_STA, 'fuzzing')
+        Aliveness = AllvCheck(sta_mac, 'fuzzing')
         Aliveness.start()
         while not settings.retrieving_IP:
             if settings.IP_not_alive:
@@ -119,6 +119,16 @@ def check_host_existence(ip):
         if check_host() == 200:
             print(f'{bcolors.OKCYAN}Pausing for 5 seconds and checking again.{bcolors.ENDC}\n')
             sleep(5)
+
+def update_config(mac_address):
+    config_path = os.path.join('src', 'config.json')
+    with open(config_path, 'r') as file:
+        config = json.load(file)
+
+    config['STA_info']['TARGETED_STA_MAC_ADDRESS'] = mac_address
+
+    with open(config_path, 'w') as file:
+        json.dump(config, file, indent=4)
 
 def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):
     terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])
