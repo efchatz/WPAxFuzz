@@ -15,6 +15,7 @@ parser.add_argument("-g", "--generator", type=str, help="Specify generator. Allo
 parser.add_argument("-m", "--mode", type=str, help="Specify mode option. Allowed options: 'standard' or 'random'.")
 parser.add_argument("-a", "--aliveness", type=str, help="Specify if Aliveness will be set or not. Allowed options: 'yes' or 'no'. Cannot used along with -u and -p")
 parser.add_argument("-sta_mac","--sta_mac", type=str, help="Specify the STA's MAC Address.")
+parser.add_argument("-scan", action="store_true", help="Scan the network for potential targets.")
 args = parser.parse_args()
 
 if len(sys.argv) == 1:
@@ -22,7 +23,7 @@ if len(sys.argv) == 1:
     parser.print_help()
     sys.exit(1)
 
-utils.argumentsValidation(args.url, args.port, args.aliveness, args.dos, args.type, args.subtype, args.generator, args.mode, args.sta_mac, sys.argv)
+utils.argumentsValidation(args.url, args.port, args.aliveness, args.dos, args.type, args.subtype, args.generator, args.mode, args.sta_mac, args.scan, sys.argv)
 
 config = json.load(open('src/config.json', 'r'))
 

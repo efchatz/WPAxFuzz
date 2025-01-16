@@ -10,7 +10,7 @@ from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
 import requests
 
-def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, arguments):
+def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, scan, arguments):
     frames = json.load(open('src/frames.json','r'))
     lowercase_frames = {key.lower(): value for key, value in frames.items()}
 
@@ -19,6 +19,9 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
         os._exit(0)
     elif dos:
         subprocess.call(['sudo python3 mage.py'], shell=True)
+
+    if scan:
+        network_scan()
 
     update_config(sta_mac)
     frameValidation(lowercase_frames, type, subtype)
@@ -129,6 +132,11 @@ def update_config(mac_address):
 
     with open(config_path, 'w') as file:
         json.dump(config, file, indent=4)
+
+def network_scan():
+    network_scan = subprocess.call(['./src/network_scan.sh'])
+    if(network_scan == 1):
+        os._exit(0)
 
 def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):
     terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])
