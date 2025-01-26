@@ -28,7 +28,7 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
     monitoringValidation(ip, port, aliveness, sta_mac)
     generatorValidator(generator)
     modeValidator(mode)
-    alivenessValidator(aliveness)
+    alivenessValidator(aliveness, ip, port)
 
 def ipValidation(ip):
     try:
@@ -69,8 +69,9 @@ def monitoringValidation(ip, port, aliveness, sta_mac):
         validIP = ipValidation(ip)
         validPort = portValidation(port)
         if validIP and validPort:
-            print(bcolors.OKBLUE + "\nHTTP Server is used as the monitoring method." + bcolors.ENDC)
-            check_host_existence(ip)
+            print(bcolors.OKBLUE + f"\nHTTP Server is used as the monitoring method. IP: {ip}" + bcolors.ENDC)
+            url = 'http://'+ip+':'+str(port)
+            check_host_existence(url)
             http_check = HttpCheck(ip, port, 'fuzzing')
             http_check.start()
             while not settings.retrieving_IP:
@@ -96,9 +97,9 @@ def modeValidator(mode):
         print(bcolors.FAIL + f"\n\t\tThis is not a valid mode!\n\t\tValid generators are: 'standard' and 'random'." + bcolors.ENDC)
         os._exit(0)
 
-def alivenessValidator(aliveness_option):
+def alivenessValidator(aliveness_option, ip, port):
     options = ['yes', 'no']
-    if aliveness_option not in options:
+    if aliveness_option not in options and not ip and not port:
         print(bcolors.FAIL + f"\n\t\tThis is not a valid aliveness option!\n\t\tValid aliveness options are: 'yes' and 'no'." + bcolors.ENDC)
         os._exit(0)
 
