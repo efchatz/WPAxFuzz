@@ -54,7 +54,7 @@ class Dot11ADDBARequest(Packet):
     fields_desc = [
         PacketField("block_ack_parameter_set", Dot11BlockAckParameterSet(a_msdu_supported=random.randint(0,1), block_ack_policy=random.randint(0,1), buffer_size=random.randint(0,1023)), Dot11BlockAckParameterSet),
         NBytesField("block_ack_timeout_value", 0, 2),
-        PacketField("block_ack_starting_sequence_control", Dot11BlockAckStartingSequenceControl(fragment_number=bin(random.randint(0,15)), starting_sequence_number=bin(random.randint(0,4095))),
+        PacketField("block_ack_starting_sequence_control", Dot11BlockAckStartingSequenceControl(fragment_number=random.randint(0,15), starting_sequence_number=random.randint(0,4095)),
                     Dot11BlockAckStartingSequenceControl)
     ]
 
