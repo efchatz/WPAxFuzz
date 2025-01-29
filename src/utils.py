@@ -135,9 +135,23 @@ def update_config(mac_address):
         json.dump(config, file, indent=4)
 
 def network_scan():
-    network_scan = subprocess.call(['./src/network_scan.sh'])
-    if(network_scan == 1):
+    network_scan = subprocess.run(['./src/network_scan.sh'], capture_output=True, text=True)
+    if(network_scan.returncode == 1):
         os._exit(0)
+    elif network_scan.returncode == 2:
+        prompt = network_scan.stdout.strip().split('\n')[6] + '\n' + network_scan.stdout.strip().split('\n')[7]
+        print(prompt)
+
+    interface = network_scan.stdout.strip().split('\n')[-1]
+    config_path = os.path.join('src', 'config.json')
+    with open(config_path, 'r') as file:
+        config = json.load(file)
+
+    config['ATT_interface_info']['ATTACKING_INTERFACE'] = interface
+    config['ATT_interface_info']['MONITORING_INTERFACE'] = interface
+
+    with open(config_path, 'w') as file:
+        json.dump(config, file, indent=4)
 
 def start_sae(targeted_AP, AP_CHANNEL, AP_MAC_DIFFERENT_FREQUENCY, CHANNEL_DIFFERENT_FREQUENCY, targeted_STA, att_interface, MONITORING_INTERFACE, PASSWORD):
     terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])
