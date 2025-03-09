@@ -79,7 +79,7 @@ You can execute the tool using the below command:
 2) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
 ```
     nmap -sP {ip_prefix}.*
-```
+```  
 3) In case the fuzz testing is executed on a Virtual Machine (VM), and the targeted STA happens to also run on the host machine, it may lead to false deductions. It is recommended to place the STA and the fuzzing operation to different physical machines.
 4) If the targeted STA is an MS Windows OS machine, it may be necessary to modify the firewall to allow ``pinging'' within the local network. This enables the monitoring mode to check the aliveness of the associated STA..
 5) Regarding the Blab tool (seed generation), due to OS inconsistencies you have to place the binary file of Blab to the main directory of the fuzzer project. In this way, the fuzzer is compatible regardless the host OS.
@@ -94,7 +94,7 @@ You can execute the tool using the below command:
 
 ### Description
 
-STEP1: Update the config file with the (i) targeted AP and associated STA MAC addresses, (ii) SSID of the AP,  and (iii) the wireless interface name.  
+STEP1: Update the config file (src/config.json) with the (i) targeted AP and associated STA MAC addresses, (ii) SSID of the AP,  and (iii) the wireless interface name.  
 STEP2: Set the WNIC to monitor mode:  
 ```
     sudo airmon-ng
