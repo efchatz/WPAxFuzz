@@ -81,8 +81,9 @@ You can execute the tool using the below command:
     nmap -sP {ip_prefix}.*
 ```  
 3) In case the fuzz testing is executed on a Virtual Machine (VM), and the targeted STA happens to also run on the host machine, it may lead to false deductions. It is recommended to place the STA and the fuzzing operation to different physical machines.
-4) If the targeted STA is an MS Windows OS machine, it may be necessary to modify the firewall to allow ``pinging'' within the local network. This enables the monitoring mode to check the aliveness of the associated STA..
-5) Regarding the Blab tool (seed generation), due to OS inconsistencies you have to place the binary file of Blab to the main directory of the fuzzer project. In this way, the fuzzer is compatible regardless the host OS.
+4) If the targeted STA is an MS Windows OS machine, it may be necessary to modify the firewall to allow ``pinging'' within the local network. This enables the monitoring mode to check the aliveness of the associated STA.
+5) The method find_LAN_prefix in AlivenessCheck.py relies on extracting the first IP address returned by hostname -I, which can lead to incorrect subnet detection when multiple network interfaces are present, as the desired interface's IP may not be the first in the list. Ensure that the desired subnetwork's IP address is the first in the output of hostname -I (Working on a fix).
+6) Regarding the Blab tool (seed generation), due to OS inconsistencies you have to place the binary file of Blab to the main directory of the fuzzer project. In this way, the fuzzer is compatible regardless the host OS.
 ```
     git clone https://haltp.org/git/blab.git
     cd blab/
