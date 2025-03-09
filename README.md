@@ -74,9 +74,11 @@ You can execute the tool using the below command:
 
 1) Make sure to have the below pre-installed. Probably other versions of Scapy and Python will be applicable too.
 
-    [![Python][Python.py]][Python-url] [![Scapy][Scapy]][Scapy-url] [![Nmap][Nmap]][Nmap-url] [![Blab][Blab]][Blab-url]  
+    [![Python][Python.py]][Python-url] [![Scapy][Scapy]][Scapy-url] [![Nmap][Nmap]][Nmap-url] [![Blab][Blab]][Blab-url]
 
-2) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
+   Also, [![aircrack-ng][aircrack-ng]][aircrack-url] must be installed in your system.
+
+3) Before initializing the tool, the user has to probe the local network to discover any potential targets, i.e., STAs and APs.
 ```
     nmap -sP {ip_prefix}.*
 ```  
@@ -280,3 +282,5 @@ We would like to thank all the vendors we contacted and reported these attacks, 
 [Nmap-url]: https://nmap.org/
 [Blab]: https://img.shields.io/badge/Blab-1.0-blue
 [Blab-url]: https://gitlab.com/akihe/blab/-/tree/master
+[aircrack-ng]: https://img.shields.io/badge/aircrack-1.7-blue
+[aircrack-url]: https://www.aircrack-ng.org/
