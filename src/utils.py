@@ -10,7 +10,7 @@ from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
 import requests
 
-def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, scan, arguments):
+def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, scan, interface, arguments):
     frames = json.load(open('src/frames.json','r'))
     lowercase_frames = {key.lower(): value for key, value in frames.items()}
 
@@ -21,9 +21,9 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
         subprocess.call(['sudo python3 mage.py'], shell=True)
 
     if scan:
-        network_scan()
+        network_scan(interface)
 
-    update_config(sta_mac)
+    update_config(sta_mac, interface)
     frameValidation(lowercase_frames, type, subtype)
     monitoringValidation(ip, port, aliveness, sta_mac)
     generatorValidator(generator)
@@ -66,9 +66,8 @@ def monitoringValidation(ip, port, aliveness, sta_mac):
         print(bcolors.FAIL + "\n\t\tYou selected both HTTP Server Check and Aliveness as the monitoring method. Please choose only one!" + bcolors.ENDC)
         os._exit(0)
     elif ip and port and not aliveness:
-        validIP = ipValidation(ip)
-        validPort = portValidation(port)
-        if validIP and validPort:
+
+        if ipValidation(ip) and portValidation(port):
             print(bcolors.OKBLUE + f"\nHTTP Server is used as the monitoring method. IP: {ip}" + bcolors.ENDC)
             url = 'http://'+ip+':'+str(port)
             check_host_existence(url)
@@ -124,18 +123,20 @@ def check_host_existence(ip):
             print(f'{bcolors.OKCYAN}Pausing for 5 seconds and checking again.{bcolors.ENDC}\n')
             sleep(5)
 
-def update_config(mac_address):
+def update_config(mac_address, interface):
     config_path = os.path.join('src', 'config.json')
     with open(config_path, 'r') as file:
         config = json.load(file)
 
     config['STA_info']['TARGETED_STA_MAC_ADDRESS'] = mac_address
+    config['ATT_interface_info']['ATTACKING_INTERFACE'] = interface
+    config['ATT_interface_info']['MONITORING_INTERFACE'] = interface
 
     with open(config_path, 'w') as file:
         json.dump(config, file, indent=4)
 
-def network_scan():
-    network_scan = subprocess.run(['./src/network_scan.sh'], capture_output=True, text=True)
+def network_scan(interface):
+    network_scan = subprocess.run([f'./src/network_scan.sh {interface}'], capture_output=True, text=True)
     if(network_scan.returncode == 1):
         os._exit(0)
     elif network_scan.returncode == 2:

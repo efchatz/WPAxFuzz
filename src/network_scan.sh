@@ -8,11 +8,7 @@ if [ -z "$IP" ]; then
 fi
 
 #Retrieve the interface of the IP
-INTERFACE=$(ip -o -4 addr show | awk -v ip="$IP" '$4 ~ ip {print $2}')
-if [ -z "$INTERFACE" ]; then
-  echo "Could not retrieve Interface of the IP Address $IP"
-  exit 1
-fi
+INTERFACE=$1
 
 # Calculate the /28 subnet
 IFS='.' read -r -a OCTETS <<< "$IP"

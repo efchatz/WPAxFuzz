@@ -14,6 +14,7 @@ parser.add_argument("-d", "--dos", action="store_true", help="DoS attack module.
 parser.add_argument("-g", "--generator", type=str, help="Specify generator. Allowed generators: 'blab' and 'gramfuzz'.")
 parser.add_argument("-m", "--mode", type=str, help="Specify mode option. Allowed options: 'standard' or 'random'.")
 parser.add_argument("-a", "--aliveness", type=str, help="Specify if Aliveness will be set or not. Allowed options: 'yes' or 'no'. Cannot used along with -u and -p")
+parser.add_argument("-i", "--interface", type=str, help="Specify interface.")
 parser.add_argument("-sta_mac","--sta_mac", type=str, help="Specify the STA's MAC Address.")
 parser.add_argument("-scan", action="store_true", help="Scan the network for potential targets.")
 args = parser.parse_args()
