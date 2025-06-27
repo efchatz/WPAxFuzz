@@ -10,7 +10,7 @@ from Connection_monitors.HttpServerCheck import HttpCheck
 from Msgs_colors import bcolors
 import requests
 
-def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, scan, interface, arguments):
+def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode, sta_mac, ap_mac, scan, interface, arguments):
     frames = json.load(open('src/frames.json','r'))
     lowercase_frames = {key.lower(): value for key, value in frames.items()}
 
@@ -23,7 +23,7 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
     if scan:
         network_scan(interface)
 
-    update_config(sta_mac, interface)
+    update_config(sta_mac, ap_mac, interface)
     frameValidation(lowercase_frames, type, subtype)
     monitoringValidation(ip, port, aliveness, sta_mac)
     generatorValidator(generator)
@@ -123,12 +123,13 @@ def check_host_existence(ip):
             print(f'{bcolors.OKCYAN}Pausing for 5 seconds and checking again.{bcolors.ENDC}\n')
             sleep(5)
 
-def update_config(mac_address, interface):
+def update_config(mac_address, ap_mac, interface):
     config_path = os.path.join('src', 'config.json')
     with open(config_path, 'r') as file:
         config = json.load(file)
 
     config['STA_info']['TARGETED_STA_MAC_ADDRESS'] = mac_address
+    config['AP_info']['AP_MAC_ADDRESS'] = ap_mac
     config['ATT_interface_info']['ATTACKING_INTERFACE'] = interface
     config['ATT_interface_info']['MONITORING_INTERFACE'] = interface
 

@@ -16,6 +16,7 @@ parser.add_argument("-m", "--mode", type=str, help="Specify mode option. Allowed
 parser.add_argument("-a", "--aliveness", type=str, help="Specify if Aliveness will be set or not. Allowed options: 'yes' or 'no'. Cannot used along with -u and -p")
 parser.add_argument("-i", "--interface", type=str, help="Specify interface.")
 parser.add_argument("-sta_mac","--sta_mac", type=str, help="Specify the STA's MAC Address.")
+parser.add_argument("-ap_mac","--ap_mac", type=str, help="Specify the AP's MAC Address.")
 parser.add_argument("-scan", action="store_true", help="Scan the network for potential targets.")
 args = parser.parse_args()
 
@@ -24,7 +25,7 @@ if len(sys.argv) == 1:
     parser.print_help()
     sys.exit(1)
 
-utils.argumentsValidation(args.url, args.port, args.aliveness, args.dos, args.type, args.subtype, args.generator, args.mode, args.sta_mac, args.scan, sys.argv)
+utils.argumentsValidation(args.url, args.port, args.aliveness, args.dos, args.type, args.subtype, args.generator, args.mode, args.sta_mac, args.ap_mac, args.scan, args.interface, sys.argv)
 
 config = json.load(open('src/config.json', 'r'))
 
