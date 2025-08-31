@@ -1,7 +1,4 @@
-#!/usr/bin/python
 from scapy.all import *
-
-
 import string
 import random
 import subprocess
