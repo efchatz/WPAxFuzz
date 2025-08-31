@@ -137,8 +137,9 @@ def update_config(mac_address, ap_mac, interface):
         json.dump(config, file, indent=4)
 
 def network_scan(interface):
-    network_scan = subprocess.run([f'./src/network_scan.sh {interface}'], capture_output=True, text=True)
-    if(network_scan.returncode == 1):
+    script_path = os.path.join(os.path.dirname(__file__), 'network_scan.sh')
+    network_scan = subprocess.run([script_path, interface], capture_output=True, text=True)
+    if network_scan.returncode == 1:
         os._exit(0)
     elif network_scan.returncode == 2:
         prompt = network_scan.stdout.strip().split('\n')[6] + '\n' + network_scan.stdout.strip().split('\n')[7]
