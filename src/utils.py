@@ -18,7 +18,7 @@ def argumentsValidation(ip, port, aliveness, dos, type, subtype, generator, mode
         print(bcolors.FAIL + "\n\t\tCannot provide other arguments when -d (--dos) argument is set." + bcolors.ENDC)
         os._exit(0)
     elif dos:
-        subprocess.call(['sudo python3 mage.py'], shell=True)
+        subprocess.call(['sudo', sys.executable,'mage.py'], shell=True)
 
     if scan:
         network_scan(interface)
