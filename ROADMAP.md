@@ -136,9 +136,16 @@ print_menu("Select Frame Type to Fuzz", [
 ### Step 6: Logging Configuration (CURRENT - Do This Next)
 **File**: `logging_config.py` (new)  
 **Context**: Phase 2 (Menu Enhancements) is complete. Moving to Phase 3 (Logging Infrastructure).  
+**Notes for Next Developer**:
+- Must use `import logging.config` to use `dictConfig()`
+- Test by importing and running setup_logging() in Python REPL
+- Log file should be created in project root directory
+- RichHandler provides colorful console output with tracebacks
+  
 **Contents**:
 ```python
 import logging
+import logging.config
 from rich.logging import RichHandler
 
 LOGGING_CONFIG = {
@@ -170,6 +177,11 @@ LOGGING_CONFIG = {
 def setup_logging():
     """Configure logging with Rich console output and file output."""
     logging.config.dictConfig(LOGGING_CONFIG)
+```
+**Testing Commands**:
+```bash
+python3 -c "from logging_config import setup_logging; setup_logging(); import logging; logging.info('Test')"
+ls wpa_fuzzer.log  # Verify log file was created
 ```
 **Change**: Create new file with logging configuration using RichHandler  
 **Test**: Can import and call setup_logging(), see Rich output + file output  
@@ -250,11 +262,19 @@ All menu enhancements in Phase 2 are now complete. Moving to Phase 3 (Logging In
 
 ### Testing Checklist Per Step
 
-- [ ] Code runs without errors
-- [ ] User input flows work correctly
+- [ ] Code runs without errors: `python3 -m py_compile fuzz.py`
+- [ ] User input flows work correctly (test the menu interaction)
 - [ ] ASCII art displays unchanged
 - [ ] No functional regressions
-- [ ] Commit message is descriptive
+- [ ] Commit message is descriptive: `git commit -m "descriptive message"`
+
+### Workflow for Next Developer
+1. **For Step 6**: Create `logging_config.py` with the configuration shown above
+2. **Test it**: Run the test commands to verify logging works
+3. **Commit**: `git add logging_config.py && git commit -m "Add logging configuration with Rich handler"`
+4. **Update ROADMAP**: Mark Step 6 complete and Step 7 as current
+5. **For Step 7**: Import and initialize logging in `fuzz.py` top section
+6. **Proceed through Phase 3-4**: Follow the same pattern
 
 ---
 
