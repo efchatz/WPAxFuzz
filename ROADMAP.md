@@ -6,8 +6,10 @@ Incremental UI improvements using Rich library and Python logging, preserving al
 ## Current State (Last Updated: Feb 17, 2026)
 
 **Progress**: 6/11 steps complete (55%)
-**Last Action**: Step 6 - Logging Configuration  
-**Next Action**: Step 7 - Logger Setup in fuzz.py
+**Status**: Ready for handoff - Step 7 is next
+**Last Action**: Step 6 - Created logging_config.py with RichHandler
+**Next Action**: Step 7 - Initialize logger in fuzz.py (see detailed instructions below)
+**Assigned To**: Next available developer
 
 ## Files Modified So Far
 1. `requirements.txt` - Added `rich>=13.0.0` and `pygments>=2.0.0` dependencies
@@ -186,9 +188,14 @@ def setup_logging():
 
 ### Step 7: Logger Setup (CURRENT - Do This Next)
 **File**: `fuzz.py`  
-**Context**: Now that logging_config.py exists, initialize logging in the main module  
+**Context**: Now that logging_config.py exists, initialize logging in the main module. This enables the logger to be used in Steps 8-9 for print migration.  
 **Location**: Add near the top of fuzz.py, after imports but before any code runs  
-**Change**: Add at top (after existing imports, around line 21-22):
+**Current Code at Lines 21-22**:
+```python
+import ascii_art
+from ui_utils import print_menu, get_input
+```
+**Exact Change Required**: Insert after line 22 (after the ui_utils import):
 ```python
 import logging
 from logging_config import setup_logging
@@ -196,9 +203,33 @@ from logging_config import setup_logging
 logger = logging.getLogger(__name__)
 setup_logging()
 ```
-**Important**: Place these after `import os` but before any existing code that might log  
-**Test**: No visible change yet, but logging is now initialized  
-**Verification**: Add temporary test line after setup: `logger.info("Logging initialized")` - should see output in console and wpa_fuzzer.log  
+**Resulting code structure (lines 21-28)**:
+```python
+import ascii_art
+from ui_utils import print_menu, get_input
+import logging
+from logging_config import setup_logging
+
+logger = logging.getLogger(__name__)
+setup_logging()
+```
+**Important Notes**:
+- Place these imports AFTER `from ui_utils import print_menu, get_input` (line 22)
+- This ensures ui_utils is imported before logging setup
+- The logger variable will be used in Steps 8-9 to replace print statements
+- No functional changes yet - just initialization
+  
+**Test**: 
+1. `python3 -m py_compile fuzz.py` - should have no errors
+2. Verify imports work: `python3 -c "import fuzz"` (may show ASCII art, that's OK)
+  
+**Verification** (optional but recommended):
+Temporarily add after `setup_logging()`: `logger.info("WPAxFuzz starting...")`
+Then run: `python3 fuzz.py` (will need to Ctrl+C after menus), check that:
+- Console shows: `[TIME] INFO     WPAxFuzz starting...`
+- File wpa_fuzzer.log contains the message
+Remove the test line before committing.
+  
 **Commit**: "Initialize logging in main module"
 
 ---
@@ -277,14 +308,89 @@ All menu enhancements in Phase 2 are now complete. Moving to Phase 3 (Logging In
 - [ ] Commit message is descriptive: `git commit -m "descriptive message"`
 
 ### Workflow for Next Developer
-1. ✅ **Step 6 Complete**: `logging_config.py` created with RichHandler
-2. 🎯 **Step 7 (Current)**: Initialize logging in `fuzz.py`
-   - Add imports: `import logging` and `from logging_config import setup_logging`
-   - Add initialization: `logger = logging.getLogger(__name__)` and `setup_logging()`
-   - Test: `python3 -m py_compile fuzz.py`
-   - Commit: `git add fuzz.py && git commit -m "Initialize logging in main module"`
-3. **Step 8**: Convert print statements to logger.info() for status messages
-4. **Step 9**: Convert error print statements to logger.error()
+
+**Current Status: Ready to Start Step 7**
+
+The codebase is in a stable state with:
+- ✅ Phase 1 (Foundation): Complete
+- ✅ Phase 2 (Menu Enhancements): Complete - all menus use Rich panels
+- 🎯 Phase 3 (Logging Infrastructure): 50% complete - configuration done, initialization pending
+- ⏳ Phase 4 (Print Migration): Not started - waiting for Step 7
+
+**Step-by-Step Instructions**:
+
+**Step 7 (Current - Logging Initialization)**:
+1. Read fuzz.py lines 1-25 to understand current import structure
+2. Add after line 22 (after `from ui_utils import print_menu, get_input`):
+   ```python
+   import logging
+   from logging_config import setup_logging
+   
+   logger = logging.getLogger(__name__)
+   setup_logging()
+   ```
+3. Test: `python3 -m py_compile fuzz.py` (must pass)
+4. Optional verification: Add temporary `logger.info("Test")` line, run `python3 fuzz.py`, check output, remove test line
+5. Update ROADMAP: Mark Step 7 complete, Step 8 as current
+6. Commit: `git add fuzz.py ROADMAP.md && git commit -m "Initialize logging in main module"`
+
+**Step 8 (Next - Info Messages)**:
+- Find all `print("Fasten your seatbelts...")` style messages in fuzz.py
+- Convert to `logger.info("...")`
+- Keep all `input()` prompts as-is (don't convert to logging)
+- Test and commit
+
+**Step 9 (Next - Error Messages)**:
+- Find all `print(bcolors.FAIL + ...)` error messages
+- Convert to `logger.error("...")`
+- RichHandler will automatically format errors in red
+- Test and commit
+
+**Post-Phase 3**:
+- All menus will have Rich styling (Phase 2) ✓
+- All status messages will go to both console AND log file (Phase 3)
+- Tool will have complete logging infrastructure
+- Ready for optional Phase 5 enhancements (progress bars, dashboard)
+
+---
+
+## Handoff Notes for Next Developer
+
+### What You Should Know Before Starting Step 7
+
+**State of the Codebase**:
+- All menu enhancements (Phase 2) are complete and working
+- `logging_config.py` exists and is functional - DON'T modify it
+- `ui_utils.py` has all helper functions available
+- `fuzz.py` has Rich-styled menus at lines 30-36, 45-52, and 66-73
+
+**Critical Context**:
+1. **Line 25 in fuzz.py** has `print(ascii_art.logo)` - this MUST remain unchanged
+2. **The logger instance** you'll create in Step 7 will be used in Steps 8-9
+3. **Import order matters**: Import logging_config AFTER ui_utils to avoid circular imports
+4. **Testing**: Always run `python3 -m py_compile fuzz.py` before committing
+5. **No functional changes** in Step 7 - it's just setup for Steps 8-9
+
+**Files You Will Modify**:
+- Step 7: `fuzz.py` only (add logging initialization)
+- Step 8: `fuzz.py` (convert info prints to logger.info())
+- Step 9: `fuzz.py` (convert error prints to logger.error())
+
+**Files You Should NOT Modify**:
+- `logging_config.py` (already complete)
+- `ui_utils.py` (already complete)
+- `ascii_art.py` (sacred - never modify)
+
+**Common Pitfalls**:
+- Don't put logging imports at the very top - put them after ui_utils import
+- Don't forget to remove any test logger.info() calls before committing
+- Don't modify any existing functionality - only convert print to logger
+
+**Quick Verification After Step 7**:
+```bash
+python3 -c "import fuzz" 2>&1 | head -5  # Should show ASCII art without errors
+git diff fuzz.py  # Should show only the 4 new lines (imports + setup)
+```
 
 ---
 
