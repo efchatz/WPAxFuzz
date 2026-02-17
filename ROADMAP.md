@@ -5,15 +5,16 @@ Incremental UI improvements using Rich library and Python logging, preserving al
 
 ## Current State (Last Updated: Feb 17, 2026)
 
-**Progress**: 4/11 steps complete (36%)
-**Last Action**: Step 4 - Mode Selection Menu  
-**Next Action**: Step 5 - Frame Type Menu
+**Progress**: 5/11 steps complete (45%)
+**Last Action**: Step 5 - Frame Type Menu  
+**Next Action**: Step 6 - Logging Configuration
 
 ## Files Modified So Far
 1. `requirements.txt` - Added `rich>=13.0.0` dependency
 2. `ui_utils.py` - Created new UI utilities module
 3. `fuzz.py` - Updated main menu to use Rich panel (lines 30-36)
 4. `fuzz.py` - Updated mode selection menu (lines 45-52)
+5. `fuzz.py` - Updated frame type menu (lines 66-74)
 
 ## Guiding Principles
 1. **ASCII art is sacred** - No modifications to ascii_art.py or its usage
@@ -95,11 +96,11 @@ else:
 **Commit**: "Enhance mode selection menu with Rich panel"  
 **Status**: Completed
 
-### Step 5: Frame Type Menu (CURRENT - Do This Next)
+### Step 5: Frame Type Menu ✅
 **File**: `fuzz.py`  
 **Lines**: 66-74  
 **Context**: This menu appears after mode selection, shows 8 frame options  
-**Current Code**:
+**Previous Code**:
 ```python
 print('Which frames would you like to fuzz?')
 print('1) Beacon frames')
@@ -111,8 +112,7 @@ print('6) Reassociation request frames')
 print('7) Reassociation response frames')
 print('8) Authentication frames\n\n')
 ```
-**Change**: 8 frame options in formatted layout using `print_menu()`  
-**Implementation Hint**:
+**Implementation**:
 ```python
 print_menu("Select Frame Type to Fuzz", [
     "Beacon frames",
@@ -126,26 +126,53 @@ print_menu("Select Frame Type to Fuzz", [
 ])
 ```
 **Test**: All 8 options selectable  
-**Commit**: "Improve frame type selection menu"
+**Commit**: "Improve frame type selection menu with Rich panel"  
+**Status**: Completed
 
 ---
 
-## Phase 3: Logging Infrastructure
+## Phase 3: Logging Infrastructure (CURRENT)
 
-### Step 6: Logging Configuration
+### Step 6: Logging Configuration (CURRENT - Do This Next)
 **File**: `logging_config.py` (new)  
+**Context**: Phase 2 (Menu Enhancements) is complete. Moving to Phase 3 (Logging Infrastructure).  
 **Contents**:
 ```python
+import logging
+from rich.logging import RichHandler
+
 LOGGING_CONFIG = {
     "version": 1,
-    "handlers": {
-        "rich": {"class": "rich.logging.RichHandler", ...},
-        "file": {"class": "logging.FileHandler", ...}
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "format": "%(message)s"
+        }
     },
-    # ...
+    "handlers": {
+        "rich": {
+            "class": "rich.logging.RichHandler",
+            "formatter": "default",
+            "rich_tracebacks": True
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "wpa_fuzzer.log",
+            "formatter": "default"
+        }
+    },
+    "root": {
+        "handlers": ["rich", "file"],
+        "level": "INFO"
+    }
 }
+
+def setup_logging():
+    """Configure logging with Rich console output and file output."""
+    logging.config.dictConfig(LOGGING_CONFIG)
 ```
-**Test**: Can configure logging, see Rich output + file output  
+**Change**: Create new file with logging configuration using RichHandler  
+**Test**: Can import and call setup_logging(), see Rich output + file output  
 **Commit**: "Add logging configuration with Rich handler"
 
 ### Step 7: Logger Setup
@@ -205,12 +232,16 @@ setup_logging()
 
 ## Quick Reference for Next Session
 
-### Current Line Numbers in fuzz.py (post-Step 4):
+### Phase 2: Complete ✅
+All menu enhancements in Phase 2 are now complete. Moving to Phase 3 (Logging Infrastructure).
+
+### Current Line Numbers in fuzz.py (post-Step 5):
 - Line 22: Import `from ui_utils import print_menu, get_input`
 - Lines 25-28: ASCII art (unchanged)
 - Lines 30-36: Main menu panel
-- Lines 45-52: Mode selection menu (completed)
-- Lines 66-74: Frame type menu (Step 5 - next target)
+- Lines 45-52: Mode selection menu
+- Lines 66-73: Frame type menu (completed)
+- **New target**: Create `logging_config.py` for Step 6
 
 ### Key Functions Available in ui_utils.py:
 - `print_menu(title, options)` - Shows numbered list in panel
@@ -251,7 +282,7 @@ git checkout backup-branch  # Switch to pre-change branch
 ## Estimated Timeline
 
 - Phase 1: 1-2 days ✓ Complete
-- Phase 2: 2-3 days (In Progress - 2/3 steps complete)
+- Phase 2: 2-3 days ✓ Complete (3/3 steps)
 - Phase 3: 1-2 days
 - Phase 4: 2-3 days
 - Phase 5: 3-5 days (optional)
