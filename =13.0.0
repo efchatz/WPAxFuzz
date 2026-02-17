@@ -1,0 +1,6 @@
+Defaulting to user installation because normal site-packages is not writeable
+Collecting rich
+  Downloading rich-14.3.2-py3-none-any.whl (309 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.0/310.0 KB 7.9 MB/s eta 0:00:00
+Installing collected packages: rich
+Successfully installed rich-14.3.2

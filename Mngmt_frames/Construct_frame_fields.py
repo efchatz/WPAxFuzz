@@ -9,6 +9,11 @@ import os
 from Logging import LogFiles
 from generateBytes import *
 from Msgs_colors import bcolors
+try:
+    from dashboard import update_dashboard_frames, update_dashboard_error
+    DASHBOARD_AVAILABLE = True
+except ImportError:
+    DASHBOARD_AVAILABLE = False
 
 NUM_OF_FRAMES_TO_SEND = 64
 
@@ -233,6 +238,8 @@ class Frame:
                                 break
                             else:
                                 self.send_Frame(frame, interface)
+                                if DASHBOARD_AVAILABLE:
+                                    update_dashboard_frames(1)
                     elif i == "addresses reversed '(destination = AP, source = STA)'" and mode == 'standard':
                         pass
                     elif i == "allowed" and mode == 'random':
@@ -250,8 +257,12 @@ class Frame:
                                     init_logs.logging_conn_loss(f"\nframe = {item}\n\n", init_logs.frames_till_disr_mngmt)
                                 init_logs.logging_conn_loss(f"*----Frames pattern above----*\n", init_logs.frames_till_disr_mngmt)
                                 frames_till_disr = []
+                                if DASHBOARD_AVAILABLE:
+                                    update_dashboard_error(f"Connection loss at cycle {counter}")
                                 break
                             else:
                                 self.send_Frame(frame, interface)
+                                if DASHBOARD_AVAILABLE:
+                                    update_dashboard_frames(1)
                 subprocess.call(['clear'], shell=True)
                 counter += 1

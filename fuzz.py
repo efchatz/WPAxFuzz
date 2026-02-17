@@ -18,9 +18,31 @@ import threading
 import settings
 import sys
 import os
+import argparse
 import ascii_art
 from ui_utils import print_menu, get_input
+import logging
+from logging_config import setup_logging
 
+logger = logging.getLogger(__name__)
+setup_logging()
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='WPAxFuzz - 802.11 Protocol Fuzzer')
+parser.add_argument('--dashboard', action='store_true', help='Enable live dashboard display')
+args = parser.parse_args()
+
+# Dashboard imports and setup
+dashboard = None
+set_dashboard_context = None
+if args.dashboard:
+    try:
+        from dashboard import start_dashboard, set_dashboard_context as _set_ctx
+        dashboard = start_dashboard()
+        set_dashboard_context = _set_ctx
+        logger.info("Live dashboard enabled")
+    except ImportError:
+        logger.warning("Dashboard module not available, continuing without dashboard")
 
 print(ascii_art.logo)
 print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n')
@@ -37,7 +59,7 @@ print_menu("Select Operation", [
 try:
     choice = int(input('Enter a choice: '))
 except:
-    print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+    logger.error("Only integer inputs accepted")
     os._exit(0)
 if choice == 1:
     subprocess.call(['clear'], shell=True)
@@ -59,7 +81,7 @@ if choice == 1:
         sleep(10)
         subprocess.call(['clear'], shell=True)
     else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        logger.error("No such mode :(")
         os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames)
@@ -76,7 +98,7 @@ if choice == 1:
     try:
         choice2 = int(input('Select a frame to fuzz: '))
     except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        logger.error("Only integer inputs accepted")
         os._exit(0)
     Deauth_monitor = DeauthMon(targeted_AP, targeted_STA, att_interface)
     Deauth_monitor.start()
@@ -90,12 +112,12 @@ if choice == 1:
             try:
                 direction = int(input('Select a frame to fuzz: '))
             except:
-                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                logger.error("Only integer inputs accepted")
                 os._exit(0)
             if direction in {1, 2}:
                 pass
             else:
-                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                logger.error("No such mode :(")
                 os._exit(0)
         else:
             direction = 1
@@ -103,7 +125,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.beacon)        
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Beacon", interface=att_interface)
         sleep(5)
         fuzz_beacons.fuzz_beacon()  
     elif choice2 == 2:
@@ -111,7 +135,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_req)      
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Probe Request", interface=att_interface)
         sleep(5)
         fuzz_probe_reqs.fuzz_probe_req()
     elif choice2 == 3:
@@ -124,12 +150,12 @@ if choice == 1:
             try:
                 direction = int(input('Select a frame to fuzz: '))
             except:
-                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                logger.error("Only integer inputs accepted")
                 os._exit(0)
             if direction in {1, 2}:
                 pass
             else:
-                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                logger.error("No such mode :(")
                 os._exit(0)
         else:
             direction = 1
@@ -137,7 +163,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.probe_resp)    
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Probe Response", interface=att_interface)
         sleep(5)
         fuzz_probe_resp.fuzz_probe_resp()
     elif choice2 == 4:
@@ -145,7 +173,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_req)
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Association Request", interface=att_interface)
         sleep(5)
         fuzz_asso_reqs.fuzz_asso_req()
     elif choice2 == 5:
@@ -158,12 +188,12 @@ if choice == 1:
             try:
                 direction = int(input('Select a frame to fuzz: '))
             except:
-                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                logger.error("Only integer inputs accepted")
                 os._exit(0)
             if direction in {1, 2}:
                 pass
             else:
-                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                logger.error("No such mode :(")
                 os._exit(0)
         else:
             direction = 1
@@ -171,7 +201,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.asso_resp)     
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Association Response", interface=att_interface)
         sleep(5)
         fuzz_asso_resp.fuzz_asso_resp()
     elif choice2 == 6:
@@ -179,7 +211,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_req) 
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Reassociation Request", interface=att_interface)
         sleep(5)
         fuzz_reasso_reqs.fuzz_reasso_req()
     elif choice2 == 7:
@@ -192,12 +226,12 @@ if choice == 1:
             try:
                 direction = int(input('Select a frame to fuzz: '))
             except:
-                print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+                logger.error("Only integer inputs accepted")
                 os._exit(0)
             if direction in {1, 2}:
                 pass
             else:
-                print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+                logger.error("No such mode :(")
                 os._exit(0)
         else:
             direction = 1
@@ -205,7 +239,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.reasso_resp)  
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Reassociation Response", interface=att_interface)
         sleep(5)
         fuzz_asso_resp.fuzz_reasso_resp()
     elif choice2 == 8:
@@ -213,7 +249,9 @@ if choice == 1:
         subprocess.call(['clear'], shell=True)
         print(ascii_art.auth)  
         print(ascii_art.wifi)
-        print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+        if dashboard and set_dashboard_context:
+            set_dashboard_context(mode=mode, frame_type="Authentication", interface=att_interface)
         sleep(5)
         fuzz_auth.fuzz_auth()
 elif choice == 2:
@@ -234,7 +272,7 @@ elif choice == 3:
         sleep(10)
         subprocess.call(['clear'], shell=True)
     else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        logger.error("No such mode :(")
         os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
@@ -243,12 +281,12 @@ elif choice == 3:
     try:
         direction = int(input('Select a frame to fuzz: '))
     except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        logger.error("Only integer inputs accepted")
         os._exit(0)
     if direction in {1, 2}:
         pass
     else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        logger.error("No such mode :(")
         os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
@@ -268,7 +306,7 @@ elif choice == 3:
     try:
         choice2 = int(input('Select a frame to fuzz: '))
     except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        logger.error("Only integer inputs accepted")
         os._exit(0)
     if choice2 == 3:
         subprocess.call(['clear'], shell=True)
@@ -286,7 +324,7 @@ elif choice == 3:
         try:
             choice3 = int(input('Select a frame to fuzz: '))
         except:
-            print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+            logger.error("Only integer inputs accepted")
             os._exit(0)
         if direction == 1:
             fuzz_ctrl = ControlFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, choice3 + 1)
@@ -300,7 +338,9 @@ elif choice == 3:
     subprocess.call(['clear'], shell=True)
     print(ascii_art.control_frames)
     print(ascii_art.wifi)
-    print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    if dashboard and set_dashboard_context:
+        set_dashboard_context(mode=mode, frame_type="Control Frames", interface=att_interface)
     sleep(5)
     print(fuzz_ctrl.fuzz_ctrl_frames())
 elif choice == 4:
@@ -318,7 +358,7 @@ elif choice == 4:
         sleep(10)
         subprocess.call(['clear'], shell=True)
     else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        logger.error("No such mode :(")
         os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
@@ -327,12 +367,12 @@ elif choice == 4:
     try:
         direction = int(input('Select a frame to fuzz: '))
     except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        logger.error("Only integer inputs accepted")
         os._exit(0)
     if direction in {1, 2}:
         pass
     else:
-        print(bcolors.FAIL + '\nNo such mode :(' + bcolors.ENDC)
+        logger.error("No such mode :(")
         os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
@@ -356,7 +396,7 @@ elif choice == 4:
     try:
         choice2 = int(input('Select a frame to fuzz: '))
     except:
-        print('\n' + bcolors.FAIL + 'Only integer inputs accepted' + bcolors.ENDC)
+        logger.error("Only integer inputs accepted")
         os._exit(0)
     if direction == 1:
         fuzz_data = DataFrames(targeted_STA, targeted_AP, att_interface, mode, choice2, True)
@@ -365,11 +405,13 @@ elif choice == 4:
     subprocess.call(['clear'], shell=True)
     print(ascii_art.data_frames)
     print(ascii_art.wifi)
-    print("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    logger.info("Fasten your seatbelts and grab a coffee. Fuzzing is about to begin!")
+    if dashboard and set_dashboard_context:
+        set_dashboard_context(mode=mode, frame_type="Data Frames", interface=att_interface)
     sleep(5)
     print(fuzz_data.fuzz_data_frames())
 elif choice == 5:
     subprocess.call(['clear'], shell=True)
     subprocess.call(['sudo python3 mage.py'], shell=True)
 else:
-    print(bcolors.FAIL + '\nNo such choice :(' + bcolors.ENDC)
+    logger.error("No such choice :(")

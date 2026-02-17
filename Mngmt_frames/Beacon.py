@@ -1,6 +1,9 @@
 from Mngmt_frames.Construct_frame_fields import *
 from scapy.all import Dot11Beacon, Dot11Elt
 from random import randint
+from rich.console import Console
+
+console = Console()
 
 class Beacon(Frame):
 
@@ -149,4 +152,5 @@ class Beacon(Frame):
         return frame
 
     def fuzz_beacon(self):
-        self.fuzz(self.mode, self.fuzzer_state, self.interface)
+        with console.status("[bold green]Fuzzing beacon frames... Press Ctrl+C twice to stop") as status:
+            self.fuzz(self.mode, self.fuzzer_state, self.interface)
