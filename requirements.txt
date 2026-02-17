@@ -1,2 +1,4 @@
 scapy
+rich>=13.0.0
+pygments>=2.0.0
 Aircrack-ng
