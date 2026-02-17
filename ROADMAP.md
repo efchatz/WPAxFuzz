@@ -5,16 +5,18 @@ Incremental UI improvements using Rich library and Python logging, preserving al
 
 ## Current State (Last Updated: Feb 17, 2026)
 
-**Progress**: 5/11 steps complete (45%)
-**Last Action**: Step 5 - Frame Type Menu  
-**Next Action**: Step 6 - Logging Configuration
+**Progress**: 6/11 steps complete (55%)
+**Last Action**: Step 6 - Logging Configuration  
+**Next Action**: Step 7 - Logger Setup in fuzz.py
 
 ## Files Modified So Far
-1. `requirements.txt` - Added `rich>=13.0.0` dependency
+1. `requirements.txt` - Added `rich>=13.0.0` and `pygments>=2.0.0` dependencies
 2. `ui_utils.py` - Created new UI utilities module
 3. `fuzz.py` - Updated main menu to use Rich panel (lines 30-36)
 4. `fuzz.py` - Updated mode selection menu (lines 45-52)
 5. `fuzz.py` - Updated frame type menu (lines 66-74)
+6. `logging_config.py` - Created logging configuration with RichHandler
+7. `requirements.txt` - Added `pygments>=2.0.0` for Rich tracebacks
 
 ## Guiding Principles
 1. **ASCII art is sacred** - No modifications to ascii_art.py or its usage
@@ -133,16 +135,16 @@ print_menu("Select Frame Type to Fuzz", [
 
 ## Phase 3: Logging Infrastructure (CURRENT)
 
-### Step 6: Logging Configuration (CURRENT - Do This Next)
+### Step 6: Logging Configuration ✅
 **File**: `logging_config.py` (new)  
 **Context**: Phase 2 (Menu Enhancements) is complete. Moving to Phase 3 (Logging Infrastructure).  
-**Notes for Next Developer**:
+**Notes**:
 - Must use `import logging.config` to use `dictConfig()`
-- Test by importing and running setup_logging() in Python REPL
-- Log file should be created in project root directory
+- Added `pygments>=2.0.0` to requirements.txt (required by RichHandler for tracebacks)
+- Log file created in project root directory
 - RichHandler provides colorful console output with tracebacks
   
-**Contents**:
+**Implementation**:
 ```python
 import logging
 import logging.config
@@ -178,18 +180,15 @@ def setup_logging():
     """Configure logging with Rich console output and file output."""
     logging.config.dictConfig(LOGGING_CONFIG)
 ```
-**Testing Commands**:
-```bash
-python3 -c "from logging_config import setup_logging; setup_logging(); import logging; logging.info('Test')"
-ls wpa_fuzzer.log  # Verify log file was created
-```
-**Change**: Create new file with logging configuration using RichHandler  
-**Test**: Can import and call setup_logging(), see Rich output + file output  
-**Commit**: "Add logging configuration with Rich handler"
+**Test**: Logging outputs to both console (Rich formatted) and file  
+**Commit**: "Add logging configuration with Rich handler"  
+**Status**: Completed
 
-### Step 7: Logger Setup
+### Step 7: Logger Setup (CURRENT - Do This Next)
 **File**: `fuzz.py`  
-**Change**: Add at top:
+**Context**: Now that logging_config.py exists, initialize logging in the main module  
+**Location**: Add near the top of fuzz.py, after imports but before any code runs  
+**Change**: Add at top (after existing imports, around line 21-22):
 ```python
 import logging
 from logging_config import setup_logging
@@ -197,7 +196,9 @@ from logging_config import setup_logging
 logger = logging.getLogger(__name__)
 setup_logging()
 ```
-**Test**: No visible change yet  
+**Important**: Place these after `import os` but before any existing code that might log  
+**Test**: No visible change yet, but logging is now initialized  
+**Verification**: Add temporary test line after setup: `logger.info("Logging initialized")` - should see output in console and wpa_fuzzer.log  
 **Commit**: "Initialize logging in main module"
 
 ---
@@ -247,13 +248,20 @@ setup_logging()
 ### Phase 2: Complete ✅
 All menu enhancements in Phase 2 are now complete. Moving to Phase 3 (Logging Infrastructure).
 
-### Current Line Numbers in fuzz.py (post-Step 5):
+### Current State (post-Step 6):
+**Phase 3 (Logging Infrastructure): In Progress - 1/2 steps complete**
+
+**New Files Created**:
+- `logging_config.py` - Logging configuration with RichHandler
+- `wpa_fuzzer.log` - Log file (created at runtime)
+
+**Current Line Numbers in fuzz.py**:
 - Line 22: Import `from ui_utils import print_menu, get_input`
 - Lines 25-28: ASCII art (unchanged)
 - Lines 30-36: Main menu panel
 - Lines 45-52: Mode selection menu
-- Lines 66-73: Frame type menu (completed)
-- **New target**: Create `logging_config.py` for Step 6
+- Lines 66-73: Frame type menu
+- **Next target**: Initialize logging in fuzz.py (Step 7)
 
 ### Key Functions Available in ui_utils.py:
 - `print_menu(title, options)` - Shows numbered list in panel
@@ -269,12 +277,14 @@ All menu enhancements in Phase 2 are now complete. Moving to Phase 3 (Logging In
 - [ ] Commit message is descriptive: `git commit -m "descriptive message"`
 
 ### Workflow for Next Developer
-1. **For Step 6**: Create `logging_config.py` with the configuration shown above
-2. **Test it**: Run the test commands to verify logging works
-3. **Commit**: `git add logging_config.py && git commit -m "Add logging configuration with Rich handler"`
-4. **Update ROADMAP**: Mark Step 6 complete and Step 7 as current
-5. **For Step 7**: Import and initialize logging in `fuzz.py` top section
-6. **Proceed through Phase 3-4**: Follow the same pattern
+1. ✅ **Step 6 Complete**: `logging_config.py` created with RichHandler
+2. 🎯 **Step 7 (Current)**: Initialize logging in `fuzz.py`
+   - Add imports: `import logging` and `from logging_config import setup_logging`
+   - Add initialization: `logger = logging.getLogger(__name__)` and `setup_logging()`
+   - Test: `python3 -m py_compile fuzz.py`
+   - Commit: `git add fuzz.py && git commit -m "Initialize logging in main module"`
+3. **Step 8**: Convert print statements to logger.info() for status messages
+4. **Step 9**: Convert error print statements to logger.error()
 
 ---
 
