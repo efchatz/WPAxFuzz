@@ -63,15 +63,16 @@ if choice == 1:
         os._exit(0)
     subprocess.call(['clear'], shell=True)
     print(ascii_art.mngmt_frames)
-    print('Which frames would you like to fuzz?')
-    print('1) Beacon frames')
-    print('2) Probe request frames')
-    print('3) Probe response frames')
-    print('4) Association request frames')
-    print('5) Association response frames')
-    print('6) Reassociation request frames')
-    print('7) Reassociation response frames')
-    print('8) Authentication frames\n\n')
+    print_menu("Select Frame Type to Fuzz", [
+        "Beacon frames",
+        "Probe request frames",
+        "Probe response frames",
+        "Association request frames",
+        "Association response frames",
+        "Reassociation request frames",
+        "Reassociation response frames",
+        "Authentication frames"
+    ])
     try:
         choice2 = int(input('Select a frame to fuzz: '))
     except:
