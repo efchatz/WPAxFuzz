@@ -25,7 +25,7 @@ STANDARD_RSN = Dot11Elt(ID='RSNinfo', info=(
 STANDARD_TIM = Dot11Elt(ID='TIM', info='\x05\x04\x00\x01\x00\x00')
 
 SUPPORTED_RATES = Dot11Elt(ID='Rates', info='\x82\x84\x8b\x0c\x12\x96\x18\x24')
-SUPPL_RATES = Dot11Elt(ID='ESRates', info='\x30\x48\60\x6c')
+SUPPL_RATES = Dot11Elt(ID='ESRates', info='\x30\x48\x60\x6c')
 
 STANDARD_HT_CAPABILITIES = Dot11Elt(ID=45, info='\x67\x09\x17\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
                                                 '\x00\x00\x00\x00\x00\x00\x00\x00')
